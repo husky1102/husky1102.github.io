@@ -5,19 +5,22 @@ permalink: /cv/
 author_profile: true
 redirect_from:
   - /resume
+  - /
 ---
 
 {% include base_path %}
 
+You can also visit my blog: [unTitled](https://digital-garden-chi-eosin.vercel.app/)
+
 Education
 ======
-* M.S. in Artificial Intelligence, Xi'an Jiaotong University, China, 2025
+* M.S. in Artificial Intelligence, Xi'an Jiaotong University, China (in progress)
 * B.S. in Robotics Engineering, Hunan University, China, 2021
 
 Work experience
 ======
 * No work experience yet
-  
+
 Skills
 ====
 * Multimodal Artificial Intelligence
@@ -25,7 +28,7 @@ Skills
   * Vision-Language models
   * Cross-modal retrieval
   * Multimodal fusion techniques
-* Deep Learning frameworks (e.g., PyTorch, TensorFlow)
+* Deep Learning frameworks (e.g., PyTorch)
 * Computer Vision
 * Natural Language Processing
 

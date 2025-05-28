@@ -30,6 +30,7 @@ author:
   employer         : "Hunan University"
   uri              : # URL
   email            : "zhiqin.gao@qq.com" 
+  blog             : "https://digital-garden-chi-eosin.vercel.app/"
 
   # Academic websites
   academia         : # URL
@@ -46,8 +47,8 @@ author:
   bitbucket        : # Username - Update with your username on the site
   codepen          : # Username
   dribbble         : # Username
-  github           : "Husky031102"
-  kaggle           : # Username  
+  github           : "husky1102"
+  kaggle           : "husky1102" 
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
   # Social media

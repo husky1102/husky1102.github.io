@@ -15,20 +15,17 @@ You can also visit my blog: [unTitled](https://digital-garden-chi-eosin.vercel.a
 Education
 ======
 * M.S. in Artificial Intelligence, Xi'an Jiaotong University, China (in progress)
-* B.S. in Robotics Engineering, Hunan University, China, 2021
+* B.S. in Robotics Engineering, Hunan University, China, 2025
 
 Work experience
 ======
 * No work experience yet
 
-Skills
-====
-* Multimodal Artificial Intelligence
-  * Multimodal data processing
-  * Vision-Language models
-  * Cross-modal retrieval
-  * Multimodal fusion techniques
-* Deep Learning frameworks (e.g., PyTorch)
+Research Interests
+======
+* Multimodal Understanding
+* Multimodal Generation
+* Large Language Models
 * Computer Vision
 * Natural Language Processing
 

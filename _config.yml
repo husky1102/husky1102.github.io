@@ -23,11 +23,11 @@ repository               : "husky1102/husky1102.github.io"
 author:
   # Biographic information
   avatar           : "图片-245透明.png"
-  name             : "克苏鲁微糖\nHusky"
+  name             : "克苏鲁微糖<br>Husky"
   pronouns         : # example: "she/her"  
-  bio              : "学无止境\nNever stop learning"
-  location         : "中国湖南省长沙市\nChang sha, Hunan, China"
-  employer         : "湖南大学\nHunan University"
+  bio              : "学无止境<br>Never stop learning"
+  location         : "中国湖南省长沙市<br>Changsha, Hunan, China"
+  employer         : "湖南大学<br>Hunan University"
   uri              : # URL
   email            : "zhiqin.gao@qq.com" 
   blog             : "https://digital-garden-chi-eosin.vercel.app/"

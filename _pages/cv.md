@@ -23,8 +23,10 @@ Work experience
 
 Research Interests
 ======
-* Multimodal Understanding
-* Multimodal Generation
+* Multimodal Artificial Intelligence
+  * Multimodal Understanding
+  * Multimodal Generation
+  * Cross-modal Retrieval and Fusion
 * Large Language Models
 * Computer Vision
 * Natural Language Processing

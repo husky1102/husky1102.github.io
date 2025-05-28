@@ -1,16 +1,10 @@
 /* start custom scss snippet */
 
-/* jetbrains-mono-regular - latin */
 @font-face {
   font-family: '霞鹜文楷';
   font-style: normal;
   font-weight: 400;
-  src: url('/assets/fonts/LXGWWenKaiGBScreen.tff');
-  /* IE9 Compat Modes */
-  src: local(''),
-    url('/assets/fonts/LXGWWenKaiGBScreen.tff') format('truetype'),
-    /* Safari, Android, iOS */
-
+  src: url('/assets/fonts/LXGWWenKaiGBScreen.ttf') format('truetype');
 }
 
 body {

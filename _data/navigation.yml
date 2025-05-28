@@ -22,13 +22,14 @@ main:
         
   # - title: "Blog Posts"
   #   url: /year-archive/
-  - title: "Blog Posts"
-    url: https://digital-garden-chi-eosin.vercel.app/
   - title: "CV"
     url: /cv/
-    
+
+  - title: "个人博客"
+    url: https://digital-garden-chi-eosin.vercel.app/
+
   # - title: "CV"
   #   url: /cv-json/
     
-  - title: "Guide"
-    url: /markdown/
+  # - title: "Guide"
+  #   url: /markdown/

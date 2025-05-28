@@ -1,0 +1,28 @@
+/* start custom scss snippet */
+
+/* jetbrains-mono-regular - latin */
+@font-face {
+  font-family: '霞鹜文楷';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/assets/fonts/LXGWWenKaiGBScreen.tff');
+  /* IE9 Compat Modes */
+  src: local(''),
+    url('/assets/fonts/LXGWWenKaiGBScreen.tff') format('truetype'),
+    /* Safari, Android, iOS */
+
+}
+
+body {
+  /* 更改正文字体 */
+  font-family: '霞鹜文楷', Times, Menlo, Monaco, Consolas, Andale Mono, lucida console, Courier New, monospace;
+  font-size: 1.2rem;
+}
+
+code {
+  /* 更改code字体 */
+  font-family: '霞鹜文楷', Times, Menlo, Monaco, Consolas, Andale Mono, lucida console, Courier New, monospace;
+  font-size: 1.05rem;
+}
+
+/* end custom scss snippet */

@@ -25,6 +25,9 @@ main:
   - title: "CV"
     url: /cv/
 
+    - title: "简历"
+    url: /cv-zh/
+
   - title: "个人博客"
     url: https://digital-garden-chi-eosin.vercel.app/
 

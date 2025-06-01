@@ -1,5 +1,5 @@
 ---
-layout: none
+layout: archive
 title: "个人博客"
 permalink: /blog_embed/
 author_profile: false

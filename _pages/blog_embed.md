@@ -6,12 +6,19 @@ author_profile: false
 ---
 
 <style>
+  .page,
+  .page__content,
+  .archive,
+  .container-lg,
+  .container,
+  .page__inner-wrap {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100vw !important;
+    width: 100vw !important;
+  }
   .page__title {
     display: none;
-  }
-  .page__content {
-    margin: 0;
-    padding: 0;
   }
   .blog-embed-iframe {
     width: 100vw;

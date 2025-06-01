@@ -28,8 +28,11 @@ main:
   - title: "简历"
     url: /cv_zh/
 
+  # - title: "个人博客"
+  #   url: https://digital-garden-chi-eosin.vercel.app/
+
   - title: "个人博客"
-    url: https://digital-garden-chi-eosin.vercel.app/
+    url: /blog_embed/
 
   # - title: "CV"
   #   url: /cv-json/

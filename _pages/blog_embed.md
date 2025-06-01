@@ -6,14 +6,16 @@ author_profile: false
 ---
 
 <style>
-  body {
+  .page__title {
+    display: none;
+  }
+  .page__content {
     margin: 0;
     padding: 0;
-    background: #fff;
   }
   .blog-embed-iframe {
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 60px); /* 60px 可根据你的导航栏高度调整 */
     border: none;
     display: block;
   }

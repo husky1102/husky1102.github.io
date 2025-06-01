@@ -1,8 +1,22 @@
 ---
-layout: archive
+layout: none
 title: "个人博客"
 permalink: /blog_embed/
-author_profile: true
+author_profile: false
 ---
 
-<iframe src="https://digital-garden-chi-eosin.vercel.app/" style="width:100%;height:80vh;border:none;"></iframe>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+  .blog-embed-iframe {
+    width: 100vw;
+    height: 100vh;
+    border: none;
+    display: block;
+  }
+</style>
+
+<iframe class="blog-embed-iframe" src="https://digital-garden-chi-eosin.vercel.app/"></iframe>

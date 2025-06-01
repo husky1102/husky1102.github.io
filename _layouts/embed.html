@@ -16,11 +16,25 @@
             border: none;
             display: block;
         }
+
+        /* 隐藏侧边栏内容，只保留顶部导航栏 */
+        .sidebar__right,
+        .sidebar__footer,
+        .author__content,
+        .author__avatar {
+            display: none !important;
+        }
+
+        .sidebar {
+            min-width: 0 !important;
+            width: auto !important;
+            background: #fff !important;
+        }
     </style>
 </head>
 
 <body>
-    {% include header.html %}
+    {% include sidebar.html %}
     {{ content }}
 </body>
 

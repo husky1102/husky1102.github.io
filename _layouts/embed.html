@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    {% include head.html %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fff;
+        }
+
+        .blog-embed-iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    {% include header.html %}
+    {{ content }}
+</body>
+
+</html>

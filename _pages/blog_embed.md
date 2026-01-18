@@ -17,4 +17,4 @@ author_profile: false
   }
 </style>
 
-<iframe class="blog-embed-iframe" src="https://digital-garden-chi-eosin.vercel.app/"></iframe>
+<iframe class="blog-embed-iframe" src="https://www.husky1102.top/"></iframe>

@@ -10,7 +10,7 @@ redirect_from:
 
 {% include base_path %}
 
-You can also visit my blog: [unTitled](https://digital-garden-chi-eosin.vercel.app/)
+You can also visit my blog: [unTitled](https://www.husky1102.top/)
 
 Education
 ======
@@ -23,13 +23,9 @@ Work experience
 
 Research Interests
 ======
-* Multimodal Artificial Intelligence
-  * Multimodal Understanding
-  * Multimodal Generation
-  * Cross-modal Retrieval and Fusion
-* Large Language Models
-* Computer Vision
-* Natural Language Processing
+* Embodied AI
+* Agent Memory
+* Anything Interesting
 
 Publications
 ======

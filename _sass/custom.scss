@@ -1,22 +1,65 @@
 /* start custom scss snippet */
 
 @font-face {
-  font-family: '霞鹜文楷';
+  font-family: "LXGW WenKai Screen";
   font-style: normal;
   font-weight: 400;
-  src: url('/assets/fonts/LXGWWenKaiGBScreen.ttf') format('truetype');
+  font-display: swap;
+  src: url("/assets/fonts/LXGWWenKaiGBScreen-subset.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0-00FF, U+2000-206F, U+2190-21FF, U+3000-303F, U+4E00-9FFF, U+FF00-FFEF;
+}
+
+@font-face {
+  font-family: "Maple Mono NF CN";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/MapleMono-NF-CN-Regular-subset.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0-00FF, U+2000-206F, U+2190-21FF, U+2500-257F, U+E0A0-E0A3, U+E0B0-E0BF, U+E0C0-E0C8, U+E0CC-E0D7;
+}
+
+@font-face {
+  font-family: "Maple Mono NF CN";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/MapleMono-NF-CN-Bold-subset.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0-00FF, U+2000-206F, U+2190-21FF, U+2500-257F, U+E0A0-E0A3, U+E0B0-E0BF, U+E0C0-E0C8, U+E0CC-E0D7;
 }
 
 body {
-  /* 更改正文字体 */
-  font-family: '霞鹜文楷', Times, Menlo, Monaco, Consolas, Andale Mono, lucida console, Courier New, monospace;
-  font-size: 1.2rem;
+  font-family: "Maple Mono NF CN", "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
 }
 
-code {
-  /* 更改code字体 */
-  font-family: '霞鹜文楷', Times, Menlo, Monaco, Consolas, Andale Mono, lucida console, Courier New, monospace;
+code,
+kbd,
+pre,
+samp,
+.masthead,
+.greedy-nav,
+.author__urls-wrapper {
+  font-family: "Maple Mono NF CN", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+code,
+kbd,
+pre,
+samp {
   font-size: 1.05rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.page__title,
+.archive__item-title,
+.author__name {
+  font-family: "Maple Mono NF CN", "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* end custom scss snippet */

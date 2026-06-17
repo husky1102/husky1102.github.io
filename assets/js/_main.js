@@ -38,10 +38,14 @@ $(document).ready(function () {
 
   // Toggle the theme manually
   var toggleTheme = function () {
+    $("#theme-toggle").addClass("is-switching");
     const current_theme = $("html").attr("data-theme");
     const new_theme = current_theme === "dark" ? "light" : "dark";
     localStorage.setItem("theme", new_theme);
     setTheme(new_theme);
+    window.setTimeout(function () {
+      $("#theme-toggle").removeClass("is-switching");
+    }, 320);
   };
 
   $('#theme-toggle').on('click', toggleTheme);

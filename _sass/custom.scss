@@ -33,6 +33,46 @@ body {
   line-height: 1.75;
 }
 
+body,
+a,
+button,
+input,
+textarea,
+select,
+.masthead,
+.greedy-nav,
+.page__footer,
+.sidebar,
+.author__urls,
+.btn,
+code,
+pre,
+table,
+th,
+td {
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    color 0.28s ease;
+}
+
+#theme-toggle a,
+#theme-icon {
+  transition:
+    color 0.28s ease,
+    transform 0.28s ease;
+}
+
+#theme-toggle:hover #theme-icon,
+#theme-toggle:focus-within #theme-icon {
+  transform: rotate(28deg) scale(1.12);
+}
+
+#theme-toggle.is-switching #theme-icon {
+  transform: rotate(180deg) scale(0.92);
+}
+
 code,
 kbd,
 pre,

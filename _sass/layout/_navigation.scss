@@ -175,7 +175,7 @@
 .greedy-nav {
   position: relative;
   min-width: 250px;
-  background: var(--global-bg-color);
+  background: transparent;
 
   a {
     display: block;
@@ -240,22 +240,26 @@
       &:before {
         content: "";
         position: absolute;
-        left: 0;
-        bottom: 0;
-        height: 4px;
-        background: var(--global-border-color);
+        left: 50%;
+        bottom: 0.18rem;
+        height: 2px;
+        border-radius: 999px;
+        background: var(--global-masthead-link-color-hover);
         width: 100%;
         -webkit-transition: $global-transition;
         transition: $global-transition;
+        -webkit-transform-origin: center;
+            -ms-transform-origin: center;
+                transform-origin: center;
         -webkit-transform: scaleX(0);
             -ms-transform: scaleX(0);
-                transform: scaleX(0); /* hide*/
+                transform: translateX(-50%) scaleX(0); /* hide*/
       }
 
       &:hover:before {
-        -webkit-transform: scaleX(1);
-            -ms-transform: scaleX(1);
-                transform: scaleX(1); /* reveal*/
+        -webkit-transform: translateX(-50%) scaleX(1);
+            -ms-transform: translateX(-50%) scaleX(1);
+                transform: translateX(-50%) scaleX(1); /* reveal*/
       }
     }
   }
@@ -268,7 +272,7 @@
     padding: 5px;
     border: 1px solid var(--global-border-color);
     border-radius: $border-radius;
-    background: #fff;
+    background: var(--global-bg-color);
     box-shadow: 0 0 10px rgba(#000, 0.25);
 
     a {
@@ -303,7 +307,7 @@
       width: 0;
       border-style: solid;
       border-width: 0 10px 10px;
-      border-color: #fff transparent;
+      border-color: var(--global-bg-color) transparent;
       display: block;
       z-index: 1;
     }
@@ -385,7 +389,7 @@
   color: var(--global-text-color-light);
   text-transform: uppercase;
   letter-spacing: 1px;
-  background-color: #fff;
+  background-color: var(--global-bg-color);
   border: 1px solid var(--global-border-color);
   border-radius: $border-radius;
   box-shadow: $box-shadow;

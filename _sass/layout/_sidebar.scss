@@ -96,10 +96,29 @@
   img {
     max-width: 175px;
     border-radius: 50%;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--global-link-color) 0%, transparent);
+    transition:
+      border-color 0.28s ease,
+      box-shadow 0.28s ease,
+      transform 0.28s ease;
 
     @include breakpoint($large) {
       padding: 5px;
-      border: 1px solid var(--global-border-color);
+      border: 1px solid color-mix(in srgb, var(--global-link-color) 35%, var(--global-border-color));
+      box-shadow:
+        0 0 0 4px color-mix(in srgb, var(--global-link-color) 9%, transparent),
+        0 10px 26px rgba(#000, 0.08);
+    }
+  }
+
+  &:hover img {
+    transform: scale(1.035);
+
+    @include breakpoint($large) {
+      border-color: var(--global-link-color);
+      box-shadow:
+        0 0 0 5px color-mix(in srgb, var(--global-link-color) 15%, transparent),
+        0 16px 34px rgba(#000, 0.13);
     }
   }
 }
@@ -235,7 +254,7 @@
     width: 0;
     border-style: solid;
     border-width: 0 10px 10px;
-    border-color: #fff transparent;
+    border-color: var(--global-bg-color) transparent;
     z-index: 1;
 
     @include breakpoint($large) {
@@ -256,9 +275,27 @@
     color: inherit;
     font-size: $type-size-5;
     text-decoration: none;
+    border-radius: 999px;
+    transition:
+      background-color 0.22s ease,
+      color 0.22s ease,
+      padding-left 0.22s ease;
 
     &:hover {
-      text-decoration: underline;
+      background: color-mix(in srgb, var(--global-link-color) 9%, transparent);
+      color: var(--global-link-color);
+      text-decoration: none;
+      padding-left: 7px;
+    }
+
+    i,
+    .ai {
+      transition: transform 0.22s ease;
+    }
+
+    &:hover i,
+    &:hover .ai {
+      transform: translateX(2px);
     }
   }
 }

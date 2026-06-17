@@ -16,6 +16,7 @@ layout: compress
   <body class="cv-layout">
     {% include browser-upgrade.html %}
     {% include masthead.html %}
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
 
     <div id="main" class="cv-main" role="main">
       {% include sidebar.html %}
@@ -31,6 +32,10 @@ layout: compress
         {% include footer.html %}
       </footer>
     </div>
+
+    <button class="back-to-top" type="button" aria-label="Back to top">
+      <i class="fas fa-arrow-up" aria-hidden="true"></i>
+    </button>
 
     {% include scripts.html %}
 

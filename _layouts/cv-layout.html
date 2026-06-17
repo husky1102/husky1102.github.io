@@ -5,25 +5,24 @@ layout: compress
 {% include base_path %}
 
 <!doctype html>
-<html lang="{{ site.locale | slice: 0,2 | default: "en" }}" class="no-js">
+<html lang="{{ site.locale | slice: 0,2 | default: "en" }}" class="no-js"{% if site.site_theme == "dark" %} data-theme="dark"{% endif %}>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %} | {{ site.name | default: site.title }}</title>
     {% include head.html %}
     {% include head/custom.html %}
-    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/cv-layout.css">
+    <link rel="stylesheet" href="{{ base_path }}/assets/css/cv-layout.css">
+    <link rel="stylesheet" href="{{ base_path }}/assets/css/cv-style.css">
   </head>
 
   <body class="cv-layout">
     {% include browser-upgrade.html %}
     {% include masthead.html %}
 
-    <div id="main" role="main">
-      <div class="container">
+    <div id="main" class="cv-main" role="main">
+      {% include sidebar.html %}
+
+      <main class="cv-page" aria-label="{{ page.title | default: "CV" }}">
         {{ content }}
-      </div>
+      </main>
     </div>
 
     <div class="page__footer">

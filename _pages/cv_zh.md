@@ -22,7 +22,7 @@ redirect_from:
     </nav>
   </header>
 
-  <section class="cv-section" aria-labelledby="education">
+  <section class="cv-section cv-section--timeline" aria-labelledby="education">
     <h2 id="education">教育背景</h2>
     <div class="cv-item">
       <div class="cv-item__main">
@@ -40,7 +40,7 @@ redirect_from:
     </div>
   </section>
 
-  <section class="cv-section" aria-labelledby="experience">
+  <section class="cv-section cv-section--timeline" aria-labelledby="experience">
     <h2 id="experience">工作经历</h2>
     <div class="cv-item cv-item--empty">
       <div class="cv-item__main">
@@ -67,15 +67,21 @@ redirect_from:
           <article class="cv-publication-item" itemscope itemtype="http://schema.org/CreativeWork">
             <h3 itemprop="headline">
               {% if post.link %}
-                <a href="{{ post.link }}">{{ title }}</a>
-                <a class="cv-publication-item__permalink" href="{{ base_path }}{{ post.url }}" rel="permalink">Permalink</a>
+                <a class="cv-publication-item__title" href="{{ post.link }}">{{ title }}</a>
               {% else %}
-                <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+                <a class="cv-publication-item__title" href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
               {% endif %}
             </h3>
             {% if post.venue %}
               <p itemprop="description">{{ post.citation }}</p>
             {% endif %}
+            <p class="cv-publication-item__links" aria-label="论文链接">
+              {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
+              {% if post.slidesurl %}<a href="{{ post.slidesurl }}">Slides</a>{% endif %}
+              {% if post.codeurl %}<a href="{{ post.codeurl }}">Code</a>{% endif %}
+              {% if post.bibtexurl %}<a href="{{ post.bibtexurl }}">BibTeX</a>{% endif %}
+              <a href="{{ base_path }}{{ post.url }}" rel="permalink">Permalink</a>
+            </p>
           </article>
         {% endfor %}
       </div>

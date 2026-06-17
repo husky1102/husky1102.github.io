@@ -62,4 +62,88 @@ h6,
   font-family: "Maple Mono NF CN", "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+.home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--global-border-color);
+}
+
+.home-hero__eyebrow {
+  margin-bottom: 0.75rem;
+  color: var(--global-text-color-light);
+  font-size: 0.8rem;
+}
+
+.home-hero h1 {
+  margin-bottom: 0.75rem;
+  font-size: 2rem;
+}
+
+.home-hero__lead {
+  max-width: 38rem;
+  font-size: 1.05rem;
+}
+
+.home-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.home-hero__portrait {
+  justify-self: start;
+  width: min(220px, 55vw);
+}
+
+.home-hero__portrait img {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid var(--global-border-color);
+  background: var(--global-footer-bg-color);
+}
+
+.home-section {
+  margin: 2rem 0;
+}
+
+.home-link-list {
+  margin-left: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.home-link-list li {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--global-border-color);
+}
+
+.home-link-list strong {
+  color: var(--global-text-color);
+}
+
+.home-link-list span {
+  color: var(--global-text-color-light);
+}
+
+@media (min-width: 48em) {
+  .home-hero {
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+
+  .home-hero h1 {
+    font-size: 2.35rem;
+  }
+
+  .home-hero__portrait {
+    justify-self: end;
+  }
+}
+
 /* end custom scss snippet */

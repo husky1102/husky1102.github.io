@@ -50,6 +50,37 @@ $(document).ready(function () {
 
   $('#theme-toggle').on('click', toggleTheme);
 
+  var $scrollProgress = $(".scroll-progress span");
+  var $backToTop = $(".back-to-top");
+  var scrollChromeTicking = false;
+  var updateScrollChrome = function () {
+    var scrollTop = $(window).scrollTop();
+    var scrollHeight = $(document).height() - $(window).height();
+    var progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+
+    $scrollProgress.css("width", Math.min(100, Math.max(0, progress)) + "%");
+    $backToTop.toggleClass("is-visible", scrollTop > $(window).height() * 0.8);
+  };
+  var requestScrollChromeUpdate = function () {
+    if (scrollChromeTicking) {
+      return;
+    }
+
+    scrollChromeTicking = true;
+    window.requestAnimationFrame(function () {
+      updateScrollChrome();
+      scrollChromeTicking = false;
+    });
+  };
+
+  updateScrollChrome();
+  $(window).on("scroll resize", requestScrollChromeUpdate);
+  window.addEventListener("scroll", requestScrollChromeUpdate, { passive: true });
+  document.addEventListener("scroll", requestScrollChromeUpdate, { passive: true });
+  $backToTop.on("click", function () {
+    $("html, body").animate({ scrollTop: 0 }, 450);
+  });
+
   // These should be the same as the settings in _variables.scss
   const scssLarge = 925; // pixels
 

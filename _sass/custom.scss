@@ -108,7 +108,7 @@ h6,
   gap: 1.5rem;
   align-items: center;
   margin-bottom: 2.5rem;
-  padding-bottom: 2rem;
+  padding: 1.25rem 0 2rem;
   border-bottom: 1px solid var(--global-border-color);
 }
 
@@ -131,13 +131,37 @@ h6,
 .home-hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.65rem;
   margin-top: 1.25rem;
+}
+
+.home-hero__actions .btn {
+  border-color: color-mix(in srgb, var(--global-link-color) 38%, var(--global-border-color));
+  border-radius: 7px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 14%, transparent), transparent 60%),
+    var(--global-bg-color);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  transform: translateY(0);
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    color 0.28s ease,
+    transform 0.28s ease;
+}
+
+.home-hero__actions .btn:hover,
+.home-hero__actions .btn:focus-visible {
+  border-color: var(--global-link-color);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.14);
+  transform: translateY(-2px);
 }
 
 .home-hero__portrait {
   justify-self: start;
   width: min(220px, 55vw);
+  perspective: 700px;
 }
 
 .home-hero__portrait img {
@@ -145,31 +169,115 @@ h6,
   border-radius: 16px;
   border: 1px solid var(--global-border-color);
   background: var(--global-footer-bg-color);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
+  transform: rotate(0deg) scale(1);
+  transition:
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    transform 0.28s ease;
+}
+
+.home-hero__portrait:hover img,
+.home-hero__portrait:focus-within img {
+  border-color: color-mix(in srgb, var(--global-link-color) 45%, var(--global-border-color));
+  box-shadow: 0 24px 54px rgba(15, 23, 42, 0.18);
+  transform: rotate(1deg) scale(1.03);
 }
 
 .home-section {
   margin: 2rem 0;
 }
 
+.home-card-grid,
 .home-link-list {
   margin-left: 0;
   padding-left: 0;
   list-style: none;
 }
 
+.home-card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.8rem;
+}
+
+.home-info-card,
 .home-link-list li {
   display: grid;
   gap: 0.25rem;
-  padding: 0.85rem 0;
-  border-bottom: 1px solid var(--global-border-color);
+  padding: 1rem;
+  border: 1px solid var(--global-border-color);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 7%, transparent), transparent 58%),
+    color-mix(in srgb, var(--global-footer-bg-color) 62%, var(--global-bg-color));
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  transform: translateY(0);
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    transform 0.28s ease;
 }
 
+.home-info-card:hover,
+.home-info-card:focus-within,
+.home-link-list li:hover,
+.home-link-list li:focus-within {
+  border-color: color-mix(in srgb, var(--global-link-color) 48%, var(--global-border-color));
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.09);
+  transform: translateY(-2px);
+}
+
+.home-info-card strong,
 .home-link-list strong {
   color: var(--global-text-color);
 }
 
+.home-info-card span,
 .home-link-list span {
   color: var(--global-text-color-light);
+}
+
+.about-entry-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.about-entry-card {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 3.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--global-border-color);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--global-footer-bg-color) 66%, var(--global-bg-color));
+  color: var(--global-text-color);
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  transform: translateY(0);
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    color 0.28s ease,
+    transform 0.28s ease;
+}
+
+.about-entry-card:hover,
+.about-entry-card:focus-visible {
+  border-color: var(--global-link-color);
+  color: var(--global-link-color);
+  text-decoration: none;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.10);
+  transform: translateY(-2px);
+}
+
+.about-entry-card i {
+  color: var(--global-link-color);
 }
 
 @media (min-width: 48em) {
@@ -183,6 +291,14 @@ h6,
 
   .home-hero__portrait {
     justify-self: end;
+  }
+
+  .home-card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .about-entry-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

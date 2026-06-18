@@ -90,6 +90,7 @@
     padding: 1.15rem 1.1rem 1.25rem;
     border: 1px solid var(--global-border-color);
     border-radius: 12px;
+    background: var(--global-bg-color);
     background: color-mix(in srgb, var(--global-footer-bg-color) 55%, var(--global-bg-color));
   }
 }
@@ -156,6 +157,7 @@
       inset: 3px;
       border-radius: 50%;
       background: var(--global-bg-color);
+      background: color-mix(in srgb, var(--global-footer-bg-color) 55%, var(--global-bg-color));
       z-index: 1;
     }
   }
@@ -216,6 +218,15 @@
   @include breakpoint($large) {
     /* Reduced-motion: keep the reveal, drop the leap. */
     @media (prefers-reduced-motion: reduce) {
+      &::before {
+        animation: none;
+      }
+
+      &:hover {
+        transform: none;
+        box-shadow: 0 10px 26px rgba(#000, 0.10);
+      }
+
       img {
         transition: border-radius 0.2s ease, filter 0.2s ease;
         transform: translateY(var(--avatar-art-y));

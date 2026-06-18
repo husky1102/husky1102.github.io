@@ -81,3 +81,23 @@ test("I-36: avatar hover uses responsive mask fade and rotating gradient ring wi
   assert.match(sidebar, /filter:\s*drop-shadow/);
 });
 
+test("I-37: avatar hover respects reduced motion and matches sidebar backdrop", () => {
+  const sidebar = read("_sass/layout/_sidebar.scss");
+
+  assert.match(
+    sidebar,
+    /&::after\s*\{[\s\S]*?background:\s*color-mix\(in srgb,\s*var\(--global-footer-bg-color\) 55%,\s*var\(--global-bg-color\)\)/
+  );
+  assert.match(
+    sidebar,
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&::before\s*\{[\s\S]*?animation:\s*none/
+  );
+  assert.match(
+    sidebar,
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&:hover\s*\{[\s\S]*?transform:\s*none[\s\S]*?box-shadow:\s*0 10px 26px rgba\(#000,\s*0\.10\)/
+  );
+  assert.match(
+    sidebar,
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&:hover img\s*\{[\s\S]*?transform:\s*translateY\(var\(--avatar-art-y\)\)[\s\S]*?filter:\s*none/
+  );
+});

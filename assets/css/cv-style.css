@@ -197,6 +197,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
+  align-items: center;
   margin: 0.55rem 0 0;
 }
 
@@ -204,6 +205,7 @@
 .cv-publication-item__permalink {
   display: inline-flex;
   align-items: center;
+  gap: 0.35rem;
   min-height: 1.8rem;
   padding: 0.2rem 0.58rem;
   border: 1px solid color-mix(in srgb, var(--global-link-color) 42%, var(--global-border-color));

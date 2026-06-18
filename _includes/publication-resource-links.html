@@ -1,0 +1,43 @@
+{% include base_path %}
+{% assign item = include.item | default: page %}
+{% assign resource_class = include.class | default: "publication-resource-links" %}
+{% assign link_label_paper = "Paper" %}
+{% assign link_label_slides = "Slides" %}
+{% assign link_label_code = "Code" %}
+{% assign link_label_bibtex = "BibTeX" %}
+{% if include.download_labels %}
+  {% assign link_label_paper = "Download Paper" %}
+  {% assign link_label_slides = "Download Slides" %}
+  {% assign link_label_code = "Code" %}
+  {% assign link_label_bibtex = "Download BibTeX" %}
+{% endif %}
+
+{% assign has_resource_links = false %}
+{% if item.paperurl or item.slidesurl or item.codeurl or item.bibtexurl or include.show_permalink %}
+  {% assign has_resource_links = true %}
+{% endif %}
+
+{% if item.citation or has_resource_links %}
+  <p class="{{ resource_class }}"{% if include.aria_label %} aria-label="{{ include.aria_label }}"{% endif %}>
+    {% unless include.hide_citation %}
+      {% if item.citation %}
+        <span class="publication-resource-links__citation">Recommended citation: {{ item.citation }}</span>
+      {% endif %}
+    {% endunless %}
+    {% if item.paperurl %}
+      <a class="publication-resource-link" href="{{ item.paperurl }}"><i class="fas fa-file-pdf" aria-hidden="true"></i><span>{{ link_label_paper }}</span></a>
+    {% endif %}
+    {% if item.slidesurl %}
+      <a class="publication-resource-link" href="{{ item.slidesurl }}"><i class="fas fa-desktop" aria-hidden="true"></i><span>{{ link_label_slides }}</span></a>
+    {% endif %}
+    {% if item.codeurl %}
+      <a class="publication-resource-link" href="{{ item.codeurl }}"><i class="fab fa-github" aria-hidden="true"></i><span>{{ link_label_code }}</span></a>
+    {% endif %}
+    {% if item.bibtexurl %}
+      <a class="publication-resource-link" href="{{ item.bibtexurl }}"><i class="fas fa-quote-right" aria-hidden="true"></i><span>{{ link_label_bibtex }}</span></a>
+    {% endif %}
+    {% if include.show_permalink %}
+      <a class="publication-resource-link" href="{{ base_path }}{{ item.url }}" rel="permalink"><i class="fas fa-link" aria-hidden="true"></i><span>Permalink</span></a>
+    {% endif %}
+  </p>
+{% endif %}

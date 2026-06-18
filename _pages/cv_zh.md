@@ -75,13 +75,7 @@ redirect_from:
             {% if post.venue %}
               <p itemprop="description">{{ post.citation }}</p>
             {% endif %}
-            <p class="cv-publication-item__links" aria-label="论文链接">
-              {% if post.paperurl %}<a href="{{ post.paperurl }}">Paper</a>{% endif %}
-              {% if post.slidesurl %}<a href="{{ post.slidesurl }}">Slides</a>{% endif %}
-              {% if post.codeurl %}<a href="{{ post.codeurl }}">Code</a>{% endif %}
-              {% if post.bibtexurl %}<a href="{{ post.bibtexurl }}">BibTeX</a>{% endif %}
-              <a href="{{ base_path }}{{ post.url }}" rel="permalink">Permalink</a>
-            </p>
+            {% include publication-resource-links.html item=post class="cv-publication-item__links" hide_citation=true show_permalink=true aria_label="论文链接" %}
           </article>
         {% endfor %}
       </div>

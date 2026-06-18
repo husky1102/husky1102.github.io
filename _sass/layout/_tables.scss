@@ -2,13 +2,26 @@
    TABLES
    ========================================================================== */
 
+/* Rebuilt for v4 (I-31): display:block + overflow-x lets wide tables scroll
+   instead of breaking the mobile layout (Kramdown emits a bare <table>, so the
+   table itself has to be the scroll container). Vertical grid lines are dropped
+   in favour of horizontal rules, a brand-tinted header, zebra rows and a soft
+   rounded frame, so tables match the rest of the card system in both themes. */
+
 table {
-  margin-bottom: 1em;
-  width: 100%;
-  font-family: $global-font-family;
+  display: block;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 100%;
+  margin: 1.5em 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  font-family: inherit;
   font-size: $type-size-6;
-  border-collapse: collapse;
   border: 1px solid var(--global-border-color);
+  border-radius: 8px;
+  border-spacing: 0;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
 
   & + table {
     margin-top: 1em;
@@ -16,21 +29,40 @@ table {
 }
 
 thead {
-  background-color: var(--global-border-color);
-  border-bottom: 1px solid var(--global-border-color);
+  background: color-mix(in srgb, var(--global-link-color) 10%, var(--global-bg-color));
+  border-bottom: 2px solid color-mix(in srgb, var(--global-link-color) 30%, var(--global-border-color));
 }
 
 th {
-  padding: 0.5em;
-  font-weight: bold;
+  padding: 0.6em 0.9em;
+  font-weight: 700;
   text-align: left;
-  border-right: 1px solid var(--global-border-color);
+  color: var(--global-text-color);
 }
 
 td {
-  padding: 0.5em;
-  border-bottom: 1px solid var(--global-border-color);
-  border-right: 1px solid var(--global-border-color);
+  padding: 0.55em 0.9em;
+}
+
+tbody tr {
+  transition: background-color 0.18s ease;
+}
+
+tbody tr td {
+  border-top: 1px solid var(--global-border-color);
+}
+
+tbody tr:first-child td {
+  /* the header border (or table frame) already separates the first row */
+  border-top: 0;
+}
+
+tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--global-footer-bg-color) 45%, transparent);
+}
+
+tbody tr:hover {
+  background: color-mix(in srgb, var(--global-link-color) 7%, transparent);
 }
 
 tr, td, th {

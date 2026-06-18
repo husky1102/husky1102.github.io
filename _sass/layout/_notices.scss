@@ -8,93 +8,109 @@
  *  #### Headline for the Notice
  *  Text for the notice
  *  </div>
+ *
+ *  Rebuilt for v4 (I-30): theme-aware + brand-aligned. The old version baked a
+ *  fixed light background with mix(#fff, color, 90%) and used the code-text
+ *  color for body text, which made notices unreadable in dark mode (~1.4:1) and
+ *  gave links sub-AA contrast even in light mode. Now the body text uses the
+ *  theme text color, the surface is a light wash of the accent over the theme
+ *  background, and each semantic accent has a light- and dark-mode value.
  */
 
-@mixin notice($notice-color) {
-  margin: 2em 0 !important;  /* override*/
-  padding: 1em;
-  font-family: $global-font-family;
+/* Semantic accents, tuned to pass AA on the notice surface in each theme. */
+:root {
+  --notice-success: #166534;
+  --notice-warning: #92400e;
+  --notice-danger:  #b91c1c;
+}
+
+html[data-theme="dark"] {
+  --notice-success: #4ade80;
+  --notice-warning: #fbbf24;
+  --notice-danger:  #f87171;
+}
+
+.notice,
+.notice--primary,
+.notice--info,
+.notice--warning,
+.notice--success,
+.notice--danger {
+  --notice-accent: var(--global-link-color);
+
+  margin: 2em 0 !important; /* override */
+  padding: 1em 1.15em 1em 1.25em;
+  font-family: inherit;
   font-size: $type-size-6 !important;
-  text-indent: initial; /* override*/
-  background-color: mix(#fff, $notice-color, 90%);
-  border-radius: $border-radius;
-  box-shadow: 0 1px 1px rgba($notice-color, 0.25);
-  color: var(--global-code-text-color);
+  line-height: 1.7;
+  text-indent: initial; /* override */
+  color: var(--global-text-color);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--notice-accent) 9%, transparent), transparent 72%),
+    color-mix(in srgb, var(--notice-accent) 6%, var(--global-bg-color));
+  border: 1px solid color-mix(in srgb, var(--notice-accent) 22%, var(--global-border-color));
+  border-left: 4px solid var(--notice-accent);
+  border-radius: 8px;
+  box-shadow:
+    0 8px 20px rgba(15, 23, 42, 0.05),
+    inset 0 0 0 1px color-mix(in srgb, var(--notice-accent) 6%, transparent);
 
   h4 {
-    margin-top: 0 !important; /* override*/
-    margin-bottom: 0.75em;
+    margin-top: 0 !important; /* override */
+    margin-bottom: 0.5em;
+    color: var(--global-text-color);
   }
 
   @at-root .page__content #{&} h4 {
-    /* using at-root to override .page-content h4 font size*/
-    margin-bottom: 0;
+    /* using at-root to override .page-content h4 font size */
+    margin-bottom: 0.3em;
     font-size: 1em;
   }
 
   p {
     &:last-child {
-      margin-bottom: 0 !important; /* override*/
+      margin-bottom: 0 !important; /* override */
     }
   }
 
   h4 + p {
-    /* remove space above paragraphs that appear directly after notice headline*/
+    /* remove space above paragraphs that appear directly after notice headline */
     margin-top: 0;
     padding-top: 0;
   }
 
   a {
-    color: $notice-color;
+    color: var(--notice-accent);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
 
-    &:hover {
-      color: mix(#000, $notice-color, 40%);
+    &:hover,
+    &:focus-visible {
+      color: color-mix(in srgb, var(--notice-accent) 75%, var(--global-text-color));
     }
   }
 
   code {
-    background-color: mix(#fff, $notice-color, 95%)
+    background-color: color-mix(in srgb, var(--notice-accent) 12%, var(--global-code-background-color));
   }
 
   ul {
     &:last-child {
-      margin-bottom: 0; /* override*/
+      margin-bottom: 0; /* override */
     }
   }
 }
 
-/* Default notice */
-
-.notice {
-  @include notice($notice-color);
-}
-
-/* Primary notice */
-
-.notice--primary {
-  @include notice($notice-color);
-}
-
-/* Info notice */
-
-.notice--info {
-  @include notice($info-color);
-}
-
-/* Warning notice */
-
+/* Per-type accent assignments (default/primary/info inherit the brand link color). */
 .notice--warning {
-  @include notice($warning-color);
+  --notice-accent: var(--notice-warning);
 }
-
-/* Success notice */
 
 .notice--success {
-  @include notice($success-color);
+  --notice-accent: var(--notice-success);
 }
 
-/* Danger notice */
-
 .notice--danger {
-  @include notice($danger-color);
+  --notice-accent: var(--notice-danger);
 }

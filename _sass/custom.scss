@@ -102,6 +102,44 @@ h6,
   font-family: "Maple Mono NF CN", "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+/* I-32: keep the mono identity, but give the heading scale a real ladder.
+   The stock theme set h1 ~25px, h2 ~20px, h3 = body, h4-h6 BELOW body (12px),
+   all at the same weight as body, so hierarchy read flat. Add weight + tight
+   tracking + a wider content scale so headings carry their own voice. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.page__title,
+.archive__item-title {
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  line-height: 1.25;
+}
+
+h1,
+h2,
+h3,
+.page__title {
+  text-wrap: balance;
+}
+
+.page__content {
+  h1 { font-size: 1.85rem; }
+  h2 { font-size: 1.45rem; }
+  h3 { font-size: 1.2rem; }
+  h4 { font-size: 1.02rem; }
+  h5 { font-size: 0.94rem; }
+  h6 {
+    font-size: 0.84rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--global-text-color-light);
+  }
+}
+
 .page__inner-wrap > header {
   margin-bottom: 1.45rem;
 }
@@ -109,6 +147,7 @@ h6,
 .page__title {
   position: relative;
   padding-bottom: 0.8rem;
+  font-size: clamp(1.85rem, calc(1.4rem + 2vw), 2.5rem);
 }
 
 .page__title::after {
@@ -205,7 +244,7 @@ html[data-theme="dark"] blockquote {
 
 .home-hero h1 {
   margin-bottom: 0.75rem;
-  font-size: 2rem;
+  font-size: clamp(2.1rem, calc(1.5rem + 3vw), 3rem);
 }
 
 .home-hero__lead {
@@ -223,6 +262,9 @@ html[data-theme="dark"] blockquote {
 .home-hero__actions .btn {
   border-color: color-mix(in srgb, var(--global-link-color) 38%, var(--global-border-color));
   border-radius: 7px;
+  /* the hero pill sits on a light surface, so its label must be the brand color,
+     not the inherited white (which would vanish on the light gradient) */
+  color: var(--global-link-color) !important;
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 14%, transparent), transparent 60%),
     var(--global-bg-color);
@@ -239,6 +281,8 @@ html[data-theme="dark"] blockquote {
 .home-hero__actions .btn:hover,
 .home-hero__actions .btn:focus-visible {
   border-color: var(--global-link-color);
+  background: var(--global-link-color);
+  color: var(--global-bg-color) !important;
   box-shadow: 0 12px 26px rgba(15, 23, 42, 0.14);
   transform: translateY(-2px);
 }
@@ -267,16 +311,25 @@ html[data-theme="dark"] blockquote {
   padding: 1rem;
   border: 1px solid var(--global-border-color);
   border-radius: 8px;
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 7%, transparent), transparent 58%),
-    color-mix(in srgb, var(--global-footer-bg-color) 62%, var(--global-bg-color));
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  /* I-35 quiet tier: flat, bordered surface at rest (no resting shadow, no
+     gradient wash). Elevation is reserved for the primary tier + hover. */
+  background: color-mix(in srgb, var(--global-footer-bg-color) 52%, var(--global-bg-color));
+  box-shadow: none;
   transform: translateY(0);
   transition:
     background-color 0.28s ease,
     border-color 0.28s ease,
     box-shadow 0.28s ease,
     transform 0.28s ease;
+}
+
+.home-info-card {
+  /* I-35 primary tier: the brand wash + a soft resting lift set the feature
+     cards apart from the quieter list/archive surfaces. */
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 8%, transparent), transparent 58%),
+    color-mix(in srgb, var(--global-footer-bg-color) 62%, var(--global-bg-color));
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
 }
 
 .home-info-card:hover,
@@ -378,10 +431,9 @@ html[data-theme="dark"] blockquote {
   padding: 1rem;
   border: 1px solid var(--global-border-color);
   border-radius: 8px;
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 6%, transparent), transparent 62%),
-    color-mix(in srgb, var(--global-footer-bg-color) 58%, var(--global-bg-color));
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  /* I-35 quiet tier: flat bordered surface at rest; elevates only on hover. */
+  background: color-mix(in srgb, var(--global-footer-bg-color) 50%, var(--global-bg-color));
+  box-shadow: none;
   transform: translateY(0);
   transition:
     background-color 0.28s ease,
@@ -545,6 +597,51 @@ html[data-theme="dark"] .cv-tag-list li:focus-within {
   color: var(--global-link-color);
 }
 
+/* I-34: a real recovery page instead of a text-only dead end. */
+.error-404 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1.5rem 0 2.75rem;
+  text-align: center;
+}
+
+.error-404__code {
+  margin: 0;
+  font-family: "Maple Mono NF CN", "LXGW WenKai Screen", monospace;
+  font-weight: 700;
+  font-size: clamp(3.75rem, 14vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--global-link-color);
+}
+
+.error-404__lead {
+  margin: 0.6rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--global-text-color);
+}
+
+.error-404__hint {
+  margin: 0.2rem 0 0;
+  color: var(--global-text-color-light);
+  font-size: 0.95rem;
+}
+
+.error-404__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 1.6rem;
+}
+
+html[data-theme="dark"] .error-404__code {
+  text-shadow: 0 0 34px rgba(103, 232, 249, 0.22);
+}
+
 .scroll-progress {
   position: fixed;
   top: 0;
@@ -632,10 +729,6 @@ html[data-theme="dark"] .cv-tag-list li:focus-within {
 }
 
 @media (min-width: 48em) {
-  .home-hero h1 {
-    font-size: 2.35rem;
-  }
-
   .home-card-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -647,6 +740,19 @@ html[data-theme="dark"] .cv-tag-list li:focus-within {
   .about-entry-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* Global keyboard-focus baseline + branded text selection. The :where() wrapper
+   keeps specificity at zero so any component-specific focus style still wins. */
+:where(a, button, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--global-link-color);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--global-link-color) 24%, transparent);
+  color: var(--global-text-color);
 }
 
 /* end custom scss snippet */

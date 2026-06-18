@@ -22,3 +22,6 @@ vendor/
 
 # Local AI agent workspace
 .cowork/
+
+# Local Claude Code settings (e.g. personal permission rules)
+.claude/settings.local.json

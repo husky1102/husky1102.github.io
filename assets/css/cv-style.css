@@ -93,6 +93,9 @@
   left: 0.36rem;
   width: 1px;
   background: var(--global-border-color);
+  transition:
+    background-color 0.24s ease,
+    box-shadow 0.24s ease;
 }
 
 .cv-section--timeline .cv-item::after {
@@ -106,6 +109,28 @@
   border-radius: 50%;
   background: var(--global-bg-color);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--global-link-color) 14%, transparent);
+  transform: scale(1);
+  transition:
+    background-color 0.24s ease,
+    border-color 0.24s ease,
+    box-shadow 0.24s ease,
+    transform 0.24s ease;
+}
+
+.cv-section--timeline .cv-item:hover::before,
+.cv-section--timeline .cv-item:focus-within::before {
+  background: color-mix(in srgb, var(--global-link-color) 62%, var(--global-border-color));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--global-link-color) 22%, transparent);
+}
+
+.cv-section--timeline .cv-item:hover::after,
+.cv-section--timeline .cv-item:focus-within::after {
+  border-color: var(--global-link-color);
+  background: var(--global-link-color);
+  box-shadow:
+    0 0 8px var(--global-link-color),
+    0 0 0 5px color-mix(in srgb, var(--global-link-color) 16%, transparent);
+  transform: scale(1.28);
 }
 
 .cv-section--timeline .cv-item:first-of-type::before {
@@ -125,6 +150,16 @@
 
 .cv-item:first-of-type {
   padding-top: 0;
+}
+
+.cv-item__main {
+  transform: translateX(0);
+  transition: transform 0.24s ease;
+}
+
+.cv-section--timeline .cv-item:hover .cv-item__main,
+.cv-section--timeline .cv-item:focus-within .cv-item__main {
+  transform: translateX(3px);
 }
 
 .cv-item__main h3,

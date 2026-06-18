@@ -177,11 +177,11 @@
 
       img {
         border-radius: 0; // open the top/sides while the frame still clips the bottom
-        /* Keep the bitmap itself shadowless; the soft silhouette is the
-           drop-shadow below, and the ring carries the frame shadow. */
+        /* Keep the bitmap itself shadowless; a drop-shadow on the clipped lower
+           edge reads as a hard line under the ring. */
         box-shadow: none;
-        transform: translateY(-7px) scale(1.16);
-        filter: drop-shadow(0 9px 8px rgba(#000, 0.18));
+        transform: translateY(var(--avatar-art-y)) scale(1.16);
+        filter: none;
       }
     }
   }
@@ -196,7 +196,7 @@
 
       &:hover img {
         transform: translateY(var(--avatar-art-y));
-        filter: drop-shadow(0 6px 8px rgba(#000, 0.22));
+        filter: none;
       }
     }
   }

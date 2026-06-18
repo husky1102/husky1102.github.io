@@ -12,8 +12,14 @@
   {% assign title = post.title %}
 {% endif %}
 
-<div class="{{ include.type | default: "list" }}__item">
-  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+{% assign archive_item_type = include.type | default: "list" %}
+{% assign archive_item_class = "archive__item" %}
+{% if archive_item_type == "card" %}
+  {% assign archive_item_class = "archive__item archive__item--card" %}
+{% endif %}
+
+<div class="{{ archive_item_type }}__item">
+  <article class="{{ archive_item_class }}" itemscope itemtype="http://schema.org/CreativeWork">
     {% if include.type == "grid" and teaser %}
       <div class="archive__item-teaser">
         <img src=
@@ -24,6 +30,22 @@
           {% endif %}
           alt="">
       </div>
+    {% endif %}
+
+    {% if archive_item_type == "card" %}
+      {% if post.category or post.categories.size > 0 or post.venue %}
+        <div class="archive__item-badges" aria-label="Archive item metadata">
+          {% if post.category %}
+            <span class="archive__item-badge">{{ post.category | replace: "-", " " }}</span>
+          {% elsif post.categories.size > 0 %}
+            {% for category in post.categories limit: 2 %}
+              <span class="archive__item-badge">{{ category | replace: "-", " " }}</span>
+            {% endfor %}
+          {% elsif post.venue %}
+            <span class="archive__item-badge">{{ post.venue }}</span>
+          {% endif %}
+        </div>
+      {% endif %}
     {% endif %}
 
     <h2 class="archive__item-title" itemprop="headline">

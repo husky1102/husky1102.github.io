@@ -360,6 +360,106 @@ html[data-theme="dark"] blockquote {
   font-size: 0.92rem;
 }
 
+.archive-card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin: 1rem 0 2.2rem;
+}
+
+.card__item {
+  min-width: 0;
+}
+
+.archive__item--card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 1rem;
+  border: 1px solid var(--global-border-color);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 6%, transparent), transparent 62%),
+    color-mix(in srgb, var(--global-footer-bg-color) 58%, var(--global-bg-color));
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  transform: translateY(0);
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    transform 0.28s ease;
+}
+
+.archive__item--card:hover,
+.archive__item--card:focus-within {
+  border-color: color-mix(in srgb, var(--global-link-color) 48%, var(--global-border-color));
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.09);
+  transform: translateY(-2px);
+}
+
+.archive__item--card a {
+  text-decoration: none;
+}
+
+.archive__item--card a:hover,
+.archive__item--card a:focus-visible {
+  text-decoration: underline;
+}
+
+.archive__item--card .publication-resource-link:hover,
+.archive__item--card .publication-resource-link:focus-visible {
+  text-decoration: none;
+}
+
+.archive__item--card .archive__item-title {
+  margin: 0 0 0.45rem;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.archive__item--card .page__meta,
+.archive__item--card .page__date {
+  margin: 0.35rem 0 0;
+  color: var(--global-text-color-light);
+  font-size: 0.78rem;
+}
+
+.archive__item--card .archive__item-excerpt {
+  margin-top: 0.7rem;
+  color: var(--global-text-color-light);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.archive__item-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.7rem;
+}
+
+.archive__item-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.45rem;
+  padding: 0.12rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--global-link-color) 34%, var(--global-border-color));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--global-link-color) 9%, transparent);
+  color: var(--global-link-color);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+html[data-theme="dark"] .archive__item--card:hover,
+html[data-theme="dark"] .archive__item--card:focus-within {
+  border-color: rgba(103, 232, 249, 0.28);
+  box-shadow:
+    0 12px 30px rgba(103, 232, 249, 0.07),
+    0 18px 46px rgba(2, 6, 23, 0.34);
+}
+
 .cv-tag-list li {
   transform: translateY(0);
   transition:
@@ -523,6 +623,10 @@ html[data-theme="dark"] .cv-tag-list li:focus-within {
 
   .home-card-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .archive-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .about-entry-grid {

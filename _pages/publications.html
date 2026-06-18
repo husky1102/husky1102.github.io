@@ -20,17 +20,24 @@ author_profile: true
         {% continue %}
       {% endif %}
       {% unless title_shown %}
-        <h2>{{ category[1].title }}</h2><hr />
+        <h2 class="archive__subtitle">{{ category[1].title }}</h2>
+        <div class="archive-card-grid archive-card-grid--publications">
         {% assign title_shown = true %}
       {% endunless %}
-      {% include archive-single.html %}
+      {% include archive-single.html type="card" %}
     {% endfor %}
+    {% if title_shown %}
+      </div>
+    {% endif %}
   {% endfor %}
 {% else %}
-  {% for post in site.publications reversed %}
-    {% include archive-single.html %}
-  {% endfor %}
+  {% if site.publications.size > 0 %}
+    <div class="archive-card-grid archive-card-grid--publications">
+      {% for post in site.publications reversed %}
+        {% include archive-single.html type="card" %}
+      {% endfor %}
+    </div>
+  {% endif %}
 {% endif %}
-
 
 

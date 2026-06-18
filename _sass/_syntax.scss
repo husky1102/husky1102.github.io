@@ -91,6 +91,17 @@ div.highlighter-rouge, figure.highlight {
             transform: translateY(0);
   }
 
+  /* Touch devices have no hover, so the reveal-on-hover button would stay
+     invisible. Keep it permanently visible (slightly dimmed) on coarse pointers. */
+  @media (hover: none) {
+    .code-copy-button {
+      opacity: 0.72;
+      -webkit-transform: none;
+          -ms-transform: none;
+              transform: none;
+    }
+  }
+
   .code-copy-button:hover,
   .code-copy-button:focus-visible,
   .code-copy-button.is-copied {

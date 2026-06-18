@@ -16,12 +16,21 @@ $(document).ready(function () {
       $("html").attr("data-theme") ||
       browserPref;
 
-    if (use_theme === "dark") {
+    const is_dark = use_theme === "dark";
+
+    if (is_dark) {
       $("html").attr("data-theme", "dark");
       $("#theme-icon").removeClass("fa-sun").addClass("fa-moon");
-    } else if (use_theme === "light") {
+    } else {
       $("html").removeAttr("data-theme");
       $("#theme-icon").removeClass("fa-moon").addClass("fa-sun");
+    }
+
+    // keep the toggle's pressed state and the browser UI color in sync
+    $("#theme-toggle button").attr("aria-pressed", is_dark ? "true" : "false");
+    var themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute("content", is_dark ? "#0f172a" : "#fbfaf7");
     }
   };
 

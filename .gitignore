@@ -16,3 +16,9 @@ package-lock.json
 # Ignore the vendor file and bundle for alternative installation
 vendor/
 .bundle/
+
+# OS / editor noise
+.DS_Store
+
+# Local AI agent workspace
+.cowork/

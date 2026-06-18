@@ -252,11 +252,47 @@
     }
 
     #theme-toggle {
-      a {
+      button {
+        /* This is a real <button> for accessibility, but it must NOT inherit the
+           absolutely-positioned overflow-toggle styles from `.greedy-nav button`.
+           Reset it back to a plain inline nav icon. */
+        position: static;
         width: 25px;
+        min-width: 0;
+        height: auto;
+        margin: 0 0 0 1rem;
+        padding: 0.5rem 0;
         display: flex;
+        align-items: center;
         justify-content: center;
+        border: 0;
+        border-radius: 4px;
+        background: none;
+        -webkit-backdrop-filter: none;
+                backdrop-filter: none;
+        box-shadow: none;
+        color: var(--global-masthead-link-color);
+        font-size: inherit;
+        line-height: inherit;
         cursor: pointer;
+
+        &:hover {
+          border: 0;
+          background: none;
+          box-shadow: none;
+          transform: none;
+          color: var(--global-masthead-link-color-hover);
+        }
+
+        /* `.greedy-nav button` kills the outline, so restore a visible focus ring */
+        &:focus-visible {
+          outline: 2px solid var(--global-link-color);
+          outline-offset: 2px;
+          background: none;
+          box-shadow: none;
+          transform: none;
+          color: var(--global-masthead-link-color-hover);
+        }
       }
     }
 

@@ -46,3 +46,14 @@ test("TOC uses a glass card with link focus indicators", () => {
   assert.match(navigation, /\.toc__menu[\s\S]*&::before/);
   assert.match(navigation, /\.toc__menu[\s\S]*border-left:\s*2px solid var\(--global-link-color\)/);
 });
+
+test("Code blocks expose copy buttons and accent framing", () => {
+  const syntax = read("_sass/_syntax.scss");
+  const mainJs = read("assets/js/_main.js");
+
+  assert.match(syntax, /border-left:\s*3px solid var\(--global-link-color\)/);
+  assert.match(syntax, /\.code-copy-button/);
+  assert.match(mainJs, /code-copy-button/);
+  assert.match(mainJs, /navigator\.clipboard\.writeText/);
+  assert.match(mainJs, /execCommand\("copy"\)/);
+});

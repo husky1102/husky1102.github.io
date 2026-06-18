@@ -81,6 +81,57 @@ $(document).ready(function () {
     $("html, body").animate({ scrollTop: 0 }, 450);
   });
 
+  var copyTextFallback = function (text) {
+    var textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.top = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  };
+  var copyCodeText = function (text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(function () {
+        copyTextFallback(text);
+      });
+    }
+
+    copyTextFallback(text);
+    return Promise.resolve();
+  };
+
+  $("div.highlighter-rouge, figure.highlight").each(function () {
+    var codeBlock = this;
+    var code = codeBlock.querySelector("pre code");
+
+    if (!code || codeBlock.querySelector(".code-copy-button")) {
+      return;
+    }
+
+    var button = document.createElement("button");
+    button.className = "code-copy-button";
+    button.type = "button";
+    button.setAttribute("aria-label", "Copy code");
+    button.setAttribute("title", "Copy code");
+    codeBlock.appendChild(button);
+
+    button.addEventListener("click", function () {
+      copyCodeText(code.innerText).then(function () {
+        button.classList.add("is-copied");
+        button.setAttribute("aria-label", "Code copied");
+        button.setAttribute("title", "Code copied");
+        window.setTimeout(function () {
+          button.classList.remove("is-copied");
+          button.setAttribute("aria-label", "Copy code");
+          button.setAttribute("title", "Copy code");
+        }, 1400);
+      });
+    });
+  });
+
   // These should be the same as the settings in _variables.scss
   const scssLarge = 925; // pixels
 

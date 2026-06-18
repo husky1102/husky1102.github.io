@@ -463,18 +463,38 @@ html[data-theme="dark"] .greedy-nav {
   font-family: $sans-serif-narrow;
   color: var(--global-text-color-light);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  background-color: var(--global-bg-color);
-  border: 1px solid var(--global-border-color);
-  border-radius: $border-radius;
-  box-shadow: $box-shadow;
+  letter-spacing: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 7%, transparent), transparent 70%),
+    color-mix(in srgb, var(--global-bg-color) 86%, transparent);
+  -webkit-backdrop-filter: blur(8px) saturate(1.12);
+          backdrop-filter: blur(8px) saturate(1.12);
+  border: 1px solid color-mix(in srgb, var(--global-link-color) 16%, var(--global-border-color));
+  border-radius: 8px;
+  box-shadow:
+    0 12px 28px rgba(#000, 0.08),
+    0 0 0 1px color-mix(in srgb, #fff 16%, transparent);
+  transition:
+    background-color 0.24s ease,
+    border-color 0.24s ease,
+    box-shadow 0.24s ease;
+
+  &:hover,
+  &:focus-within {
+    border-color: color-mix(in srgb, var(--global-link-color) 38%, var(--global-border-color));
+    box-shadow:
+      0 16px 34px rgba(#000, 0.11),
+      0 0 0 1px color-mix(in srgb, var(--global-link-color) 10%, transparent);
+  }
 
   .nav__title {
-    color: #fff;
+    color: var(--global-bg-color);
     font-size: $type-size-6;
-    background: var(--global-base-color);
-    border-top-left-radius: $border-radius;
-    border-top-right-radius: $border-radius;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 82%, var(--global-base-color)), var(--global-base-color));
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
   }
 }
 
@@ -486,18 +506,55 @@ html[data-theme="dark"] .greedy-nav {
   font-size: 0.8rem;
 
   a {
+    position: relative;
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem 0.5rem 1.15rem;
     color: var(--global-code-text-color);
     font-size: $type-size-7;
     font-weight: bold;
     line-height: 1.5;
     border-bottom: 1px solid var(--global-border-color);
     text-decoration-line: none !important;
+    transition:
+      background-color 0.22s ease,
+      color 0.22s ease,
+      padding-left 0.22s ease;
 
-    &:hover {
-      color: #000;
-      background: var(--global-link-color-hover);
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0.45rem;
+      bottom: 0.45rem;
+      left: 0;
+      border-left: 2px solid var(--global-link-color);
+      border-radius: 999px;
+      opacity: 0;
+      -webkit-transform: scaleY(0.3);
+          -ms-transform: scaleY(0.3);
+              transform: scaleY(0.3);
+      -webkit-transform-origin: center;
+          -ms-transform-origin: center;
+              transform-origin: center;
+      -webkit-transition: opacity 0.22s ease, transform 0.22s ease;
+              transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    &:hover,
+    &:focus-visible,
+    &.active {
+      color: var(--global-link-color);
+      background:
+        linear-gradient(90deg, color-mix(in srgb, var(--global-link-color) 14%, transparent), transparent 82%);
+      padding-left: 1.35rem;
+    }
+
+    &:hover::before,
+    &:focus-visible::before,
+    &.active::before {
+      opacity: 1;
+      -webkit-transform: scaleY(1);
+          -ms-transform: scaleY(1);
+              transform: scaleY(1);
     }
   }
 
@@ -510,6 +567,12 @@ html[data-theme="dark"] .greedy-nav {
   li ul > li a {
     padding-left: 2rem;
     font-weight: normal;
+
+    &:hover,
+    &:focus-visible,
+    &.active {
+      padding-left: 2.2rem;
+    }
   }
 
   /* hide sub sub links on small screens*/
@@ -519,5 +582,21 @@ html[data-theme="dark"] .greedy-nav {
     @include breakpoint($medium) {
       display: block;
     }
+  }
+}
+
+html[data-theme="dark"] .toc {
+  background:
+    linear-gradient(135deg, rgba(103, 232, 249, 0.06), transparent 70%),
+    rgba(15, 23, 42, 0.85);
+  box-shadow:
+    0 12px 30px rgba(2, 6, 23, 0.40),
+    0 0 18px rgba(103, 232, 249, 0.06);
+
+  &:hover,
+  &:focus-within {
+    box-shadow:
+      0 14px 34px rgba(2, 6, 23, 0.46),
+      0 0 22px rgba(103, 232, 249, 0.09);
   }
 }

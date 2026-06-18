@@ -37,3 +37,12 @@ test("Sidebar author URLs are grouped into contact and links sections", () => {
   assert.match(sidebar, /\.author__urls-section \+ \.author__urls-section/);
   assert.match(sidebar, /\.author__urls-heading/);
 });
+
+test("TOC uses a glass card with link focus indicators", () => {
+  const navigation = read("_sass/layout/_navigation.scss");
+
+  assert.match(navigation, /\.toc[\s\S]*backdrop-filter:\s*blur\(8px\)/);
+  assert.match(navigation, /\.toc[\s\S]*border-radius:\s*8px/);
+  assert.match(navigation, /\.toc__menu[\s\S]*&::before/);
+  assert.match(navigation, /\.toc__menu[\s\S]*border-left:\s*2px solid var\(--global-link-color\)/);
+});

@@ -107,12 +107,14 @@
        as a refined halo instead of the old hard border + box-shadow double ring.
        position: relative anchors the solid "stage" disc (::before) the character
        stands on, so the frame stays put when she leaps out of it on hover. */
+    --avatar-art-y: 8px;
     position: relative;
     display: block;
     width: fit-content;
     height: auto;
     padding: 3px;
     border-radius: 50%;
+    overflow: hidden;
     background: conic-gradient(
       from 210deg,
       var(--global-link-color),
@@ -152,6 +154,7 @@
       box-shadow: none;
       transform-origin: 50% 100%; // anchored at the ring's base, so she stands up
                                   // without lifting off it (no gap at the bottom)
+      transform: translateY(var(--avatar-art-y)); // preload a little hidden artwork below the ring
       transition:
         transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1), // gentle leap overshoot
         border-radius 0.34s ease,
@@ -165,6 +168,7 @@
      silhouette shadow. The halo + disc stay put as the frame she leapt from. */
   &:hover {
     @include breakpoint($large) {
+      overflow: visible;
       box-shadow: 0 18px 38px rgba(#000, 0.18);
 
       img {
@@ -173,7 +177,7 @@
            frame's hover box-shadow lands on the image too — as a square plate
            behind her. Null it here; her shadow is the drop-shadow below. */
         box-shadow: none;
-        transform: scale(1.22); // grows from the base only — feet stay on the ring
+        transform: translateY(var(--avatar-art-y)) scale(1.2);
         filter: drop-shadow(0 18px 15px rgba(#000, 0.32));
       }
     }
@@ -184,11 +188,11 @@
     @media (prefers-reduced-motion: reduce) {
       img {
         transition: border-radius 0.2s ease, filter 0.2s ease;
-        transform: none;
+        transform: translateY(var(--avatar-art-y));
       }
 
       &:hover img {
-        transform: none;
+        transform: translateY(var(--avatar-art-y));
         filter: drop-shadow(0 6px 8px rgba(#000, 0.22));
       }
     }

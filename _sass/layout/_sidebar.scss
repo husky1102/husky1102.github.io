@@ -266,6 +266,48 @@
     white-space: nowrap;
   }
 
+  .author__urls-section {
+    white-space: normal;
+  }
+
+  .author__urls-section + .author__urls-section {
+    margin-top: 0.65rem;
+    padding-top: 0.72rem;
+
+    &::before {
+      content: "";
+      display: block;
+      height: 1px;
+      margin: 0 0 0.65rem;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--global-link-color) 34%, var(--global-border-color)),
+        transparent
+      );
+    }
+  }
+
+  .author__urls-group {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .author__urls-heading {
+    display: block;
+    margin: 0 0 0.4rem;
+    color: color-mix(in srgb, var(--global-text-color-light) 80%, var(--global-link-color));
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  .author__urls-group li {
+    white-space: nowrap;
+  }
+
   a {
     display: block;
     margin-bottom: 5px;

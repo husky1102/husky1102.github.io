@@ -25,3 +25,15 @@ test("Greedy navigation overflow menu uses rounded glass motion", () => {
   assert.match(navigation, /\.hidden-links[\s\S]*&:not\(\.hidden\)/);
   assert.match(utilities, /\.greedy-nav button:hover \.navicon/);
 });
+
+test("Sidebar author URLs are grouped into contact and links sections", () => {
+  const include = read("_includes/author-profile.html");
+  const sidebar = read("_sass/layout/_sidebar.scss");
+
+  assert.match(include, /author__urls-section author__urls-section--contact/);
+  assert.match(include, /author__urls-heading">CONTACT/);
+  assert.match(include, /author__urls-section author__urls-section--links/);
+  assert.match(include, /author__urls-heading">LINKS/);
+  assert.match(sidebar, /\.author__urls-section \+ \.author__urls-section/);
+  assert.match(sidebar, /\.author__urls-heading/);
+});

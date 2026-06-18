@@ -24,6 +24,10 @@
   <div class="author__urls-wrapper">
     <button class="btn btn--inverse">Follow</button>
     <ul class="author__urls social-icons">
+      {% if author.location or author.employer or author.uri or author.email %}
+      <li class="author__urls-section author__urls-section--contact">
+        <span class="author__urls-heading">CONTACT</span>
+        <ul class="author__urls-group">
       <!-- Font Awesome icons / Biographic information  -->
       {% if author.location %}
       <li class="author__desktop"><i class="fas fa-fw fa-location-dot icon-pad-right" aria-hidden="true"></i>{{
@@ -41,7 +45,14 @@
       <li><a href="mailto:{{ author.email }}"><i class="fas fa-fw fa-envelope icon-pad-right" aria-hidden="true"></i>{{
           site.data.ui-text[site.locale].email_label | default: "Email" }}</a></li>
       {% endif %}
+        </ul>
+      </li>
+      {% endif %}
 
+      {% if author.academia or author.arxiv or author.googlescholar or author.semantic or author.impactstory or author.orcid or author.pubmed or author.researchgate or author.scopus or author.bitbucket or author.codepen or author.dribbble or author.github or author.kaggle or author.stackoverflow or author.bluesky or author.facebook or author.flickr or author.foursquare or author.goodreads or author.google_plus or author.keybase or author.instagram or author.lastfm or author.linkedin or author.mastodon or author.medium or author.pinterest or author.soundcloud or author.steam or author.telegram or author.tumblr or author.twitter or author.vine or author.weibo or author.wikipedia or author.xing or author.youtube or author.zhihu or author.blog %}
+      <li class="author__urls-section author__urls-section--links">
+        <span class="author__urls-heading">LINKS</span>
+        <ul class="author__urls-group">
       <!-- Font Awesome and Academicons icons / Academic websites -->
       {% if author.academia %}
       <li><a href="{{ author.academia }}"><i class="ai ai-academia ai-fw icon-pad-right"
@@ -202,6 +213,9 @@
       <!-- myCustom -->
       {% if author.blog %}
       <li><a href="{{ author.blog }}"><i class="fas fa-fw fa-blog icon-pad-right" aria-hidden="true"></i>博客</a>
+      </li>
+      {% endif %}
+        </ul>
       </li>
       {% endif %}
     </ul>

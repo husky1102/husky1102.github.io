@@ -102,9 +102,25 @@
   // height: 36px;
 
   @include breakpoint($large) {
+    /* Desktop: a gradient halo ring hugging the photo. fit-content so the ring
+       wraps the avatar tightly; the brand conic gradient + a light sweep reads
+       as a refined halo instead of the old hard border + box-shadow double ring. */
     display: block;
-    width: auto;
+    width: fit-content;
     height: auto;
+    padding: 3px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 210deg,
+      var(--global-link-color),
+      color-mix(in srgb, var(--global-link-color) 35%, transparent) 150deg,
+      var(--global-link-color) 300deg,
+      var(--global-link-color)
+    );
+    box-shadow: 0 10px 26px rgba(#000, 0.10);
+    transition:
+      box-shadow 0.28s ease,
+      transform 0.28s ease;
   }
 
   img {
@@ -112,27 +128,22 @@
     border-radius: 50%;
     box-shadow: 0 0 0 0 color-mix(in srgb, var(--global-link-color) 0%, transparent);
     transition:
-      border-color 0.28s ease,
       box-shadow 0.28s ease,
       transform 0.28s ease;
 
     @include breakpoint($large) {
-      padding: 5px;
-      border: 1px solid color-mix(in srgb, var(--global-link-color) 35%, var(--global-border-color));
-      box-shadow:
-        0 0 0 4px color-mix(in srgb, var(--global-link-color) 9%, transparent),
-        0 10px 26px rgba(#000, 0.08);
+      display: block;
+      /* solid backing so a transparent PNG never shows the gradient halo through it */
+      background: var(--global-bg-color);
+      box-shadow: none;
     }
   }
 
-  &:hover img {
-    transform: scale(1.035);
-
+  /* lift + zoom the whole medallion (ring + photo together) on hover */
+  &:hover {
     @include breakpoint($large) {
-      border-color: var(--global-link-color);
-      box-shadow:
-        0 0 0 5px color-mix(in srgb, var(--global-link-color) 15%, transparent),
-        0 16px 34px rgba(#000, 0.13);
+      box-shadow: 0 16px 36px rgba(#000, 0.16);
+      transform: translateY(-2px) scale(1.03);
     }
   }
 }

@@ -115,6 +115,7 @@
     padding: 3px;
     border-radius: 50%;
     overflow: hidden;
+    clip-path: inset(0 0 0 0 round 999px);
     background: conic-gradient(
       from 210deg,
       var(--global-link-color),
@@ -169,10 +170,13 @@
   &:hover {
     @include breakpoint($large) {
       overflow: visible;
+      /* Let the character break out above and sideways, but keep the lower crop
+         pinned to the medallion so the artwork's missing legs never escape. */
+      clip-path: inset(-42px -34px 0 -34px);
       box-shadow: 0 18px 38px rgba(#000, 0.18);
 
       img {
-        border-radius: 0; // open the crop fully so her whole body springs out
+        border-radius: 0; // open the top/sides while the frame still clips the bottom
         /* The <img> shares the .author__avatar class with the frame, so the
            frame's hover box-shadow lands on the image too — as a square plate
            behind her. Null it here; her shadow is the drop-shadow below. */

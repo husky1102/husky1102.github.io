@@ -185,6 +185,7 @@ exclude:
   - Rakefile
   - README
   - tmp
+  - tests
   - vendor
   - examples
 keep_files:

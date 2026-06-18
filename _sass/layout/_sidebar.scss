@@ -104,7 +104,10 @@
   @include breakpoint($large) {
     /* Desktop: a gradient halo ring hugging the photo. fit-content so the ring
        wraps the avatar tightly; the brand conic gradient + a light sweep reads
-       as a refined halo instead of the old hard border + box-shadow double ring. */
+       as a refined halo instead of the old hard border + box-shadow double ring.
+       position: relative anchors the solid "stage" disc (::before) the character
+       stands on, so the frame stays put when she leaps out of it on hover. */
+    position: relative;
     display: block;
     width: fit-content;
     height: auto;
@@ -118,9 +121,19 @@
       var(--global-link-color)
     );
     box-shadow: 0 10px 26px rgba(#000, 0.10);
-    transition:
-      box-shadow 0.28s ease,
-      transform 0.28s ease;
+    transition: box-shadow 0.28s ease;
+
+    /* The solid disc lives on the frame, not the <img>. That keeps it a tidy
+       circle the character sits in — and means opening her circular crop on
+       hover reveals only her silhouette, never a bg-coloured square. */
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--global-bg-color);
+      z-index: 0;
+    }
   }
 
   img {
@@ -132,18 +145,52 @@
       transform 0.28s ease;
 
     @include breakpoint($large) {
+      position: relative;
+      z-index: 1; // above the disc
       display: block;
-      /* solid backing so a transparent PNG never shows the gradient halo through it */
-      background: var(--global-bg-color);
+      background: none; // backing now provided by the frame's ::before disc
       box-shadow: none;
+      transform-origin: 50% 100%; // anchored at the ring's base, so she stands up
+                                  // without lifting off it (no gap at the bottom)
+      transition:
+        transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1), // gentle leap overshoot
+        border-radius 0.34s ease,
+        filter 0.34s ease;
+      will-change: transform;
     }
   }
 
-  /* lift + zoom the whole medallion (ring + photo together) on hover */
+  /* 跃然纸上 — on hover the circular crop opens and the full character (twin-tails,
+     robot and all) springs up out of the ring and lifts off the page with a
+     silhouette shadow. The halo + disc stay put as the frame she leapt from. */
   &:hover {
     @include breakpoint($large) {
-      box-shadow: 0 16px 36px rgba(#000, 0.16);
-      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 18px 38px rgba(#000, 0.18);
+
+      img {
+        border-radius: 0; // open the crop fully so her whole body springs out
+        /* The <img> shares the .author__avatar class with the frame, so the
+           frame's hover box-shadow lands on the image too — as a square plate
+           behind her. Null it here; her shadow is the drop-shadow below. */
+        box-shadow: none;
+        transform: scale(1.22); // grows from the base only — feet stay on the ring
+        filter: drop-shadow(0 18px 15px rgba(#000, 0.32));
+      }
+    }
+  }
+
+  @include breakpoint($large) {
+    /* Reduced-motion: keep the reveal, drop the leap. */
+    @media (prefers-reduced-motion: reduce) {
+      img {
+        transition: border-radius 0.2s ease, filter 0.2s ease;
+        transform: none;
+      }
+
+      &:hover img {
+        transform: none;
+        filter: drop-shadow(0 6px 8px rgba(#000, 0.22));
+      }
     }
   }
 }

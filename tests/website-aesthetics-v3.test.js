@@ -57,3 +57,12 @@ test("Code blocks expose copy buttons and accent framing", () => {
   assert.match(mainJs, /navigator\.clipboard\.writeText/);
   assert.match(mainJs, /execCommand\("copy"\)/);
 });
+
+test("Back-to-top arrow has hover motion and dark-mode glow", () => {
+  const custom = read("_sass/custom.scss");
+
+  assert.match(custom, /\.back-to-top i[\s\S]*transition:[\s\S]*transform 0\.28s ease/);
+  assert.match(custom, /\.back-to-top:hover i[\s\S]*transform:\s*translateY\(-3px\)/);
+  assert.match(custom, /html\[data-theme="dark"\] \.back-to-top:hover[\s\S]*rgba\(103, 232, 249, 0\.15\)/);
+  assert.match(custom, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.back-to-top i[\s\S]*transform:\s*none/);
+});

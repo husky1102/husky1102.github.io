@@ -492,6 +492,7 @@ html[data-theme="dark"] .back-to-top:hover,
 html[data-theme="dark"] .back-to-top:focus-visible {
   border-color: rgba(103, 232, 249, 0.36);
   box-shadow:
+    0 8px 20px rgba(103, 232, 249, 0.15),
     0 10px 28px rgba(103, 232, 249, 0.08),
     0 18px 48px rgba(2, 6, 23, 0.38);
 }
@@ -598,11 +599,21 @@ html[data-theme="dark"] .cv-tag-list li:focus-within {
   transform: translateY(0);
 }
 
+.back-to-top i {
+  transform: translateY(0);
+  transition: transform 0.28s ease;
+}
+
 .back-to-top:hover,
 .back-to-top:focus-visible {
   border-color: var(--global-link-color);
   box-shadow: 0 18px 42px rgba(15, 23, 42, 0.20);
   transform: translateY(-2px);
+}
+
+.back-to-top:hover i,
+.back-to-top:focus-visible i {
+  transform: translateY(-3px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -613,6 +624,10 @@ html[data-theme="dark"] .cv-tag-list li:focus-within {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .back-to-top i {
+    transform: none;
   }
 }
 

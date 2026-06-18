@@ -4,7 +4,7 @@
 {% assign author = site.data.authors[page.author] %}{% else %}{% assign author = site.author %}
 {% endif %}
 
-<div itemscope itemtype="http://schema.org/Person">
+<div class="author__profile" itemscope itemtype="http://schema.org/Person">
 
   <div class="author__avatar">
     {% if author.avatar contains "://" %}
@@ -24,7 +24,7 @@
   <div class="author__urls-wrapper">
     <button class="btn btn--inverse">Follow</button>
     <ul class="author__urls social-icons">
-      {% if author.location or author.employer or author.uri or author.email %}
+      {% if author.location or author.employer or author.uri %}
       <li class="author__urls-section author__urls-section--contact">
         <span class="author__urls-heading">CONTACT</span>
         <ul class="author__urls-group">
@@ -40,10 +40,6 @@
       {% if author.uri %}
       <li><a href="{{ author.uri }}"><i class="fas fa-fw fa-link icon-pad-right" aria-hidden="true"></i>{{
           site.data.ui-text[site.locale].website_label | default: "Website" }}</a></li>
-      {% endif %}
-      {% if author.email %}
-      <li><a href="mailto:{{ author.email }}"><i class="fas fa-fw fa-envelope icon-pad-right" aria-hidden="true"></i>{{
-          site.data.ui-text[site.locale].email_label | default: "Email" }}</a></li>
       {% endif %}
         </ul>
       </li>

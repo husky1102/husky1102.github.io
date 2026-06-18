@@ -18,9 +18,6 @@ author_profile: true
       <a class="btn btn--inverse" href="{{ base_path }}/blog_embed/">个人博客</a>
     </div>
   </div>
-  <div class="home-hero__portrait">
-    <img src="{{ base_path }}/images/图片-245透明.png" alt="Husky avatar">
-  </div>
 </section>
 
 <section class="home-section">

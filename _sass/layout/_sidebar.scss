@@ -94,7 +94,7 @@
   }
 }
 
-.author__avatar {
+.author__profile > .author__avatar {
   display: table-cell;
   vertical-align: top;
   width: 36px;
@@ -107,7 +107,7 @@
        as a refined halo instead of the old hard border + box-shadow double ring.
        position: relative anchors the solid "stage" disc (::before) the character
        stands on, so the frame stays put when she leaps out of it on hover. */
-    --avatar-art-y: 8px;
+    --avatar-art-y: 6px;
     position: relative;
     display: block;
     width: fit-content;
@@ -173,16 +173,15 @@
       /* Let the character break out above and sideways, but keep the lower crop
          pinned to the medallion so the artwork's missing legs never escape. */
       clip-path: inset(-42px -34px 0 -34px);
-      box-shadow: 0 18px 38px rgba(#000, 0.18);
+      box-shadow: 0 14px 28px rgba(#000, 0.12);
 
       img {
         border-radius: 0; // open the top/sides while the frame still clips the bottom
-        /* The <img> shares the .author__avatar class with the frame, so the
-           frame's hover box-shadow lands on the image too — as a square plate
-           behind her. Null it here; her shadow is the drop-shadow below. */
+        /* Keep the bitmap itself shadowless; the soft silhouette is the
+           drop-shadow below, and the ring carries the frame shadow. */
         box-shadow: none;
-        transform: translateY(var(--avatar-art-y)) scale(1.2);
-        filter: drop-shadow(0 18px 15px rgba(#000, 0.32));
+        transform: translateY(-7px) scale(1.16);
+        filter: drop-shadow(0 9px 8px rgba(#000, 0.18));
       }
     }
   }

@@ -13,7 +13,7 @@ redirect_from:
   <header class="cv-header">
     <div class="cv-header__text">
       <h1 id="cv-title">Husky</h1>
-      <p class="cv-header__summary">M.S. student in Artificial Intelligence at Xi'an Jiaotong University, with interests in Embodied AI, Agent Memory, and anything interesting enough to keep learning.</p>
+      <p class="cv-header__summary">M.S. student in Artificial Intelligence at Xi'an Jiaotong University, with interests in Embodied AI, Agent Memory, and anything interesting enough.</p>
     </div>
     <nav class="cv-header__links" aria-label="CV links">
       <a href="{{ base_path }}/cv_zh/">中文简历</a>

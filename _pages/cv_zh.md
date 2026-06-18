@@ -12,8 +12,8 @@ redirect_from:
 <article class="cv-document cv-document--zh">
   <header class="cv-header">
     <div class="cv-header__text">
-      <h1 id="cv-title">克苏鲁微糖 / Husky</h1>
-      <p class="cv-header__summary">西安交通大学人工智能硕士在读，关注具身智能、智能体记忆，以及任何足够有趣、值得持续学习的问题。</p>
+      <h1 id="cv-title">克苏鲁微糖</h1>
+      <p class="cv-header__summary">西安交通大学人工智能硕士在读，关注具身智能、智能体记忆，以及任何足够有趣的东西。</p>
     </div>
     <nav class="cv-header__links" aria-label="简历链接">
       <a href="{{ base_path }}/cv/">English CV</a>

@@ -96,12 +96,19 @@
 }
 
 @keyframes avatar-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@property --avatar-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 210deg;
+}
+
+@keyframes avatar-spin-angle {
+  from { --avatar-angle: 210deg; }
+  to { --avatar-angle: 570deg; }
 }
 
 .author__profile > .author__avatar {
@@ -113,52 +120,95 @@
 
   @include breakpoint($large) {
     /* Desktop: a gradient halo ring hugging the photo. fit-content so the ring
-       wraps the avatar tightly; the brand conic gradient + a light sweep reads
-       as a refined halo instead of the old hard border + box-shadow double ring.
-       position: relative anchors the solid "stage" disc (::before) the character
+       wraps the avatar tightly.
+       position: relative anchors the solid "stage" disc (::after) the character
        stands on, so the frame stays put when she leaps out of it on hover. */
-    --avatar-art-y: 6px;
+    --avatar-art-y: 10px;
     position: relative;
     display: block;
     width: fit-content;
     height: auto;
     padding: 3px;
     border-radius: 50%;
-    overflow: hidden;
-    clip-path: inset(0 0 0 0 round 999px);
+    overflow: hidden; /* Clips contents (img, rings) strictly to a circle */
     background: none;
-    box-shadow: 0 10px 26px rgba(#000, 0.10);
+    box-shadow: none; /* Removed, we use unified drop-shadow below */
+    /* Unified drop-shadow for the whole 3D object (not clipped by overflow: hidden) */
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.12));
     transition: 
-      box-shadow 0.38s ease,
-      transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+      filter 0.4s ease,
+      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform-origin: 50% 100%;
 
-    /* The rotating conic gradient border ring */
+    /* 3D Pop-out: Front Ring (Bottom Half)
+       Sits IN FRONT of the image (z-index: 3) to cover the cropped legs.
+       We punch a hole in the center with a mask, and clip it to only show the bottom half. */
     &::before {
       content: "";
       position: absolute;
       inset: 0;
       border-radius: 50%;
+      padding: 3px;
+      box-sizing: border-box;
       background: conic-gradient(
-        from 210deg,
-        var(--global-link-color),
-        color-mix(in srgb, var(--global-link-color) 35%, transparent) 150deg,
-        var(--global-link-color) 300deg,
-        var(--global-link-color)
+        from var(--avatar-angle),
+        transparent 0deg,
+        color-mix(in srgb, var(--global-link-color) 20%, transparent) 90deg,
+        var(--global-link-color) 180deg,
+        #fff 195deg,
+        var(--global-link-color) 210deg,
+        color-mix(in srgb, var(--global-link-color) 20%, transparent) 270deg,
+        transparent 360deg
       );
-      z-index: 0;
-      animation: avatar-spin 16s linear infinite;
+      /* Punch out the center padding-box so it's just a border ring */
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      /* Only show the bottom half (from 50% Y downwards) */
+      clip-path: polygon(-50% 50%, 150% 50%, 150% 150%, -50% 150%);
+      z-index: 3;
+      animation: avatar-spin-angle 16s linear infinite;
+      pointer-events: none;
+      transition:
+        animation-duration 0.6s ease,
+        filter 0.4s ease;
     }
 
-    /* The solid backdrop disc */
+    /* 3D Pop-out: Back Ring + Solid Backdrop
+       Sits BEHIND the image (z-index: 0).
+       We use multiple backgrounds: a solid color in the content-box,
+       and the conic-gradient ring in the border-box. */
     &::after {
       content: "";
       position: absolute;
-      inset: 3px;
+      inset: 0;
       border-radius: 50%;
-      background: var(--global-bg-color);
-      background: color-mix(in srgb, var(--global-footer-bg-color) 55%, var(--global-bg-color));
-      z-index: 1;
+      padding: 3px;
+      box-sizing: border-box;
+      background-image: 
+        linear-gradient(
+          color-mix(in srgb, var(--global-footer-bg-color) 55%, var(--global-bg-color)),
+          color-mix(in srgb, var(--global-footer-bg-color) 55%, var(--global-bg-color))
+        ),
+        conic-gradient(
+          from var(--avatar-angle),
+          transparent 0deg,
+          color-mix(in srgb, var(--global-link-color) 20%, transparent) 90deg,
+          var(--global-link-color) 180deg,
+          #fff 195deg,
+          var(--global-link-color) 210deg,
+          color-mix(in srgb, var(--global-link-color) 20%, transparent) 270deg,
+          transparent 360deg
+        );
+      background-clip: content-box, border-box;
+      background-origin: border-box, border-box;
+      z-index: 0;
+      animation: avatar-spin-angle 16s linear infinite;
+      transition:
+        animation-duration 0.6s ease,
+        filter 0.4s ease;
     }
   }
 
@@ -178,58 +228,87 @@
       box-shadow: none;
       transform-origin: 50% 100%; // anchored at the ring's base, so she stands up
                                   // without lifting off it (no gap at the bottom)
-      transform: translateY(var(--avatar-art-y)); // preload a little hidden artwork below the ring
-      filter: drop-shadow(0 0 0 transparent);
-      mask-image: linear-gradient(to bottom, black 76%, transparent 96%);
-      -webkit-mask-image: linear-gradient(to bottom, black 76%, transparent 96%);
+      transform: translateY(var(--avatar-art-y)); // sit lower in the ring so it covers the cropped legs
+      filter: none; // removed drop-shadow to eliminate internal shadow bleeding
+      /* Start with a flat unclipped bottom (using a matching 17-point polygon for smooth interpolation) */
+      clip-path: polygon(
+        -50% -50%, 150% -50%, 150% 150%, 
+        87.0% 150%, 85.7% 150%, 82.0% 150%, 76.2% 150%, 68.5% 150%, 59.6% 150%, 50.0% 150%, 
+        40.4% 150%, 31.5% 150%, 23.8% 150%, 18.0% 150%, 14.3% 150%, 13.0% 150%, 
+        -50% 150%
+      );
       transition:
         transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), // gentle leap overshoot
-        border-radius 0.4s ease,
-        filter 0.4s ease;
-      will-change: transform, filter;
+        clip-path 0.4s ease;
+      will-change: transform;
     }
   }
 
-  /* 跃然纸上 — on hover the circular crop opens and the full character (twin-tails,
-     robot and all) springs up out of the ring and lifts off the page with a
-     silhouette shadow. The halo + disc stay put as the frame she leapt from. */
+  /* 跃然纸上 — on hover the container unclips, allowing the image to expand out.
+     The unified drop-shadow beautifully captures the new silhouette + circular ring. */
   &:hover {
     @include breakpoint($large) {
-      overflow: visible;
-      /* Remove clip-path on hover to allow the character to pop out fully,
-         relying on mask-image to fade the bottom of the character. */
-      clip-path: none;
+      overflow: visible; // unclip contents!
       transform: scale(1.06);
-      box-shadow: 
-        0 24px 48px rgba(#000, 0.16),
-        0 8px 20px rgba(#000, 0.08);
+      /* Unified glowing drop-shadow */
+      filter: drop-shadow(0 12px 28px color-mix(in srgb, var(--global-link-color) 40%, rgba(0,0,0,0.15)));
+
+      /* Both rings accelerate, removed blur for a crisp, high-tech neon look */
+      &::before, &::after {
+        animation-duration: 4s;
+        transform: scale(1.02);
+      }
 
       img {
-        border-radius: 0; // open the top/sides while the frame still clips the bottom
-        /* Keep the bitmap itself shadowless; a drop-shadow on the clipped lower
-           edge reads as a hard line under the ring. */
+        border-radius: 0;
         box-shadow: none;
-        transform: translateY(-18px) scale(1.20);
-        filter: drop-shadow(0 14px 18px rgba(#000, 0.15));
+        /* 跃然纸上: scale up from bottom-center origin so upper body pops
+           out above the ring. Reduced translateY to 0px so the legs show much more! */
+        transform: translateY(0px) scale(1.35);
+        /* NO filter on the image, handled by parent container's unified drop-shadow */
+        filter: none;
+        /* Mathematically precise 17-point polygon that traces the container's bottom circular arc.
+           Since S=1.35 and Y=0, the arc radius is 37%, centered at Y=63%.
+           This flawlessly curves the image's bottom to fit exactly inside the 3px front ring,
+           eliminating flat cuts and corner poke-outs completely! */
+        clip-path: polygon(
+          -50% -50%, 150% -50%, 150% 63.0%, 
+          87.0% 63.0%, 85.7% 72.6%, 82.0% 81.5%, 76.2% 89.2%, 68.5% 95.0%, 59.6% 98.7%, 50.0% 100.0%, 
+          40.4% 98.7%, 31.5% 95.0%, 23.8% 89.2%, 18.0% 81.5%, 14.3% 72.6%, 13.0% 63.0%, 
+          -50% 63.0%
+        );
       }
     }
   }
 
   @include breakpoint($large) {
-    /* Reduced-motion: keep the reveal, drop the leap. */
+    /* Reduced-motion: disable all animations, transforms, and glows. */
     @media (prefers-reduced-motion: reduce) {
-      &::before {
+      &::before, &::after {
         animation: none;
       }
 
       &:hover {
         transform: none;
-        box-shadow: 0 10px 26px rgba(#000, 0.10);
+        overflow: hidden; // stay circular
+        filter: drop-shadow(0 8px 20px rgba(0,0,0,0.12));
+      }
+
+      &:hover::before, &:hover::after {
+        animation: none;
+        transform: none;
       }
 
       img {
-        transition: border-radius 0.2s ease, filter 0.2s ease;
+        transition: clip-path 0.2s ease, transform 0.2s ease;
         transform: translateY(var(--avatar-art-y));
+        filter: none;
+        clip-path: polygon(
+          -50% -50%, 150% -50%, 150% 150%, 
+          87.0% 150%, 85.7% 150%, 82.0% 150%, 76.2% 150%, 68.5% 150%, 59.6% 150%, 50.0% 150%, 
+          40.4% 150%, 31.5% 150%, 23.8% 150%, 18.0% 150%, 14.3% 150%, 13.0% 150%, 
+          -50% 150%
+        );
       }
 
       &:hover img {

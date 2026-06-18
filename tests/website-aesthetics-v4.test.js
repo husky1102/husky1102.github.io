@@ -71,12 +71,13 @@ test("Minor: forms get a visible focus ring + theme-aware background; selection 
   assert.match(custom, /::selection \{[\s\S]*?color-mix/);
 });
 
-test("I-36: avatar hover uses responsive mask fade and rotating gradient ring with shadow glow", () => {
+test("I-36: avatar hover uses overflow visible, rotating gradient ring, and unified shadow", () => {
   const sidebar = read("_sass/layout/_sidebar.scss");
 
-  // Check SCSS variables and animations
-  assert.match(sidebar, /clip-path:\s*none/);
-  assert.match(sidebar, /mask-image:\s*linear-gradient/);
+  // container unclips to let image expand
+  assert.match(sidebar, /overflow:\s*visible/);
+  // character sits lower in the ring so it covers the cropped legs
+  assert.match(sidebar, /--avatar-art-y:\s*10px/);
   assert.match(sidebar, /animation:\s*avatar-spin/);
   assert.match(sidebar, /filter:\s*drop-shadow/);
 });
@@ -86,15 +87,15 @@ test("I-37: avatar hover respects reduced motion and matches sidebar backdrop", 
 
   assert.match(
     sidebar,
-    /&::after\s*\{[\s\S]*?background:\s*color-mix\(in srgb,\s*var\(--global-footer-bg-color\) 55%,\s*var\(--global-bg-color\)\)/
+    /&::after\s*\{[\s\S]*?background-image:[\s\S]*?linear-gradient\([\s\S]*?color-mix\(in srgb,\s*var\(--global-footer-bg-color\) 55%,\s*var\(--global-bg-color\)\)/
   );
   assert.match(
     sidebar,
-    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&::before\s*\{[\s\S]*?animation:\s*none/
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&::before,\s*&::after\s*\{[\s\S]*?animation:\s*none/
   );
   assert.match(
     sidebar,
-    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&:hover\s*\{[\s\S]*?transform:\s*none[\s\S]*?box-shadow:\s*0 10px 26px rgba\(#000,\s*0\.10\)/
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&:hover\s*\{[\s\S]*?transform:\s*none[\s\S]*?filter:\s*drop-shadow/
   );
   assert.match(
     sidebar,

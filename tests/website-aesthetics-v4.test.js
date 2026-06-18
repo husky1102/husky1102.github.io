@@ -101,3 +101,11 @@ test("I-37: avatar hover respects reduced motion and matches sidebar backdrop", 
     /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&:hover img\s*\{[\s\S]*?transform:\s*translateY\(var\(--avatar-art-y\)\)[\s\S]*?filter:\s*none/
   );
 });
+
+test("I-38: local sidebar avatar uses a deploy-safe relative image URL", () => {
+  const include = read("_includes/author-profile.html");
+
+  assert.match(include, /author\.avatar \| prepend:\s*"\/images\/" \| relative_url/);
+  assert.doesNotMatch(include, /author\.avatar \| prepend:\s*"\/images\/" \| prepend:\s*base_path/);
+  assert.doesNotMatch(include, /<img[^>]+class="author__avatar"/);
+});

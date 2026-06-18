@@ -70,3 +70,14 @@ test("Minor: forms get a visible focus ring + theme-aware background; selection 
   const custom = read("_sass/custom.scss");
   assert.match(custom, /::selection \{[\s\S]*?color-mix/);
 });
+
+test("I-36: avatar hover uses responsive mask fade and rotating gradient ring with shadow glow", () => {
+  const sidebar = read("_sass/layout/_sidebar.scss");
+
+  // Check SCSS variables and animations
+  assert.match(sidebar, /clip-path:\s*none/);
+  assert.match(sidebar, /mask-image:\s*linear-gradient/);
+  assert.match(sidebar, /animation:\s*avatar-spin/);
+  assert.match(sidebar, /filter:\s*drop-shadow/);
+});
+

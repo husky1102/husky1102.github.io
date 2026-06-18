@@ -9,7 +9,7 @@
 # Basic Site Settings
 locale                   : "zh-CN"
 site_theme               : "default"
-title                    : "Husky1102/Untitled"
+title                    : "unTitled"
 title_separator          : "-"
 name                     : &name "Husky1102"
 description              : &description "这个人很懒，还什么都没写"

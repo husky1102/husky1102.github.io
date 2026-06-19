@@ -26,6 +26,20 @@ test("Greedy navigation overflow menu uses rounded glass motion", () => {
   assert.match(utilities, /\.greedy-nav button:hover \.navicon/);
 });
 
+test("Theme toggle stays visible and independent from greedy overflow menu", () => {
+  const masthead = read("_includes/masthead.html");
+  const greedyNav = read("assets/js/plugins/jquery.greedy-navigation.js");
+  const mainJs = read("assets/js/_main.js");
+
+  assert.match(masthead, /class="greedy-nav__toggle"/);
+  assert.match(masthead, /id="theme-toggle"[\s\S]*fa-sun/);
+  assert.match(masthead, /aria-label="切换到深色模式"/);
+  assert.match(greedyNav, /\$btn = \$\('#site-nav > \.greedy-nav__toggle'\)/);
+  assert.doesNotMatch(greedyNav, /\$btn = \$\('#site-nav button'\)/);
+  assert.match(mainJs, /fa-moon/);
+  assert.match(mainJs, /切换到浅色模式/);
+});
+
 test("Sidebar author URLs are grouped into contact and links sections", () => {
   const include = read("_includes/author-profile.html");
   const sidebar = read("_sass/layout/_sidebar.scss");

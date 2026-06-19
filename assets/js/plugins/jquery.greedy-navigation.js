@@ -6,12 +6,19 @@
 */
 
 var $nav = $('#site-nav');
-var $btn = $('#site-nav button');
+var $btn = $('#site-nav > .greedy-nav__toggle');
 var $vlinks = $('#site-nav .visible-links');
 var $vlinks_persist_tail = $vlinks.children("*.persist.tail");
 var $hlinks = $('#site-nav .hidden-links');
 
 var breaks = [];
+
+function setHiddenLinksOpen(isOpen) {
+  $hlinks.toggleClass('hidden', !isOpen);
+  $hlinks.attr('aria-hidden', isOpen ? 'false' : 'true');
+  $btn.toggleClass('close', isOpen);
+  $btn.attr('aria-expanded', isOpen ? 'true' : 'false');
+}
 
 function updateNav() {
 
@@ -50,8 +57,7 @@ function updateNav() {
     // Hide the dropdown btn if hidden list is empty
     if (breaks.length < 1) {
       $btn.addClass('hidden');
-      $btn.removeClass('close');
-      $hlinks.addClass('hidden');
+      setHiddenLinksOpen(false);
     }
   }
 
@@ -79,8 +85,7 @@ screen.orientation.addEventListener("change", function () {
 });
 
 $btn.on('click', function () {
-  $hlinks.toggleClass('hidden');
-  $(this).toggleClass('close');
+  setHiddenLinksOpen($hlinks.hasClass('hidden'));
 });
 
 updateNav();

@@ -26,8 +26,14 @@ $(document).ready(function () {
       $("#theme-icon").removeClass("fa-moon").addClass("fa-sun");
     }
 
-    // keep the toggle's pressed state and the browser UI color in sync
-    $("#theme-toggle button").attr("aria-pressed", is_dark ? "true" : "false");
+    // keep the toggle's state, label, and the browser UI color in sync
+    var $themeToggleButton = $("#theme-toggle button");
+    var nextThemeLabel = is_dark ? "切换到浅色模式" : "切换到深色模式";
+    $themeToggleButton.attr({
+      "aria-pressed": is_dark ? "true" : "false",
+      "aria-label": nextThemeLabel,
+      "title": nextThemeLabel,
+    });
     var themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) {
       themeColorMeta.setAttribute("content", is_dark ? "#0f172a" : "#fbfaf7");

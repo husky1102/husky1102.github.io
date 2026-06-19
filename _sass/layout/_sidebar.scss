@@ -239,8 +239,8 @@
       );
       transition:
         transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), // gentle leap overshoot
-        clip-path 0.4s ease;
-      will-change: transform;
+        clip-path 0.08s ease-out; // keep the lower mask ahead of the pop-out scale
+      will-change: transform, clip-path;
     }
   }
 

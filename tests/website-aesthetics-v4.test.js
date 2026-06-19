@@ -80,6 +80,10 @@ test("I-36: avatar hover uses overflow visible, rotating gradient ring, and unif
   assert.match(sidebar, /--avatar-art-y:\s*10px/);
   assert.match(sidebar, /animation:\s*avatar-spin/);
   assert.match(sidebar, /filter:\s*drop-shadow/);
+  // the lower image mask must settle before the pop-out scale, so the ring
+  // does not visually chase the enlarged avatar.
+  assert.match(sidebar, /clip-path\s+0\.08s ease-out/);
+  assert.match(sidebar, /will-change:\s*transform,\s*clip-path/);
 });
 
 test("I-37: avatar hover respects reduced motion and matches sidebar backdrop", () => {

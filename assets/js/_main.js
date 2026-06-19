@@ -67,13 +67,96 @@ $(document).ready(function () {
 
   var $scrollProgress = $(".scroll-progress span");
   var $backToTop = $(".back-to-top");
+  var gsapApi = window.gsap;
+  var scrollTriggerApi = window.ScrollTrigger;
+  var useGsapScrollProgress = false;
+  var hasMotionEngine = Boolean(gsapApi && scrollTriggerApi);
+
+  if (hasMotionEngine) {
+    gsapApi.registerPlugin(scrollTriggerApi);
+  }
+
+  var updateScrollProgressFallback = function (scrollTop, scrollHeight) {
+    var progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    $scrollProgress.css("width", Math.min(100, Math.max(0, progress)) + "%");
+  };
+  var initGsapScrollProgress = function () {
+    if (!hasMotionEngine || !$scrollProgress.length) {
+      return;
+    }
+
+    useGsapScrollProgress = true;
+    gsapApi.set($scrollProgress[0], {
+      width: "100%",
+      scaleX: 0,
+      transformOrigin: "left center",
+    });
+    gsapApi.to($scrollProgress[0], {
+      scaleX: 1,
+      ease: "none",
+      scrollTrigger: {
+        id: "site-scroll-progress",
+        trigger: document.documentElement,
+        start: "top top",
+        end: "max",
+        scrub: 0.3,
+      },
+    });
+  };
+  var initGsapMotion = function () {
+    if (!hasMotionEngine || !gsapApi.matchMedia) {
+      return;
+    }
+
+    var motionMedia = gsapApi.matchMedia();
+    motionMedia.add("(prefers-reduced-motion: no-preference)", function () {
+      var heroElements = document.querySelectorAll(".home-hero__eyebrow, .home-hero h1, .home-hero__lead, .home-hero__actions");
+      if (heroElements.length) {
+        gsapApi.from(heroElements, {
+          y: 24,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: "power3.out",
+          stagger: 0.12,
+          clearProps: "all",
+        });
+      }
+
+      if (document.querySelector(".home-info-card, .archive__item--card")) {
+        scrollTriggerApi.batch(".home-info-card, .archive__item--card", {
+          start: "top 88%",
+          once: true,
+          onEnter: function (elements) {
+            gsapApi.from(elements, {
+              y: 32,
+              autoAlpha: 0,
+              duration: 0.7,
+              ease: "power2.out",
+              stagger: 0.08,
+              overwrite: "auto",
+              clearProps: "all",
+            });
+          },
+        });
+      }
+
+      return function () {
+        scrollTriggerApi.refresh();
+      };
+    });
+
+    window.addEventListener("load", function () {
+      scrollTriggerApi.refresh();
+    }, { once: true });
+  };
   var scrollChromeTicking = false;
   var updateScrollChrome = function () {
     var scrollTop = $(window).scrollTop();
     var scrollHeight = $(document).height() - $(window).height();
-    var progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
 
-    $scrollProgress.css("width", Math.min(100, Math.max(0, progress)) + "%");
+    if (!useGsapScrollProgress) {
+      updateScrollProgressFallback(scrollTop, scrollHeight);
+    }
     $backToTop.toggleClass("is-visible", scrollTop > $(window).height() * 0.8);
   };
   var requestScrollChromeUpdate = function () {
@@ -88,6 +171,8 @@ $(document).ready(function () {
     });
   };
 
+  initGsapScrollProgress();
+  initGsapMotion();
   updateScrollChrome();
   $(window).on("scroll resize", requestScrollChromeUpdate);
   window.addEventListener("scroll", requestScrollChromeUpdate, { passive: true });

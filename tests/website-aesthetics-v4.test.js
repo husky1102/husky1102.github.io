@@ -115,3 +115,23 @@ test("I-38: local sidebar avatar uses a deploy-safe relative image URL", () => {
   assert.doesNotMatch(include, /author\.avatar \| prepend:\s*"\/images\/" \| prepend:\s*base_path/);
   assert.doesNotMatch(include, /<img[^>]+class="author__avatar"/);
 });
+
+test("I-39: GSAP motion is bundled locally and respects reduced motion", () => {
+  const pkg = JSON.parse(read("package.json"));
+  const mainJs = read("assets/js/_main.js");
+
+  assert.match(pkg.dependencies.gsap, /^\^3\./);
+  assert.match(
+    pkg.scripts.uglify,
+    /node_modules\/gsap\/dist\/gsap\.min\.js\s+node_modules\/gsap\/dist\/ScrollTrigger\.min\.js[\s\S]*assets\/js\/_main\.js/
+  );
+  assert.match(mainJs, /gsapApi\.registerPlugin\(scrollTriggerApi\)/);
+  assert.match(mainJs, /gsapApi\.matchMedia\(\)/);
+  assert.match(mainJs, /\(prefers-reduced-motion: no-preference\)/);
+  assert.match(mainJs, /\.home-hero__eyebrow, \.home-hero h1, \.home-hero__lead, \.home-hero__actions/);
+  assert.match(mainJs, /scrollTriggerApi\.batch\("\.home-info-card, \.archive__item--card"/);
+  assert.match(mainJs, /id:\s*"site-scroll-progress"/);
+  assert.match(mainJs, /scaleX:\s*1/);
+  assert.match(mainJs, /if \(!useGsapScrollProgress\)[\s\S]*updateScrollProgressFallback\(scrollTop, scrollHeight\)/);
+  assert.equal((mainJs.match(/\$scrollProgress\.css\("width"/g) || []).length, 1);
+});

@@ -34,10 +34,33 @@ test("Theme toggle stays visible and independent from greedy overflow menu", () 
   assert.match(masthead, /class="greedy-nav__toggle"/);
   assert.match(masthead, /id="theme-toggle"[\s\S]*fa-sun/);
   assert.match(masthead, /aria-label="切换到深色模式"/);
-  assert.match(greedyNav, /\$btn = \$\('#site-nav > \.greedy-nav__toggle'\)/);
-  assert.doesNotMatch(greedyNav, /\$btn = \$\('#site-nav button'\)/);
+  assert.match(greedyNav, /querySelector\("#site-nav > \.greedy-nav__toggle"\)/);
+  assert.doesNotMatch(greedyNav, /querySelector\("#site-nav button"\)/);
   assert.match(mainJs, /fa-moon/);
   assert.match(mainJs, /切换到浅色模式/);
+});
+
+test("jQuery stage 1 vanillaizes local navigation and chrome while keeping plugin calls", () => {
+  const greedyNav = read("assets/js/plugins/jquery.greedy-navigation.js");
+  const mainJs = read("assets/js/_main.js");
+  const pluginStart = mainJs.indexOf("// init smooth scroll");
+  const localChrome = mainJs.slice(0, pluginStart);
+  const pluginTail = mainJs.slice(pluginStart);
+
+  assert.match(greedyNav, /document\.getElementById\("site-nav"\)/);
+  assert.match(greedyNav, /classList\.toggle\("hidden", !isOpen\)/);
+  assert.match(greedyNav, /insertBefore\(movableLinks\[movableLinks\.length - 1\], hiddenLinks\.firstElementChild\)/);
+  assert.doesNotMatch(greedyNav, /\$\(|jQuery/);
+
+  assert.match(localChrome, /root\.toggleAttribute\("data-theme", isDark\)/);
+  assert.match(localChrome, /scrollProgress\.style\.width =/);
+  assert.match(localChrome, /document\.querySelectorAll\("div\.highlighter-rouge, figure\.highlight"\)/);
+  assert.match(localChrome, /authorUrlsButton\.addEventListener\("click"/);
+  assert.doesNotMatch(localChrome, /\$\(|jQuery\s*\(/);
+
+  assert.match(pluginTail, /\$\("a"\)\.smoothScroll/);
+  assert.match(pluginTail, /\$\(this\)/);
+  assert.match(pluginTail, /\$\("\.image-popup"\)\.magnificPopup/);
 });
 
 test("Sidebar author URLs are grouped into contact and links sections", () => {

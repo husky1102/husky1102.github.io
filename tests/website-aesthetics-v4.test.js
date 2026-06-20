@@ -133,5 +133,5 @@ test("I-39: GSAP motion is bundled locally and respects reduced motion", () => {
   assert.match(mainJs, /id:\s*"site-scroll-progress"/);
   assert.match(mainJs, /scaleX:\s*1/);
   assert.match(mainJs, /if \(!useGsapScrollProgress\)[\s\S]*updateScrollProgressFallback\(scrollTop, scrollHeight\)/);
-  assert.equal((mainJs.match(/\$scrollProgress\.css\("width"/g) || []).length, 1);
+  assert.equal((mainJs.match(/scrollProgress\.style\.width =/g) || []).length, 1);
 });

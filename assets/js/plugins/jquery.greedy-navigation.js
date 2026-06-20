@@ -5,87 +5,113 @@
 *
 */
 
-var $nav = $('#site-nav');
-var $btn = $('#site-nav > .greedy-nav__toggle');
-var $vlinks = $('#site-nav .visible-links');
-var $vlinks_persist_tail = $vlinks.children("*.persist.tail");
-var $hlinks = $('#site-nav .hidden-links');
+(function () {
+  var nav = document.getElementById("site-nav");
+  var btn = document.querySelector("#site-nav > .greedy-nav__toggle");
+  var visibleLinks = nav ? nav.querySelector(".visible-links") : null;
+  var persistTail = visibleLinks ? visibleLinks.querySelector(".persist.tail") : null;
+  var hiddenLinks = nav ? nav.querySelector(".hidden-links") : null;
+  var breaks = [];
 
-var breaks = [];
+  if (!nav || !btn || !visibleLinks || !hiddenLinks) {
+    return;
+  }
 
-function setHiddenLinksOpen(isOpen) {
-  $hlinks.toggleClass('hidden', !isOpen);
-  $hlinks.attr('aria-hidden', isOpen ? 'false' : 'true');
-  $btn.toggleClass('close', isOpen);
-  $btn.attr('aria-expanded', isOpen ? 'true' : 'false');
-}
+  var getWidth = function (element) {
+    return element ? element.getBoundingClientRect().width : 0;
+  };
 
-function updateNav() {
+  var isVisible = function (element) {
+    return Boolean(
+      element &&
+      (element.offsetWidth || element.offsetHeight || element.getClientRects().length)
+    );
+  };
 
-  var availableSpace = $btn.hasClass('hidden') ? $nav.width() : $nav.width() - $btn.width() - 30;
+  var getMovableLinks = function () {
+    return Array.prototype.filter.call(visibleLinks.children, function (item) {
+      return !item.classList.contains("persist");
+    });
+  };
 
-  // The visible list is overflowing the nav
-  if ($vlinks.width() > availableSpace) {
+  var getAvailableSpace = function () {
+    return btn.classList.contains("hidden")
+      ? getWidth(nav)
+      : getWidth(nav) - getWidth(btn) - 30;
+  };
 
-    while ($vlinks.width() > availableSpace && $vlinks.children("*:not(.persist)").length > 0) {
-      // Record the width of the list
-      breaks.push($vlinks.width());
+  var setHiddenLinksOpen = function (isOpen) {
+    hiddenLinks.classList.toggle("hidden", !isOpen);
+    hiddenLinks.setAttribute("aria-hidden", isOpen ? "false" : "true");
+    btn.classList.toggle("close", isOpen);
+    btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  };
 
-      // Move item to the hidden list
-      $vlinks.children("*:not(.persist)").last().prependTo($hlinks);
+  var updatePageChromeOffsets = function () {
+    var masthead = document.querySelector(".masthead");
+    var sidebar = document.querySelector(".sidebar");
+    var authorButton = document.querySelector(".author__urls-wrapper button");
+    var mastheadHeight = masthead ? masthead.offsetHeight : 0;
 
-      availableSpace = $btn.hasClass("hidden") ? $nav.width() : $nav.width() - $btn.width() - 30;
-
-      // Show the dropdown btn
-      $btn.removeClass("hidden");
+    document.body.style.paddingTop = mastheadHeight + "px";
+    if (sidebar) {
+      sidebar.style.paddingTop = isVisible(authorButton) ? "" : mastheadHeight + "px";
     }
+  };
 
-    // The visible list is not overflowing
-  } else {
+  var updateNav = function () {
+    var availableSpace = getAvailableSpace();
 
-    // There is space for another item in the nav
-    while (breaks.length > 0 && availableSpace > breaks[breaks.length - 1]) {
-      // Move the item to the visible list
-      if ($vlinks_persist_tail.children().length > 0) {
-        $hlinks.children().first().insertBefore($vlinks_persist_tail);
-      } else {
-        $hlinks.children().first().appendTo($vlinks);
+    // The visible list is overflowing the nav.
+    if (getWidth(visibleLinks) > availableSpace) {
+      while (getWidth(visibleLinks) > availableSpace && getMovableLinks().length > 0) {
+        var movableLinks = getMovableLinks();
+
+        breaks.push(getWidth(visibleLinks));
+        hiddenLinks.insertBefore(movableLinks[movableLinks.length - 1], hiddenLinks.firstElementChild);
+        btn.classList.remove("hidden");
+        availableSpace = getAvailableSpace();
       }
-      breaks.pop();
+
+      // The visible list is not overflowing.
+    } else {
+      // There is space for another item in the nav.
+      while (breaks.length > 0 && availableSpace > breaks[breaks.length - 1]) {
+        var firstHiddenLink = hiddenLinks.firstElementChild;
+
+        if (!firstHiddenLink) {
+          break;
+        }
+
+        if (persistTail && persistTail.children.length > 0) {
+          visibleLinks.insertBefore(firstHiddenLink, persistTail);
+        } else {
+          visibleLinks.appendChild(firstHiddenLink);
+        }
+        breaks.pop();
+      }
+
+      // Hide the dropdown btn if hidden list is empty.
+      if (breaks.length < 1) {
+        btn.classList.add("hidden");
+        setHiddenLinksOpen(false);
+      }
     }
 
-    // Hide the dropdown btn if hidden list is empty
-    if (breaks.length < 1) {
-      $btn.addClass('hidden');
-      setHiddenLinksOpen(false);
-    }
-  }
+    btn.setAttribute("count", breaks.length);
+    updatePageChromeOffsets();
+  };
 
-  // Keep counter updated
-  $btn.attr("count", breaks.length);
-
-  // update masthead height and the body/sidebar top padding
-  var mastheadHeight = $('.masthead').height();
-  $('body').css('padding-top', mastheadHeight + 'px');
-  if ($(".author__urls-wrapper button").is(":visible")) {
-    $(".sidebar").css("padding-top", "");
+  window.addEventListener("resize", updateNav);
+  if (screen.orientation && screen.orientation.addEventListener) {
+    screen.orientation.addEventListener("change", updateNav);
   } else {
-    $(".sidebar").css("padding-top", mastheadHeight + "px");
+    window.addEventListener("orientationchange", updateNav);
   }
 
-}
+  btn.addEventListener("click", function () {
+    setHiddenLinksOpen(hiddenLinks.classList.contains("hidden"));
+  });
 
-// Window listeners
-
-$(window).on('resize', function () {
   updateNav();
-});
-screen.orientation.addEventListener("change", function () {
-  updateNav();
-});
-
-$btn.on('click', function () {
-  setHiddenLinksOpen($hlinks.hasClass('hidden'));
-});
-
-updateNav();
+}());

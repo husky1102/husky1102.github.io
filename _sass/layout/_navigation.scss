@@ -264,23 +264,12 @@
         line-height: 1;
         text-decoration: none;
 
-        &:hover,
-        &:focus-visible {
+        &:hover {
           color: var(--global-masthead-link-color-hover);
-          background: color-mix(in srgb, var(--global-link-color) 10%, transparent);
         }
 
         &:focus {
           outline: none;
-        }
-
-        &:focus-visible {
-          outline: 2px solid var(--global-link-color);
-          outline-offset: 2px;
-        }
-
-        &:before {
-          display: none;
         }
       }
 
@@ -325,10 +314,11 @@
           color: var(--global-masthead-link-color-hover);
         }
 
-        /* `.greedy-nav button` kills the outline, so restore a visible focus ring */
+        &:focus {
+          outline: none;
+        }
+
         &:focus-visible {
-          outline: 2px solid var(--global-link-color);
-          outline-offset: 2px;
           background: none;
           box-shadow: none;
           transform: none;
@@ -337,7 +327,8 @@
       }
     }
 
-    a {
+    a,
+    .theme-toggle__btn {
       position: relative;
 
       &:before {
@@ -359,7 +350,17 @@
                 transform: translateX(-50%) scaleX(0); /* hide*/
       }
 
-      &:hover:before {
+      &:focus {
+        outline: none;
+      }
+
+      &:hover,
+      &:focus-visible {
+        color: var(--global-masthead-link-color-hover);
+      }
+
+      &:hover:before,
+      &:focus-visible:before {
         -webkit-transform: translateX(-50%) scaleX(1);
             -ms-transform: translateX(-50%) scaleX(1);
                 transform: translateX(-50%) scaleX(1); /* reveal*/

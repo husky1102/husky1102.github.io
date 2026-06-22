@@ -48,8 +48,9 @@ test("Masthead action icons use a stable square focus target", () => {
   assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?width:\s*2\.25rem/);
   assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?height:\s*2\.25rem/);
   assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?&:focus[\s\S]*?outline:\s*none/);
-  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?&:focus-visible[\s\S]*?outline:\s*2px solid var\(--global-link-color\)/);
-  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?&:before[\s\S]*?display:\s*none/);
+  assert.match(navigation, /a,\s*\n\s*\.theme-toggle__btn\s*\{[\s\S]*?&:before/);
+  assert.match(navigation, /&:hover,\s*\n\s*&:focus-visible\s*\{[\s\S]*?color:\s*var\(--global-masthead-link-color-hover\)/);
+  assert.match(navigation, /&:hover:before,\s*\n\s*&:focus-visible:before\s*\{[\s\S]*?scaleX\(1\)/);
   assert.match(blogEmbed, /embed_url:\s*"https:\/\/www\.husky1102\.top\/"/);
 });
 

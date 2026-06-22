@@ -251,29 +251,70 @@
       }
     }
 
+    .masthead__menu-item--action {
+      a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        margin: 0 0.35rem;
+        padding: 0;
+        border-radius: 6px;
+        line-height: 1;
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+          color: var(--global-masthead-link-color-hover);
+          background: color-mix(in srgb, var(--global-link-color) 10%, transparent);
+        }
+
+        &:focus {
+          outline: none;
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--global-link-color);
+          outline-offset: 2px;
+        }
+
+        &:before {
+          display: none;
+        }
+      }
+
+      i {
+        display: block;
+        width: 1em;
+        line-height: 1;
+        text-align: center;
+      }
+    }
+
     #theme-toggle {
       button {
         /* This is a real <button> for accessibility, but it must NOT inherit the
            absolutely-positioned overflow-toggle styles from `.greedy-nav button`.
            Reset it back to a plain inline nav icon. */
         position: static;
-        width: 25px;
+        width: 2.25rem;
         min-width: 0;
-        height: auto;
-        margin: 0 0 0 1rem;
-        padding: 0.5rem 0;
+        height: 2.25rem;
+        margin: 0 0 0 0.35rem;
+        padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         border: 0;
-        border-radius: 4px;
+        border-radius: 6px;
         background: none;
         -webkit-backdrop-filter: none;
                 backdrop-filter: none;
         box-shadow: none;
         color: var(--global-masthead-link-color);
         font-size: inherit;
-        line-height: inherit;
+        line-height: 1;
         cursor: pointer;
 
         &:hover {

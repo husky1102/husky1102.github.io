@@ -40,6 +40,19 @@ test("Theme toggle stays visible and independent from greedy overflow menu", () 
   assert.match(mainJs, /切换到浅色模式/);
 });
 
+test("Masthead action icons use a stable square focus target", () => {
+  const navigation = read("_sass/layout/_navigation.scss");
+  const blogEmbed = read("_pages/blog_embed.md");
+
+  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?display:\s*inline-flex/);
+  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?width:\s*2\.25rem/);
+  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?height:\s*2\.25rem/);
+  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?&:focus[\s\S]*?outline:\s*none/);
+  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?&:focus-visible[\s\S]*?outline:\s*2px solid var\(--global-link-color\)/);
+  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?&:before[\s\S]*?display:\s*none/);
+  assert.match(blogEmbed, /embed_url:\s*"https:\/\/www\.husky1102\.top\/"/);
+});
+
 test("jQuery stage 1 vanillaizes local navigation and chrome while keeping plugin calls", () => {
   const greedyNav = read("assets/js/plugins/jquery.greedy-navigation.js");
   const mainJs = read("assets/js/_main.js");

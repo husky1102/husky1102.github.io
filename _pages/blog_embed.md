@@ -103,7 +103,7 @@ embed_url: "https://www.husky1102.top/"
 <div class="blog-embed-shell">
   <div class="blog-embed-frame">
     <div class="blog-embed-spinner" aria-hidden="true"></div>
-    <iframe class="blog-embed-iframe" src="{{ page.embed_url }}" title="个人博客" loading="eager"></iframe>
+    <iframe class="blog-embed-iframe" src="{{ page.embed_url }}" title="个人博客" loading="eager" referrerpolicy="no-referrer"></iframe>
   </div>
 </div>
 

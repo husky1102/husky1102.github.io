@@ -6,3 +6,4 @@ Bug reports and feature requests to the template  should be [submitted via GitHu
 
 Fork from master and go from there. Remember that this repository is intended to remain a generic, ready-to-fork template that demonstrates the features of academicpages.
 
+For local Ruby builds, this site intentionally follows GitHub Pages' managed dependency set and does not commit `Gemfile.lock`; use the `github-pages` gem constraint from `Gemfile`.

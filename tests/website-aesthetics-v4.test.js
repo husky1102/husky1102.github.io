@@ -135,3 +135,17 @@ test("I-39: GSAP motion is bundled locally and respects reduced motion", () => {
   assert.match(mainJs, /if \(!useGsapScrollProgress\)[\s\S]*updateScrollProgressFallback\(scrollTop, scrollHeight\)/);
   assert.equal((mainJs.match(/scrollProgress\.style\.width =/g) || []).length, 1);
 });
+
+test("I-40: blog iframe and footer links use the hardened public-site defaults", () => {
+  const blogEmbed = read("_pages/blog_embed.md");
+  const footer = read("_includes/footer.html");
+  const contributing = read("CONTRIBUTING.md");
+
+  assert.match(blogEmbed, /class="blog-embed-iframe"[^>]*referrerpolicy="no-referrer"/);
+  assert.doesNotMatch(blogEmbed, /class="blog-embed-iframe"[^>]*sandbox=/);
+  assert.match(footer, /href="https:\/\/github\.com\/\{\{ site\.author\.github \}\}"/);
+  assert.match(footer, /href="https:\/\/bitbucket\.org\/\{\{ site\.author\.bitbucket \}\}"/);
+  assert.match(footer, /href="https:\/\/jekyllrb\.com"/);
+  assert.doesNotMatch(footer, /href="http:\/\/(github\.com|bitbucket\.org|jekyllrb\.com)/);
+  assert.match(contributing, /does not commit `Gemfile\.lock`/);
+});

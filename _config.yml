@@ -167,11 +167,14 @@ exclude:
   - .github
   - .jekyll-assets-cache
   - .sass-cache
+  - .agents
+  - .cowork
   - assets/js/_main.js
   - assets/js/plugins
   - assets/js/vendor
   - CHANGELOG
   - Capfile
+  - CONTRIBUTING.md
   - config
   - Dockerfile
   - Gemfile
@@ -180,10 +183,20 @@ exclude:
   - LICENSE
   - local
   - log
+  - markdown_generator
   - node_modules
   - package.json*
+  - package-lock.json
   - Rakefile
   - README
+  - review
+  - scripts
+  - skills-lock.json
+  - "*-lock.json"
+  - "*.ipynb"
+  - docker-compose.yaml
+  - compose*.yml
+  - talkmap.py
   - tmp
   - tests
   - vendor

@@ -1,0 +1,42 @@
+name: Site Check
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  site-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Build JavaScript
+        run: npm run build:js
+
+      - name: Run Node tests
+        run: node --test tests/website-aesthetics-v4.test.js tests/website-aesthetics-v3.test.js tests/publish-boundary.test.js tests/public-routes.test.js
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Clean generated site
+        run: bundle exec jekyll clean
+
+      - name: Build Jekyll site
+        run: bundle exec jekyll build --safe --trace

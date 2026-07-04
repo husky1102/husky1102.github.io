@@ -61,6 +61,31 @@ test("publish boundary excludes notebooks and lockfile-style generated metadata"
   assert.deepEqual(leakedFiles, [], `Unexpected public files: ${leakedFiles.join(", ")}`);
 });
 
+test("template publication sample files are absent from source and generated site", () => {
+  assertBuiltSite();
+
+  const samplePublicationFiles = [
+    "files/bibtex1.bib",
+    "files/paper1.pdf",
+    "files/paper2.pdf",
+    "files/paper3.pdf",
+    "files/slides1.pdf",
+    "files/slides2.pdf",
+    "files/slides3.pdf",
+  ];
+
+  const remainingSourceFiles = samplePublicationFiles.filter(existsInRoot);
+  assert.deepEqual(remainingSourceFiles, [], `Unexpected template files in source: ${remainingSourceFiles.join(", ")}`);
+
+  const leakedGeneratedFiles = samplePublicationFiles.filter(existsInSite);
+  assert.deepEqual(leakedGeneratedFiles, [], `Unexpected template files in _site: ${leakedGeneratedFiles.join(", ")}`);
+
+  const sitemap = fs.readFileSync(path.join(site, "sitemap.xml"), "utf8");
+  for (const file of samplePublicationFiles) {
+    assert.doesNotMatch(sitemap, new RegExp(file.replaceAll("/", "\\/").replaceAll(".", "\\.")));
+  }
+});
+
 test("removed JSON CV path does not leave source artifacts or sample output", () => {
   assertBuiltSite();
 

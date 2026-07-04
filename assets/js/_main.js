@@ -189,6 +189,110 @@
         scrollTriggerApi.refresh();
       }, { once: true });
     };
+    var initDarkAmbientMotion = function () {
+      if (!hasMotionEngine || !gsapApi.matchMedia || !gsapApi.quickSetter || !gsapApi.quickTo) {
+        return;
+      }
+
+      var ambientMedia = gsapApi.matchMedia();
+      var ambientVarNames = [
+        "--dark-ambient-x",
+        "--dark-ambient-y",
+        "--dark-ambient-spotlight-alpha",
+        "--dark-ambient-card-alpha",
+      ];
+      var isDarkTheme = function () {
+        return root.getAttribute("data-theme") === "dark";
+      };
+      var clearAmbientVars = function () {
+        ambientVarNames.forEach(function (name) {
+          root.style.removeProperty(name);
+        });
+      };
+
+      ambientMedia.add("(prefers-reduced-motion: no-preference) and (pointer: fine)", function () {
+        var setAmbientX = gsapApi.quickSetter(root, "--dark-ambient-x");
+        var setAmbientY = gsapApi.quickSetter(root, "--dark-ambient-y");
+        var setSpotlightAlpha = gsapApi.quickTo(root, "--dark-ambient-spotlight-alpha", {
+          duration: 0.45,
+          ease: "power2.out",
+        });
+        var setCardAlpha = gsapApi.quickTo(root, "--dark-ambient-card-alpha", {
+          duration: 0.7,
+          ease: "power2.out",
+        });
+        var pendingPointer = null;
+        var pointerTicking = false;
+        var ambientThemeObserver = null;
+
+        var restoreAmbientRest = function () {
+          setAmbientX("50%");
+          setAmbientY("18%");
+          setSpotlightAlpha(isDarkTheme() ? 0.075 : 0);
+          setCardAlpha(isDarkTheme() ? 0.16 : 0);
+        };
+        var syncAmbientTheme = function () {
+          var shouldRun = isDarkTheme();
+
+          root.classList.toggle("has-dark-ambient-motion", shouldRun);
+          if (!shouldRun) {
+            setAmbientX("50%");
+            setAmbientY("18%");
+            setSpotlightAlpha(0);
+            setCardAlpha(0);
+            return;
+          }
+
+          restoreAmbientRest();
+        };
+        var renderPointerAmbient = function () {
+          pointerTicking = false;
+          if (!pendingPointer || !isDarkTheme()) {
+            return;
+          }
+
+          var x = Math.max(0, Math.min(100, (pendingPointer.clientX / window.innerWidth) * 100));
+          var y = Math.max(0, Math.min(100, (pendingPointer.clientY / window.innerHeight) * 100));
+
+          setAmbientX(x.toFixed(2) + "%");
+          setAmbientY(y.toFixed(2) + "%");
+          setSpotlightAlpha(0.12);
+          setCardAlpha(0.18);
+        };
+        var handlePointerMove = function (event) {
+          pendingPointer = event;
+          if (pointerTicking) {
+            return;
+          }
+
+          pointerTicking = true;
+          window.requestAnimationFrame(renderPointerAmbient);
+        };
+
+        syncAmbientTheme();
+        if (window.MutationObserver) {
+          ambientThemeObserver = new MutationObserver(syncAmbientTheme);
+          ambientThemeObserver.observe(root, {
+            attributes: true,
+            attributeFilter: ["data-theme"],
+          });
+        }
+        window.addEventListener("pointermove", handlePointerMove, { passive: true });
+        window.addEventListener("pointerleave", restoreAmbientRest, { passive: true });
+        window.addEventListener("blur", restoreAmbientRest);
+
+        return function () {
+          window.removeEventListener("pointermove", handlePointerMove);
+          window.removeEventListener("pointerleave", restoreAmbientRest);
+          window.removeEventListener("blur", restoreAmbientRest);
+          if (ambientThemeObserver) {
+            ambientThemeObserver.disconnect();
+          }
+          root.classList.remove("has-dark-ambient-motion");
+          clearAmbientVars();
+        };
+      });
+    };
     var scrollChromeTicking = false;
     var updateScrollChrome = function () {
       var scrollTop = getScrollTop();
@@ -243,6 +347,7 @@
 
     initGsapScrollProgress();
     initGsapMotion();
+    initDarkAmbientMotion();
     updateScrollChrome();
     window.addEventListener("scroll", requestScrollChromeUpdate, { passive: true });
     window.addEventListener("resize", requestScrollChromeUpdate);

@@ -136,6 +136,39 @@ test("I-39: GSAP motion is bundled locally and respects reduced motion", () => {
   assert.equal((mainJs.match(/scrollProgress\.style\.width =/g) || []).length, 1);
 });
 
+test("I-41: dark ambient layer is dark-scoped, surface-scoped, and reduced-motion safe", () => {
+  const custom = read("_sass/custom.scss");
+
+  assert.match(custom, /html\[data-theme="dark"\]\s*\{[\s\S]*?--dark-ambient-x:\s*50%/);
+  assert.match(
+    custom,
+    /html\[data-theme="dark"\] body \{[\s\S]*?radial-gradient\(circle at var\(--dark-ambient-x\) var\(--dark-ambient-y\)/
+  );
+  assert.match(custom, /html\[data-theme="dark"\] \.home-info-card::before/);
+  assert.match(custom, /html\[data-theme="dark"\] \.archive__item--card::before/);
+  assert.match(custom, /html\[data-theme="dark"\] \.about-entry-card::before/);
+  assert.match(custom, /@keyframes darkAmbientCardBreath/);
+  assert.match(
+    custom,
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?html\[data-theme="dark"\] \.home-info-card::before[\s\S]*?animation:\s*none/
+  );
+});
+
+test("I-41: GSAP ambient pointer glow is gated to dark-capable fine-pointer motion", () => {
+  const mainJs = read("assets/js/_main.js");
+
+  assert.match(mainJs, /var initDarkAmbientMotion = function \(\)/);
+  assert.match(mainJs, /ambientMedia\.add\("\(prefers-reduced-motion: no-preference\) and \(pointer: fine\)"/);
+  assert.match(mainJs, /gsapApi\.quickSetter\(root, "--dark-ambient-x"\)/);
+  assert.match(mainJs, /gsapApi\.quickSetter\(root, "--dark-ambient-y"\)/);
+  assert.match(mainJs, /gsapApi\.quickTo\(root, "--dark-ambient-spotlight-alpha"/);
+  assert.match(mainJs, /root\.classList\.toggle\("has-dark-ambient-motion", shouldRun\)/);
+  assert.match(mainJs, /window\.addEventListener\("pointermove", handlePointerMove, \{ passive: true \}\)/);
+  assert.match(mainJs, /window\.removeEventListener\("pointermove", handlePointerMove\)/);
+  assert.match(mainJs, /MutationObserver\(syncAmbientTheme\)/);
+  assert.doesNotMatch(mainJs, /mousemove/);
+});
+
 test("I-40: blog iframe and footer links use the hardened public-site defaults", () => {
   const blogEmbed = read("_pages/blog_embed.md");
   const footer = read("_includes/footer.html");

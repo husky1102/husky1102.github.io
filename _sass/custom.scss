@@ -536,6 +536,70 @@ html[data-theme="dark"] .cv-tag-list li:focus-within {
     0 18px 46px rgba(2, 6, 23, 0.34);
 }
 
+html[data-theme="dark"] {
+  --dark-ambient-x: 50%;
+  --dark-ambient-y: 18%;
+  --dark-ambient-spotlight-alpha: 0.075;
+  --dark-ambient-card-alpha: 0.16;
+}
+
+html[data-theme="dark"] body {
+  background-image:
+    radial-gradient(circle at var(--dark-ambient-x) var(--dark-ambient-y), color-mix(in srgb, #67e8f9 calc(var(--dark-ambient-spotlight-alpha) * 100%), transparent) 0, transparent min(34rem, 58vw)),
+    radial-gradient(circle at 14% 12%, rgba(103, 232, 249, 0.055) 0, transparent 34rem),
+    radial-gradient(circle at 86% 4%, rgba(196, 181, 253, 0.05) 0, transparent 30rem),
+    linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(17, 28, 49, 0.22) 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+html[data-theme="dark"] .home-info-card,
+html[data-theme="dark"] .home-link-list li,
+html[data-theme="dark"] .archive__item--card,
+html[data-theme="dark"] .about-entry-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+html[data-theme="dark"] .home-info-card > *,
+html[data-theme="dark"] .home-link-list li > *,
+html[data-theme="dark"] .archive__item--card > *,
+html[data-theme="dark"] .about-entry-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+html[data-theme="dark"] .home-info-card::before,
+html[data-theme="dark"] .home-link-list li::before,
+html[data-theme="dark"] .archive__item--card::before,
+html[data-theme="dark"] .about-entry-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(103, 232, 249, 0.16), transparent 48%),
+    linear-gradient(135deg, rgba(103, 232, 249, 0.08), transparent 55%),
+    linear-gradient(315deg, rgba(196, 181, 253, 0.06), transparent 52%);
+  opacity: var(--dark-ambient-card-alpha);
+  transform: scale(1);
+  transform-origin: center;
+  animation: darkAmbientCardBreath 8s ease-in-out infinite;
+}
+
+html[data-theme="dark"] .home-link-list li::before,
+html[data-theme="dark"] .archive__item--card::before {
+  animation-duration: 10s;
+  animation-delay: -2s;
+}
+
+html[data-theme="dark"] .about-entry-card::before {
+  animation-delay: -4s;
+}
+
 html[data-theme="dark"] .home-hero__actions .btn:hover,
 html[data-theme="dark"] .home-hero__actions .btn:focus-visible,
 html[data-theme="dark"] .publication-resource-link:hover,
@@ -642,6 +706,19 @@ html[data-theme="dark"] .error-404__code {
   text-shadow: 0 0 34px rgba(103, 232, 249, 0.22);
 }
 
+@keyframes darkAmbientCardBreath {
+  0%,
+  100% {
+    opacity: calc(var(--dark-ambient-card-alpha) * 0.78);
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: calc(var(--dark-ambient-card-alpha) * 1.22);
+    transform: scale(1.015);
+  }
+}
+
 .scroll-progress {
   position: fixed;
   top: 0;
@@ -724,6 +801,23 @@ html[data-theme="dark"] .error-404__code {
   }
 
   .back-to-top i {
+    transform: none;
+  }
+
+  html[data-theme="dark"] {
+    --dark-ambient-spotlight-alpha: 0.045;
+    --dark-ambient-card-alpha: 0.12;
+  }
+
+  html[data-theme="dark"] body {
+    background-attachment: scroll;
+  }
+
+  html[data-theme="dark"] .home-info-card::before,
+  html[data-theme="dark"] .home-link-list li::before,
+  html[data-theme="dark"] .archive__item--card::before,
+  html[data-theme="dark"] .about-entry-card::before {
+    animation: none;
     transform: none;
   }
 }

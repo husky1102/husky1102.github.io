@@ -175,13 +175,12 @@ test("I-40: blog iframe and footer links use the hardened public-site defaults",
   const contributing = read("CONTRIBUTING.md");
 
   assert.match(blogEmbed, /class="blog-embed-iframe"[^>]*referrerpolicy="no-referrer"/);
-  assert.doesNotMatch(blogEmbed, /class="blog-embed-iframe"[^>]*sandbox=/);
-  assert.match(blogEmbed, /digital-garden-color-theme/);
+  assert.match(blogEmbed, /class="blog-embed-iframe"[^>]*sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads"/);
   assert.match(blogEmbed, /var markLoaded = function \(\)/);
-  assert.match(blogEmbed, /iframe\.srcdoc = rewriteSrcdoc\(blogHtml, getTheme\(\)\)/);
-  assert.match(blogEmbed, /window\.setTimeout\(markLoaded, 0\)/);
+  assert.doesNotMatch(blogEmbed, /iframe\.srcdoc/);
+  assert.doesNotMatch(blogEmbed, /fetch\(sourceUrl/);
+  assert.doesNotMatch(blogEmbed, /allow-same-origin/);
   assert.match(blogEmbed, /new MutationObserver\(syncBlogTheme\)/);
-  assert.match(blogEmbed, /\.replace\(\/\\b\(href\|src\)=\(\["'\]\)\\\/\(\?!\\\/\)\/g/);
   assert.match(blogEmbed, /data-theme-bridge="fallback"/);
   assert.match(footer, /href="https:\/\/github\.com\/\{\{ site\.author\.github \}\}"/);
   assert.match(footer, /href="https:\/\/bitbucket\.org\/\{\{ site\.author\.bitbucket \}\}"/);

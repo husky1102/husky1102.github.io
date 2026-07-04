@@ -101,7 +101,7 @@ embed_url: "https://www.husky1102.top/"
 <div class="blog-embed-shell">
   <div class="blog-embed-frame">
     <div class="blog-embed-spinner" aria-hidden="true"></div>
-    <iframe class="blog-embed-iframe" src="{{ page.embed_url }}" title="个人博客" loading="eager" referrerpolicy="no-referrer"></iframe>
+    <iframe class="blog-embed-iframe" src="{{ page.embed_url }}" title="个人博客" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads" data-theme-bridge="fallback"></iframe>
   </div>
 </div>
 
@@ -109,9 +109,6 @@ embed_url: "https://www.husky1102.top/"
   (function () {
     var shell = document.querySelector(".blog-embed-shell");
     var iframe = document.querySelector(".blog-embed-iframe");
-    var sourceUrl = "{{ page.embed_url }}";
-    var sourceOrigin = new URL(sourceUrl).origin;
-    var blogHtml = "";
     var observer = null;
 
     var markLoaded = function () {
@@ -122,60 +119,12 @@ embed_url: "https://www.husky1102.top/"
       return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
     };
 
-    var rewriteSrcdoc = function (html, theme) {
-      var baseTag = '<base href="' + sourceUrl + '">';
-      var scriptOpen = "<scr" + "ipt>";
-      var scriptClose = "</scr" + "ipt>";
-      var themeScript = [
-        scriptOpen,
-        "(function(){",
-        "var theme = " + JSON.stringify(theme) + ";",
-        "try { localStorage.setItem('digital-garden-color-theme', theme); } catch (e) {}",
-        "document.documentElement.style.colorScheme = theme;",
-        "document.documentElement.classList.toggle('theme-dark', theme === 'dark');",
-        "document.documentElement.classList.toggle('theme-light', theme !== 'dark');",
-        "document.addEventListener('DOMContentLoaded', function () {",
-        "document.body.classList.toggle('theme-dark', theme === 'dark');",
-        "document.body.classList.toggle('theme-light', theme !== 'dark');",
-        "});",
-        "}());",
-        scriptClose
-      ].join("");
-
-      return html
-        .replace(/<head([^>]*)>/i, "<head$1>" + baseTag + themeScript)
-        .replace(/\b(href|src)=(["'])\/(?!\/)/g, "$1=$2" + sourceOrigin + "/");
-    };
-
     var syncBlogTheme = function () {
-      if (!blogHtml) {
-        iframe.dataset.themeBridge = "fallback";
-        iframe.src = sourceUrl;
-        return;
-      }
-
-      iframe.dataset.themeBridge = "srcdoc";
-      iframe.removeAttribute("src");
-      iframe.srcdoc = rewriteSrcdoc(blogHtml, getTheme());
-      window.setTimeout(markLoaded, 0);
+      iframe.dataset.themeBridge = getTheme() === "dark" ? "fallback" : "native";
     };
 
     iframe.addEventListener("load", markLoaded);
-
-    fetch(sourceUrl, { mode: "cors", credentials: "omit" })
-      .then(function (response) {
-        if (!response.ok) {
-          throw new Error("Blog fetch failed: " + response.status);
-        }
-        return response.text();
-      })
-      .then(function (html) {
-        blogHtml = html;
-        syncBlogTheme();
-      })
-      .catch(function () {
-        syncBlogTheme();
-      });
+    syncBlogTheme();
 
     observer = new MutationObserver(syncBlogTheme);
     observer.observe(document.documentElement, {

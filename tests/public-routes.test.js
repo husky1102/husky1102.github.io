@@ -6,14 +6,15 @@ const assert = require("node:assert/strict");
 const root = path.resolve(__dirname, "..");
 const site = path.join(root, "_site");
 
-const existsInSite = (relativePath) => fs.existsSync(path.join(site, relativePath));
-const readIfExists = (relativePath) => {
-  const fullPath = path.join(site, relativePath);
-  return fs.existsSync(fullPath) ? fs.readFileSync(fullPath, "utf8") : "";
+const assertBuiltSite = () => {
+  assert.ok(fs.existsSync(path.join(site, "index.html")), "Run `bundle exec jekyll build` before public route tests.");
+  assert.ok(fs.existsSync(path.join(site, "sitemap.xml")), "Generated sitemap.xml is required for public route tests.");
 };
+const existsInSite = (relativePath) => fs.existsSync(path.join(site, relativePath));
+const readGenerated = (relativePath) => fs.readFileSync(path.join(site, relativePath), "utf8");
 
 const walk = (dir) => {
-  if (!fs.existsSync(dir)) return [];
+  assert.ok(fs.existsSync(dir), "Generated _site directory is required for public route tests.");
 
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const fullPath = path.join(dir, entry.name);
@@ -22,7 +23,13 @@ const walk = (dir) => {
   });
 };
 
+test("generated site exists before public route assertions", () => {
+  assertBuiltSite();
+});
+
 test("template-only and talkmap routes are not generated", () => {
+  assertBuiltSite();
+
   const absentRoutes = [
     "talkmap.html",
     "talkmap",
@@ -42,7 +49,9 @@ test("template-only and talkmap routes are not generated", () => {
 });
 
 test("sitemap omits template-only and talkmap routes", () => {
-  const sitemap = readIfExists("sitemap.xml");
+  assertBuiltSite();
+
+  const sitemap = readGenerated("sitemap.xml");
   const forbiddenUrls = [
     "/talkmap.html",
     "/talkmap/",
@@ -61,6 +70,8 @@ test("sitemap omits template-only and talkmap routes", () => {
 });
 
 test("sample talk content is absent from generated text assets", () => {
+  assertBuiltSite();
+
   const textExtensions = new Set([".css", ".html", ".js", ".json", ".txt", ".xml"]);
   const generatedText = walk(site)
     .filter((file) => textExtensions.has(path.extname(file)))

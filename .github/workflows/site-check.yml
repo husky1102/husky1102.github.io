@@ -26,9 +26,6 @@ jobs:
       - name: Build JavaScript
         run: npm run build:js
 
-      - name: Run Node tests
-        run: node --test tests/website-aesthetics-v4.test.js tests/website-aesthetics-v3.test.js tests/publish-boundary.test.js tests/public-routes.test.js
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -40,3 +37,6 @@ jobs:
 
       - name: Build Jekyll site
         run: bundle exec jekyll build --safe --trace
+
+      - name: Run Node tests
+        run: npm test

@@ -6,11 +6,15 @@ const assert = require("node:assert/strict");
 const root = path.resolve(__dirname, "..");
 const site = path.join(root, "_site");
 
+const assertBuiltSite = () => {
+  assert.ok(fs.existsSync(path.join(site, "index.html")), "Run `bundle exec jekyll build` before publish boundary tests.");
+  assert.ok(fs.existsSync(path.join(site, "sitemap.xml")), "Generated sitemap.xml is required for publish boundary tests.");
+};
 const existsInSite = (relativePath) => fs.existsSync(path.join(site, relativePath));
 const existsInRoot = (relativePath) => fs.existsSync(path.join(root, relativePath));
 
 const walk = (dir) => {
-  if (!fs.existsSync(dir)) return [];
+  assert.ok(fs.existsSync(dir), "Generated _site directory is required for publish boundary tests.");
 
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   return entries.flatMap((entry) => {
@@ -20,7 +24,13 @@ const walk = (dir) => {
   });
 };
 
+test("generated site exists before publish boundary assertions", () => {
+  assertBuiltSite();
+});
+
 test("publish boundary excludes source-only maintenance artifacts", () => {
+  assertBuiltSite();
+
   const forbiddenPaths = [
     "scripts",
     "markdown_generator",
@@ -41,6 +51,8 @@ test("publish boundary excludes source-only maintenance artifacts", () => {
 });
 
 test("publish boundary excludes notebooks and lockfile-style generated metadata", () => {
+  assertBuiltSite();
+
   const leakedFiles = walk(site).filter((relativePath) => {
     const fileName = path.basename(relativePath);
     return fileName.endsWith(".ipynb") || fileName.endsWith("-lock.json");
@@ -50,6 +62,8 @@ test("publish boundary excludes notebooks and lockfile-style generated metadata"
 });
 
 test("removed JSON CV path does not leave source artifacts or sample output", () => {
+  assertBuiltSite();
+
   const deletedSourcePaths = [
     "_data/cv.json",
     "_includes/cv-template.html",

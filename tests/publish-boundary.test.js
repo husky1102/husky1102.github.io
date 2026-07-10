@@ -106,3 +106,14 @@ test("removed JSON CV path does not leave source artifacts or sample output", ()
   assert.doesNotMatch(generatedText, /Your Sidebar Name/);
   assert.doesNotMatch(generatedText, /Red Brick University/);
 });
+
+test("privacy page describes only the integrations that are actually active", () => {
+  assertBuiltSite();
+
+  const terms = fs.readFileSync(path.join(site, "terms", "index.html"), "utf8");
+
+  assert.doesNotMatch(terms, /Disqus|Third-party advertisers|Google Analytics/);
+  assert.match(terms, /GitHub Pages/);
+  assert.match(terms, /本地存储/);
+  assert.match(terms, /博客原站/);
+});

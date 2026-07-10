@@ -1,39 +1,31 @@
 ---
 permalink: /terms/
-title: "Terms and Privacy Policy"
-modified: 2016-06-06
+title: "隐私说明"
+description: "说明本站使用的本地设置、托管服务与外部内容边界。"
+modified: 2026-07-10
 ---
 
 {% include base_path %}
 {% include toc %}
 
-## Privacy Policy
+## 本站如何运行
 
-The privacy of my visitors is extremely important. This Privacy Policy outlines the types of personal information that is received and collected and how it is used.
+本站是托管在 GitHub Pages 上的静态个人主页，不提供注册、评论、投稿、广告或访问统计功能。本站代码不会主动要求你提交姓名、邮箱或其他个人资料。
 
-First and foremost, I will never share your email address or any other personal information to anyone without your direct consent.
+GitHub Pages 在提供网页和静态资源时，可能按照 [GitHub 隐私声明](https://docs.github.com/zh/site-policy/privacy-policies/github-general-privacy-statement) 处理必要的访问与安全信息。这部分由 GitHub 负责，不由本站直接读取或管理。
 
-### Log Files
+## 浏览器本地设置
 
-Like many other websites, this site uses log files to help learn about when, from where, and how often traffic flows to this site. The information in these log files include:
+为了记住你选择的浅色或深色主题，本站会在浏览器本地存储中保存一个名为 `theme` 的设置。这个值只用于恢复显示偏好，不包含身份信息，也不会由本站代码发送到服务器。
 
-* Internet Protocol addresses (IP)
-* Types of browser
-* Internet Service Provider (ISP)
-* Date and time stamp
-* Referring and exit pages
-* Number of clicks
+你可以在浏览器的网站数据设置中删除这个本地设置；删除后，本站会重新跟随系统主题。
 
-All of this information is not linked to anything that is personally identifiable.
+## 博客与外部链接
 
-### Cookies and Web Beacons
+“个人博客”页面通过受限 iframe 加载博客原站 `www.husky1102.top`。打开该页面时，浏览器会直接连接博客原站；博客内容及其数据处理规则由博客原站负责。本站不会向博客原站发送当前页面的来源地址。
 
-When you visit this site "convenience" cookies are stored on your computer when you submit a comment to help you log in faster to [Disqus](http://disqus.com) the next time you leave a comment.
+页面中的 GitHub、Kaggle 等外部链接只会在你点击后访问相应服务，并适用对方的隐私政策。
 
-Third-party advertisers may also place and read cookies on your browser and/or use web beacons to collect information. This site has no access or control over these cookies. You should review the respective privacy policies on any and all third-party ad servers for more information regarding their practices and how to opt-out.
+## 说明更新
 
-If you wish to disable cookies, you may do so through your web browser options. Instructions for doing so can be found on the specific web browsers' websites.
-
-#### Google Analytics
-
-Google Analytics is a web analytics tool I use to help understand how visitors engage with this website. It reports website trends using cookies and web beacons without identifying individual visitors. You can read [Google Analytics Privacy Policy](http://www.google.com/analytics/learn/privacy.html).
+如果本站以后新增会改变上述数据边界的功能，本页会随之更新。

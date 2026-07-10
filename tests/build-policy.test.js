@@ -34,3 +34,21 @@ test("GitHub workflows grant deployment credentials only to the deploy job", () 
   );
   assert.match(siteCheck, /^permissions:\n  contents: read\n/m);
 });
+
+test("Node builds use the committed lockfile and the supported runtime", () => {
+  const pages = read(".github/workflows/pages.yml");
+  const siteCheck = read(".github/workflows/site-check.yml");
+  const packageJson = JSON.parse(read("package.json"));
+  const packageLock = JSON.parse(read("package-lock.json"));
+  const gitignore = read(".gitignore");
+
+  for (const workflow of [pages, siteCheck]) {
+    assert.match(workflow, /node-version: "22"/);
+    assert.match(workflow, /run: npm ci/);
+    assert.doesNotMatch(workflow, /run: npm install/);
+  }
+
+  assert.equal(packageJson.engines.node, ">=22");
+  assert.equal(packageLock.packages[""].engines.node, ">=22");
+  assert.doesNotMatch(gitignore, /^package-lock\.json$/m);
+});

@@ -440,29 +440,42 @@
     // FitVids init.
     fitvids();
 
-    // Follow menu drop down.
-    var authorUrlsButton = document.querySelector(".author__urls-wrapper button");
-    var authorUrls = document.querySelector(".author__urls");
+    // Mobile profile links disclosure.
+    var authorUrlsButton = document.getElementById("author-links-toggle");
+    var authorUrls = document.getElementById("author-links");
+    var setAuthorUrlsState = function (isVisible) {
+      if (!authorUrlsButton) {
+        return;
+      }
+
+      var authorUrlsLabel = isVisible ? "不显示个人资料与链接" : "显示个人资料与链接";
+      authorUrlsButton.classList.toggle("open", isVisible);
+      authorUrlsButton.setAttribute("aria-expanded", isVisible ? "true" : "false");
+      authorUrlsButton.setAttribute("aria-label", authorUrlsLabel);
+      authorUrlsButton.setAttribute("title", authorUrlsLabel);
+    };
     var setAuthorUrlsVisible = function (isVisible) {
       if (!authorUrls) {
         return;
       }
 
       authorUrls.style.display = isVisible ? "block" : "none";
+      setAuthorUrlsState(isVisible);
     };
     if (authorUrlsButton && authorUrls) {
       authorUrlsButton.addEventListener("click", function () {
         var isHidden = window.getComputedStyle(authorUrls).display === "none";
 
         setAuthorUrlsVisible(isHidden);
-        authorUrlsButton.classList.toggle("open", isHidden);
       });
     }
 
-    // Restore the follow menu if toggled on a window resize.
+    // Clear mobile disclosure state when the desktop layout takes over. This
+    // also lets the CSS default close the disclosure after returning to mobile.
     window.addEventListener("resize", function () {
-      if (authorUrls && window.getComputedStyle(authorUrls).display === "none" && window.innerWidth >= scssLarge) {
-        authorUrls.style.display = "block";
+      if (authorUrls && authorUrlsButton && window.innerWidth >= scssLarge) {
+        authorUrls.style.removeProperty("display");
+        setAuthorUrlsState(false);
       }
     });
 

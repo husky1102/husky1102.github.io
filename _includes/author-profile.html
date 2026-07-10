@@ -21,8 +21,8 @@
   </div>
 
   <div class="author__urls-wrapper">
-    <button class="btn btn--inverse">Follow</button>
-    <ul class="author__urls social-icons">
+    <button id="author-links-toggle" type="button" class="btn btn--inverse" aria-controls="author-links" aria-expanded="false" aria-label="显示个人资料与链接" title="显示个人资料与链接">资料与链接</button>
+    <ul id="author-links" class="author__urls social-icons">
       {% if author.location or author.employer or author.uri %}
       <li class="author__urls-section author__urls-section--contact">
         <span class="author__urls-heading">CONTACT</span>

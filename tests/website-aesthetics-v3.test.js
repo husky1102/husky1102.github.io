@@ -89,6 +89,20 @@ test("Sidebar author URLs are grouped into contact and links sections", () => {
   assert.match(sidebar, /\.author__urls-heading/);
 });
 
+test("Sidebar links disclosure exposes and synchronizes accessible state", () => {
+  const include = read("_includes/author-profile.html");
+  const mainJs = read("assets/js/_main.js");
+
+  assert.match(include, /id="author-links-toggle"[^>]*type="button"/);
+  assert.match(include, /id="author-links-toggle"[^>]*aria-controls="author-links"/);
+  assert.match(include, /id="author-links-toggle"[^>]*aria-expanded="false"/);
+  assert.match(include, /id="author-links-toggle"[^>]*aria-label="显示个人资料与链接"/);
+  assert.match(include, /id="author-links" class="author__urls social-icons"/);
+  assert.match(mainJs, /authorUrlsButton\.setAttribute\("aria-expanded", isVisible \? "true" : "false"\)/);
+  assert.match(mainJs, /isVisible \? "不显示个人资料与链接" : "显示个人资料与链接"/);
+  assert.match(mainJs, /authorUrls\.style\.removeProperty\("display"\)/);
+});
+
 test("TOC uses a glass card with link focus indicators", () => {
   const navigation = read("_sass/layout/_navigation.scss");
 

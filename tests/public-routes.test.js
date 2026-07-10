@@ -135,3 +135,14 @@ test("HTML sitemap lists only titled, user-facing content pages", () => {
     ]
   );
 });
+
+test("generated sidebar links disclosure has an accessible control relationship", () => {
+  assertBuiltSite();
+
+  const home = readGenerated("index.html");
+  assert.match(
+    home,
+    /<button id="author-links-toggle" type="button"[^>]*aria-controls="author-links"[^>]*aria-expanded="false"[^>]*aria-label="显示个人资料与链接"/
+  );
+  assert.match(home, /<ul id="author-links" class="author__urls social-icons">/);
+});

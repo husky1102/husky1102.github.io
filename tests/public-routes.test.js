@@ -88,3 +88,25 @@ test("sample talk content is absent from generated text assets", () => {
     assert.doesNotMatch(generatedText, new RegExp(sampleText));
   }
 });
+
+test("primary pages expose non-empty description and Open Graph description metadata", () => {
+  assertBuiltSite();
+
+  const primaryPages = [
+    "index.html",
+    "about/index.html",
+    "cv/index.html",
+    "cv_zh/index.html",
+    "blog_embed/index.html",
+  ];
+
+  for (const page of primaryPages) {
+    const html = readGenerated(page);
+    assert.match(
+      html,
+      /<meta property="og:description" name="description" content="[^"]+">/,
+      `${page} should expose its resolved SEO description.`
+    );
+    assert.match(html, /<link rel="canonical" href="https:\/\/husky1102\.github\.io\//);
+  }
+});

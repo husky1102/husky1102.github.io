@@ -6,7 +6,7 @@ Bug reports and feature requests to the template  should be [submitted via GitHu
 
 Fork from master and go from there. Remember that this repository is intended to remain a generic, ready-to-fork template that demonstrates the features of academicpages.
 
-For local Ruby builds, this site intentionally follows GitHub Pages' managed dependency set and does not commit `Gemfile.lock`; use the `github-pages` gem constraint from `Gemfile`.
+Ruby dependencies are locked in `Gemfile.lock` so local builds and GitHub Actions resolve the same versions. CI uses Ruby 3.3, and the lockfile is maintained with Bundler 2.4.22. Install that Bundler version when needed, run `bundle _2.4.22_ install` for normal setup, and use `bundle _2.4.22_ update` only as an explicit dependency-maintenance change followed by the full site verification suite.
 
 The published LXGW webfont is generated from the source-only font under `scripts/assets/fonts/`. After changing Chinese page or UI copy, regenerate and verify the subset with:
 

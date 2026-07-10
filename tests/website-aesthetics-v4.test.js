@@ -186,5 +186,7 @@ test("I-40: blog iframe and footer links use the hardened public-site defaults",
   assert.match(footer, /href="https:\/\/bitbucket\.org\/\{\{ site\.author\.bitbucket \}\}"/);
   assert.match(footer, /href="https:\/\/jekyllrb\.com"/);
   assert.doesNotMatch(footer, /href="http:\/\/(github\.com|bitbucket\.org|jekyllrb\.com)/);
-  assert.match(contributing, /does not commit `Gemfile\.lock`/);
+  assert.match(contributing, /Ruby dependencies are locked in `Gemfile\.lock`/);
+  assert.match(contributing, /lockfile is maintained with Bundler 2\.4\.22/);
+  assert.match(contributing, /bundle _2\.4\.22_ update/);
 });

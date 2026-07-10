@@ -7,3 +7,20 @@ Bug reports and feature requests to the template  should be [submitted via GitHu
 Fork from master and go from there. Remember that this repository is intended to remain a generic, ready-to-fork template that demonstrates the features of academicpages.
 
 For local Ruby builds, this site intentionally follows GitHub Pages' managed dependency set and does not commit `Gemfile.lock`; use the `github-pages` gem constraint from `Gemfile`.
+
+The published LXGW webfont is generated from the source-only font under `scripts/assets/fonts/`. After changing Chinese page or UI copy, regenerate and verify the subset with:
+
+```bash
+python3 scripts/subset_site_font.py
+python3 scripts/subset_site_font.py --check
+```
+
+The script requires FontTools with WOFF2 support. The full font stays under the Jekyll-excluded `scripts/` tree and must not be referenced by public CSS.
+
+The sidebar avatar follows the same source-only rule. Regenerate the public 640px transparent WebP with:
+
+```bash
+cwebp -q 82 -alpha_q 100 -m 6 -resize 640 640 scripts/assets/images/avatar-gpt063-source.png -o images/avatar-gpt063.webp
+```
+
+After exporting, confirm that the WebP still has an alpha channel and remains within the budget in `tests/asset-budget.test.js`.

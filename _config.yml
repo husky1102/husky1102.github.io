@@ -22,7 +22,7 @@ repository               : "husky1102/husky1102.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "avatar-gpt063.png"
+  avatar           : "avatar-gpt063.webp"
   name             : '克苏鲁微糖<br><span class="author__name-latin">Husky</span>'
   pronouns         : # example: "she/her"  
   bio              : "学无止境<br>Never stop learning"

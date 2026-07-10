@@ -110,3 +110,28 @@ test("primary pages expose non-empty description and Open Graph description meta
     assert.match(html, /<link rel="canonical" href="https:\/\/husky1102\.github\.io\//);
   }
 });
+
+test("HTML sitemap lists only titled, user-facing content pages", () => {
+  assertBuiltSite();
+
+  const sitemap = readGenerated("sitemap/index.html");
+  const listedPages = Array.from(
+    sitemap.matchAll(/<h2 class="archive__item-title"[^>]*>\s*<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g),
+    ([, href, title]) => ({ href, title: title.replace(/<[^>]+>/g, "").trim() })
+  );
+
+  assert.deepEqual(
+    listedPages,
+    [
+      { href: "https://husky1102.github.io/about/", title: "About" },
+      { href: "https://husky1102.github.io/blog_embed/", title: "个人博客" },
+      { href: "https://husky1102.github.io/categories/", title: "Posts by Category" },
+      { href: "https://husky1102.github.io/cv/", title: "CV" },
+      { href: "https://husky1102.github.io/cv_zh/", title: "简历" },
+      { href: "https://husky1102.github.io/", title: "Husky1102" },
+      { href: "https://husky1102.github.io/tags/", title: "Posts by Tags" },
+      { href: "https://husky1102.github.io/terms/", title: "隐私说明" },
+      { href: "https://husky1102.github.io/year-archive/", title: "Blog posts" },
+    ]
+  );
+});

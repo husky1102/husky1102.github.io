@@ -53,6 +53,21 @@ test("Node builds use the committed lockfile and the supported runtime", () => {
   assert.doesNotMatch(gitignore, /^package-lock\.json$/m);
 });
 
+test("npm metadata identifies this repository as a private site project", () => {
+  const packageJson = JSON.parse(read("package.json"));
+  const packageLock = JSON.parse(read("package-lock.json"));
+  const lockRoot = packageLock.packages[""];
+
+  assert.equal(packageJson.name, "husky1102.github.io");
+  assert.equal(packageJson.private, true);
+  assert.equal(packageJson.repository.url, "https://github.com/husky1102/husky1102.github.io");
+  assert.equal(packageJson.homepage, "https://husky1102.github.io");
+  assert.equal(packageJson.bugs.url, "https://github.com/husky1102/husky1102.github.io/issues");
+  assert.equal(packageLock.name, packageJson.name);
+  assert.equal(lockRoot.name, packageJson.name);
+  assert.equal(lockRoot.version, packageJson.version);
+});
+
 test("Ruby builds use a committed cross-platform dependency lock", () => {
   const gemfileLock = read("Gemfile.lock");
   const gitignore = read(".gitignore");

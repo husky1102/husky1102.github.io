@@ -6,6 +6,7 @@ const assert = require("node:assert/strict");
 const root = path.resolve(__dirname, "..");
 const sourceFont = path.join(root, "scripts", "assets", "fonts", "LXGWWenKaiGBScreen-full.woff2");
 const publicFont = path.join(root, "assets", "fonts", "LXGWWenKaiGBScreen-subset.woff2");
+const fontLicense = path.join(root, "assets", "fonts", "LXGWWenKai-OFL.txt");
 const sourceAvatar = path.join(root, "scripts", "assets", "images", "avatar-gpt063-source.png");
 const avatar = path.join(root, "images", "avatar-gpt063.webp");
 
@@ -14,6 +15,18 @@ test("the full Chinese font stays source-only and the public subset stays within
   assert.ok(fs.existsSync(publicFont), "Generate the public Chinese font subset before testing.");
   assert.ok(fs.statSync(sourceFont).size > 1024 * 1024, "The source-only font should remain the complete font file.");
   assert.ok(fs.statSync(publicFont).size <= 512 * 1024, "The published Chinese font must stay at or below 512 KiB.");
+});
+
+test("the LXGW font license ships with the source and generated site", () => {
+  assert.ok(fs.existsSync(fontLicense), "Ship the upstream LXGW license beside the public font.");
+  const license = fs.readFileSync(fontLicense, "utf8");
+  assert.match(license, /^Copyright 2021-2024 LXGW \(https:\/\/github\.com\/lxgw\/LxgwWenKai-Screen\)$/m);
+  assert.match(license, /^Copyright 2020 The Klee Project Authors \(https:\/\/github\.com\/fontworks-fonts\/Klee\)$/m);
+  assert.match(license, /^SIL OPEN FONT LICENSE Version 1\.1 - 26 February 2007$/m);
+  assert.ok(
+    fs.existsSync(path.join(root, "_site", "assets", "fonts", "LXGWWenKai-OFL.txt")),
+    "The generated site must publish the LXGW license beside the font."
+  );
 });
 
 test("the configured sidebar avatar is a compact WebP asset", () => {

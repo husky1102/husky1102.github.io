@@ -13,9 +13,10 @@ The published LXGW webfont is generated from the source-only font under `scripts
 ```bash
 python3 scripts/subset_site_font.py
 python3 scripts/subset_site_font.py --check
+python3 scripts/subset_site_font.py --check-generated
 ```
 
-The script requires FontTools with WOFF2 support. The full font stays under the Jekyll-excluded `scripts/` tree and must not be referenced by public CSS.
+The first command regenerates the committed subset. Use `--check` for a fast character-coverage and size check, and use `--check-generated` to rebuild in a temporary directory and require an exact byte match with the committed font. The script requires FontTools with WOFF2 support. The full font stays under the Jekyll-excluded `scripts/` tree and must not be referenced by public CSS.
 
 The sidebar avatar follows the same source-only rule. Regenerate the public 640px transparent WebP with:
 

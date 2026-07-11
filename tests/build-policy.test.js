@@ -103,7 +103,7 @@ test("CI rejects stale generated JavaScript and incomplete font subsets", () => 
     assert.match(workflow, /uses: actions\/setup-python@v5/);
     assert.match(workflow, /python-version: "3\.12"/);
     assert.match(workflow, /run: python3 -m pip install -r requirements-assets\.txt/);
-    assert.match(workflow, /run: python3 scripts\/subset_site_font\.py --check/);
+    assert.match(workflow, /run: python3 scripts\/subset_site_font\.py --check-generated/);
 
     const buildIndex = workflow.indexOf("run: npm run build:js");
     const diffIndex = workflow.indexOf("run: git diff --exit-code -- assets/js/main.min.js");

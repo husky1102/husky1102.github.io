@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import tempfile
 from pathlib import Path
 
 from fontTools import subset
@@ -66,25 +68,32 @@ def font_codepoints(path: Path) -> set[int]:
         return set(font.getBestCmap() or {})
 
 
-def verify(expected: set[int]) -> None:
-    if not PUBLIC_FONT.exists():
-        raise SystemExit(f"missing public font: {PUBLIC_FONT.relative_to(ROOT)}")
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
 
-    missing = expected - font_codepoints(PUBLIC_FONT)
+
+def verify(expected: set[int], public_font: Path = PUBLIC_FONT) -> None:
+    if not public_font.exists():
+        raise SystemExit(f"missing public font: {display_path(public_font)}")
+
+    missing = expected - font_codepoints(public_font)
     if missing:
         formatted = ", ".join(f"U+{codepoint:04X}" for codepoint in sorted(missing))
         raise SystemExit(f"public font is missing site characters: {formatted}")
 
-    size = PUBLIC_FONT.stat().st_size
+    size = public_font.stat().st_size
     if size > MAX_PUBLIC_BYTES:
         raise SystemExit(f"public font exceeds {MAX_PUBLIC_BYTES} bytes: {size}")
 
-    print(f"verified {len(expected)} codepoints in {PUBLIC_FONT.relative_to(ROOT)} ({size} bytes)")
+    print(f"verified {len(expected)} codepoints in {display_path(public_font)} ({size} bytes)")
 
 
-def generate(expected: set[int]) -> None:
-    if not SOURCE_FONT.exists():
-        raise SystemExit(f"missing source font: {SOURCE_FONT.relative_to(ROOT)}")
+def generate(expected: set[int], target: Path = PUBLIC_FONT, source_font: Path = SOURCE_FONT) -> None:
+    if not source_font.exists():
+        raise SystemExit(f"missing source font: {display_path(source_font)}")
 
     options = subset.Options()
     options.flavor = "woff2"
@@ -96,26 +105,57 @@ def generate(expected: set[int]) -> None:
     options.notdef_outline = True
     options.recommended_glyphs = True
 
-    font = TTFont(SOURCE_FONT, recalcTimestamp=False)
+    font = TTFont(source_font, recalcTimestamp=False)
     subsetter = subset.Subsetter(options=options)
     subsetter.populate(unicodes=expected)
     subsetter.subset(font)
 
-    PUBLIC_FONT.parent.mkdir(parents=True, exist_ok=True)
+    target.parent.mkdir(parents=True, exist_ok=True)
     font.flavor = "woff2"
-    font.save(PUBLIC_FONT, reorderTables=True)
+    font.save(target, reorderTables=True)
     font.close()
 
-    verify(expected)
+    verify(expected, target)
+
+
+def check_generated(
+    expected: set[int],
+    public_font: Path = PUBLIC_FONT,
+    source_font: Path = SOURCE_FONT,
+) -> None:
+    verify(expected, public_font)
+    with tempfile.TemporaryDirectory(prefix="lxgw-font-check-") as temp_dir:
+        generated_font = Path(temp_dir) / public_font.name
+        generate(expected, generated_font, source_font)
+
+        committed_bytes = public_font.read_bytes()
+        generated_bytes = generated_font.read_bytes()
+        if generated_bytes != committed_bytes:
+            committed_hash = hashlib.sha256(committed_bytes).hexdigest()
+            generated_hash = hashlib.sha256(generated_bytes).hexdigest()
+            raise SystemExit(
+                "generated font differs from committed font: "
+                f"committed sha256={committed_hash}, generated sha256={generated_hash}"
+            )
+
+    print(f"generated font matches {display_path(public_font)}")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true", help="verify the committed subset without regenerating it")
+    checks = parser.add_mutually_exclusive_group()
+    checks.add_argument("--check", action="store_true", help="verify the committed subset without regenerating it")
+    checks.add_argument(
+        "--check-generated",
+        action="store_true",
+        help="regenerate in a temporary directory and compare with the committed subset",
+    )
     args = parser.parse_args()
 
     expected = collect_codepoints()
-    if args.check:
+    if args.check_generated:
+        check_generated(expected)
+    elif args.check:
         verify(expected)
     else:
         generate(expected)

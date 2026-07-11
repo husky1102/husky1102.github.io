@@ -43,7 +43,7 @@ jobs:
         run: python3 -m pip install -r requirements-assets.txt
 
       - name: Verify generated font subset
-        run: python3 scripts/subset_site_font.py --check
+        run: python3 scripts/subset_site_font.py --check-generated
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1

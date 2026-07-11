@@ -63,3 +63,23 @@ test("Ruby builds use a committed cross-platform dependency lock", () => {
   assert.match(gemfileLock, /PLATFORMS\n(?: {2}.+\n)* {2}ruby\n(?: {2}.+\n)* {2}x86_64-linux\n/);
   assert.match(gemfileLock, /BUNDLED WITH\n {3}2\.4\.22\n/);
 });
+
+test("CI rejects stale generated JavaScript and incomplete font subsets", () => {
+  const pages = read(".github/workflows/pages.yml");
+  const siteCheck = read(".github/workflows/site-check.yml");
+  const requirements = read("requirements-assets.txt");
+
+  assert.equal(requirements, "fonttools==4.60.2\nbrotli==1.2.0\n");
+
+  for (const workflow of [pages, siteCheck]) {
+    assert.match(workflow, /uses: actions\/setup-python@v5/);
+    assert.match(workflow, /python-version: "3\.12"/);
+    assert.match(workflow, /run: python3 -m pip install -r requirements-assets\.txt/);
+    assert.match(workflow, /run: python3 scripts\/subset_site_font\.py --check/);
+
+    const buildIndex = workflow.indexOf("run: npm run build:js");
+    const diffIndex = workflow.indexOf("run: git diff --exit-code -- assets/js/main.min.js");
+    assert.notEqual(buildIndex, -1, "Missing JavaScript build step.");
+    assert.ok(diffIndex > buildIndex, "Generated JavaScript must be checked after rebuilding it.");
+  }
+});

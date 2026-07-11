@@ -29,6 +29,22 @@ jobs:
       - name: Build JavaScript
         run: npm run build:js
 
+      - name: Verify generated JavaScript
+        run: git diff --exit-code -- assets/js/main.min.js
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-assets.txt
+
+      - name: Install asset verification dependencies
+        run: python3 -m pip install -r requirements-assets.txt
+
+      - name: Verify generated font subset
+        run: python3 scripts/subset_site_font.py --check
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:

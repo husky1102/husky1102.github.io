@@ -42,6 +42,7 @@ test("publish boundary excludes source-only maintenance artifacts", () => {
     "talkmap_out.ipynb",
     "talkmap.py",
     "package-lock.json",
+    "requirements-assets.txt",
     "skills-lock.json",
     "docker-compose.yaml",
   ];

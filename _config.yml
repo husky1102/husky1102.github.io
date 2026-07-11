@@ -187,6 +187,7 @@ exclude:
   - node_modules
   - package.json*
   - package-lock.json
+  - requirements-assets.txt
   - Rakefile
   - README
   - review

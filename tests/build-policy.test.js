@@ -79,6 +79,19 @@ test("Ruby builds use a committed cross-platform dependency lock", () => {
   assert.match(gemfileLock, /BUNDLED WITH\n {3}2\.4\.22\n/);
 });
 
+test("Docker builds and serves with the locked Ruby bundle", () => {
+  const dockerfile = read("Dockerfile");
+  const compose = read("docker-compose.yaml");
+
+  assert.match(dockerfile, /^FROM ruby:3\.3$/m);
+  assert.match(dockerfile, /^COPY Gemfile Gemfile\.lock \.\/$/m);
+  assert.match(dockerfile, /^RUN gem install bundler:2\.4\.22$/m);
+  assert.match(dockerfile, /^RUN bundle _2\.4\.22_ install$/m);
+  assert.doesNotMatch(dockerfile, /gem install connection_pool/);
+  assert.match(dockerfile, /^CMD \["bundle", "exec", "jekyll", "serve", "-H", "0\.0\.0\.0", "-w"\]$/m);
+  assert.match(compose, /^\s+command: bundle exec jekyll serve -H 0\.0\.0\.0 -w$/m);
+});
+
 test("CI rejects stale generated JavaScript and incomplete font subsets", () => {
   const pages = read(".github/workflows/pages.yml");
   const siteCheck = read(".github/workflows/site-check.yml");

@@ -40,15 +40,6 @@ redirect_from:
     </div>
   </section>
 
-  <section class="cv-section cv-section--timeline" aria-labelledby="experience">
-    <h2 id="experience">工作经历</h2>
-    <div class="cv-item cv-item--empty">
-      <div class="cv-item__main">
-        <h3>暂无工作经历</h3>
-      </div>
-    </div>
-  </section>
-
   <section class="cv-section" aria-labelledby="interests">
     <h2 id="interests">研究兴趣</h2>
     <ul class="cv-tag-list">
@@ -58,9 +49,9 @@ redirect_from:
     </ul>
   </section>
 
-  <section class="cv-section" aria-labelledby="publications">
-    <h2 id="publications">论文发表</h2>
-    {% if site.publications.size > 0 %}
+  {% if site.publications.size > 0 %}
+    <section class="cv-section" aria-labelledby="publications">
+      <h2 id="publications">论文发表</h2>
       <div class="cv-publication-list">
         {% for post in site.publications reversed %}
           {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
@@ -79,8 +70,6 @@ redirect_from:
           </article>
         {% endfor %}
       </div>
-    {% else %}
-      <p class="cv-empty">当前没有列出的论文条目。</p>
-    {% endif %}
-  </section>
+    </section>
+  {% endif %}
 </article>

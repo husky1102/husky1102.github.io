@@ -95,6 +95,39 @@ test("I-42: mobile homepage controls expose at least 44px targets", () => {
   assert.match(sidebar, /\.author__urls-wrapper[\s\S]*?button \{[\s\S]*?min-height:\s*2\.75rem/);
 });
 
+test("I-43: bilingual CVs omit unsupported experience and wrap the full publications section", () => {
+  const cv = read("_pages/cv.md");
+  const cvZh = read("_pages/cv_zh.md");
+
+  assert.doesNotMatch(cv, /Work Experience|No work experience yet|cv-item--empty/);
+  assert.doesNotMatch(cvZh, /工作经历|暂无工作经历|cv-item--empty/);
+  assert.match(
+    cv,
+    /\{% if site\.publications\.size > 0 %\}\s*<section class="cv-section" aria-labelledby="publications">[\s\S]*<\/section>\s*\{% endif %\}\s*<\/article>/
+  );
+  assert.match(
+    cvZh,
+    /\{% if site\.publications\.size > 0 %\}\s*<section class="cv-section" aria-labelledby="publications">[\s\S]*<\/section>\s*\{% endif %\}\s*<\/article>/
+  );
+  assert.doesNotMatch(cv, /cv-empty|No publication entries are currently listed/);
+  assert.doesNotMatch(cvZh, /cv-empty|当前没有列出的论文条目/);
+});
+
+test("I-43: dark theme uses graphite surfaces and a restrained warm ambient trace", () => {
+  const dark = read("_sass/theme/_dark.scss");
+  const custom = read("_sass/custom.scss");
+
+  assert.match(dark, /\$background\s*:\s*#17191d/);
+  assert.match(dark, /--global-footer-bg-color\s*:\s*#22252a/);
+  assert.match(dark, /--global-thead-color\s*:\s*#25292f/);
+  assert.doesNotMatch(dark, /#0f172a|#111c31/);
+  assert.match(custom, /radial-gradient\(circle at 86% 4%, rgba\(246, 173, 99, 0\.04\)/);
+  assert.match(custom, /linear-gradient\(315deg, rgba\(246, 173, 99, 0\.045\)/);
+  assert.doesNotMatch(custom, /rgba\(196, 181, 253/);
+  assert.match(custom, /#67e8f9/);
+  assert.match(custom, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?animation:\s*none/);
+});
+
 test("Minor: forms get a visible focus ring + theme-aware background; selection is branded", () => {
   const forms = read("_sass/layout/_forms.scss");
   assert.match(forms, /:focus-visible[\s\S]*?outline:\s*2px solid var\(--global-link-color\)/);

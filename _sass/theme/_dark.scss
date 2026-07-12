@@ -8,7 +8,7 @@ $dark-gray : mix(#000, $gray, 40%);
 $darker-gray : mix(#000, $gray, 60%);
 $light-gray : mix(#fff, $gray, 50%);
 
-$background : #0f172a;
+$background : #17191d;
 $background-light : mix(#fff, $background, 80%);
 $background-lighter : mix(#fff, $background, 90%);
 $text : #e7edf4;
@@ -38,7 +38,7 @@ $sidebar-screen-min-width : 1024px;
 html[data-theme="dark"] {
     --global-base-color : #{$background};
     --global-bg-color : #{$background};
-    --global-footer-bg-color : #111c31;
+    --global-footer-bg-color : #22252a;
     --global-border-color : rgba(255, 255, 255, 0.10);
     --global-dark-border-color : rgba(255, 255, 255, 0.16);
     --global-code-background-color: rgba(255, 255, 255, 0.06);
@@ -51,5 +51,5 @@ html[data-theme="dark"] {
     --global-masthead-link-color-hover : #a5f3fc;
     --global-text-color : #{$text};
     --global-text-color-light : #a6b3c4;
-    --global-thead-color : #111c31;
+    --global-thead-color : #25292f;
 }

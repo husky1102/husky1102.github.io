@@ -46,8 +46,11 @@ jobs:
       - name: Install asset verification dependencies
         run: python3 -m pip install -r requirements-assets.txt
 
+      - name: Generate font subset from current site content
+        run: npm run build:font
+
       - name: Verify generated font subset
-        run: python3 scripts/subset_site_font.py --check-generated
+        run: npm run check:font
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1

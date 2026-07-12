@@ -92,18 +92,29 @@ test("Docker builds and serves with the locked Ruby bundle", () => {
   assert.match(compose, /^\s+command: bundle exec jekyll serve -H 0\.0\.0\.0 -w$/m);
 });
 
-test("CI rejects stale generated JavaScript and incomplete font subsets", () => {
+test("builds regenerate font subsets before verification and publication", () => {
   const pages = read(".github/workflows/pages.yml");
   const siteCheck = read(".github/workflows/site-check.yml");
+  const packageJson = JSON.parse(read("package.json"));
   const requirements = read("requirements-assets.txt");
 
   assert.equal(requirements, "fonttools==4.60.2\nbrotli==1.2.0\n");
+  assert.equal(packageJson.scripts["build:font"], "python3 scripts/subset_site_font.py");
+  assert.equal(packageJson.scripts["check:font"], "python3 scripts/subset_site_font.py --check-generated");
+  assert.equal(packageJson.scripts.pretest, "npm run build:font && npm run check:font");
 
   for (const workflow of [pages, siteCheck]) {
     assert.match(workflow, /uses: actions\/setup-python@v5/);
     assert.match(workflow, /python-version: "3\.12"/);
     assert.match(workflow, /run: python3 -m pip install -r requirements-assets\.txt/);
-    assert.match(workflow, /run: python3 scripts\/subset_site_font\.py --check-generated/);
+
+    const installIndex = workflow.indexOf("run: python3 -m pip install -r requirements-assets.txt");
+    const generateIndex = workflow.indexOf("run: npm run build:font");
+    const fontCheckIndex = workflow.indexOf("run: npm run check:font");
+    const jekyllIndex = workflow.indexOf("run: bundle exec jekyll build --safe --trace");
+    assert.ok(generateIndex > installIndex, "Font generation must run after installing its pinned tools.");
+    assert.ok(fontCheckIndex > generateIndex, "The generated font must be verified after it is rebuilt.");
+    assert.ok(jekyllIndex > fontCheckIndex, "Jekyll must publish the freshly generated font.");
 
     const buildIndex = workflow.indexOf("run: npm run build:js");
     const diffIndex = workflow.indexOf("run: git diff --exit-code -- assets/js/main.min.js");

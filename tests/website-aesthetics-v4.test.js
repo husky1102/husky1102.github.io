@@ -81,7 +81,11 @@ test("I-42: homepage uses a character stage and differentiated information struc
   const stageRule = custom.match(/\.home-hero__stage \{[\s\S]*?\n\}/)[0];
 
   assert.match(home, /class="home-hero__stage"/);
-  assert.match(home, /avatar-gpt063\.webp[\s\S]*?relative_url/);
+  assert.equal((home.match(/avatar-gpt063\.webp/g) || []).length, 2);
+  assert.match(home, /home-hero__portrait-window[\s\S]*?home-hero__character--inside[\s\S]*?home-hero__portrait-ring[\s\S]*?home-hero__portrait-front[\s\S]*?home-hero__character--front/);
+  assert.match(home, /home-hero__stage" role="img" tabindex="0" aria-label=/);
+  assert.equal((home.match(/class="home-hero__character[^>]*alt=""/g) || []).length, 2);
+  assert.doesNotMatch(home, /home-hero__orbit/);
   assert.equal((home.match(/class="home-research-track"/g) || []).length, 3);
   assert.match(home, /class="home-now"/);
   assert.match(home, /class="home-destination-list"/);
@@ -92,6 +96,9 @@ test("I-42: homepage uses a character stage and differentiated information struc
   assert.doesNotMatch(stageRule, /border|linear-gradient/);
   assert.match(custom, /\.home-hero__stage::before[\s\S]*?radial-gradient/);
   assert.match(custom, /\.home-hero__stage::after[\s\S]*?radial-gradient\(ellipse/);
+  assert.match(custom, /\.home-hero__portrait-window \{[\s\S]*?clip-path:\s*circle\(42% at 50% 50%\)/);
+  assert.match(custom, /\.home-hero__portrait-ring \{[\s\S]*?z-index:\s*2[\s\S]*?border:\s*2px solid/);
+  assert.match(custom, /\.home-hero__portrait-front \{[\s\S]*?z-index:\s*3[\s\S]*?clip-path:\s*polygon\([\s\S]*?50% 92%/);
   assert.match(custom, /\.home-research-track/);
   assert.match(custom, /\.home-now/);
   assert.match(custom, /\.home-destination-list/);
@@ -107,6 +114,26 @@ test("I-44: homepage profile labels name education stages and current city direc
   assert.doesNotMatch(home, /<dt>(学习|基础|所在)<\/dt>/);
   assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__stage-note \{[\s\S]*?display:\s*none/);
   assert.match(custom, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.home-hero__character[\s\S]*?will-change:\s*auto/);
+});
+
+test("I-45: homepage portrait pops through its ring without desynchronizing layers", () => {
+  const custom = read("_sass/custom.scss");
+  const mainJs = read("assets/js/_main.js");
+
+  assert.match(custom, /\.home-hero__stage:hover \.home-hero__character[\s\S]*?translate3d\(0, -6\.5%, 0\) scale\(1\.12\)/);
+  assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__character/);
+  assert.match(custom, /\.home-hero__stage:hover \.home-hero__portrait-ring[\s\S]*?transform:\s*scale\(0\.95\)/);
+  assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__stage-note[\s\S]*?opacity:\s*0/);
+  assert.match(custom, /\.home-hero__stage:focus-visible \.home-hero__portrait-ring/);
+  assert.match(custom, /@media \(hover: none\), \(pointer: coarse\)[\s\S]*?\.home-hero__stage:hover:not\(\.is-popped\) \.home-hero__character[\s\S]*?transform:\s*none/);
+  assert.match(mainJs, /var portrait = homeHero\.querySelector\("\.home-hero__portrait"\)/);
+  assert.match(mainJs, /event\.pointerType === "mouse" \|\| event\.pointerType === "pen"/);
+  assert.match(mainJs, /stage\.matches\(":focus-visible"\)[\s\S]*?stage\.classList\.add\("is-popped"\)/);
+  assert.match(mainJs, /stage\.classList\.add\("is-popped"\)/);
+  assert.match(mainJs, /stage\.addEventListener\("pointerenter", handlePortraitPointerEnter\)/);
+  assert.match(mainJs, /stage\.removeEventListener\("pointerenter", handlePortraitPointerEnter\)/);
+  assert.doesNotMatch(mainJs, /querySelector\("\.home-hero__character"\)/);
+  assert.doesNotMatch(mainJs, /outerOrbit|innerOrbit|orbitElements/);
 });
 
 test("I-42: homepage destinations keep accepted URLs and describe the action", () => {
@@ -225,7 +252,8 @@ test("I-39: GSAP runs a visible-baseline, lifecycle-aware homepage motion system
   assert.match(mainJs, /var initHomepageMotion = function \(\)/);
   assert.match(mainJs, /gsapApi\.timeline\(\{[\s\S]*?defaults:/);
   assert.match(mainJs, /\.home-hero__stage/);
-  assert.match(mainJs, /\.home-hero__character/);
+  assert.match(mainJs, /\.home-hero__portrait/);
+  assert.match(mainJs, /\.home-hero__portrait-ring/);
   assert.match(mainJs, /\.home-hero__lead-en/);
   assert.match(mainJs, /opacity:\s*0\.72/);
   assert.match(mainJs, /opacity:\s*0\.78/);
@@ -261,7 +289,7 @@ test("I-41: JavaScript performs no ambient pointer-driven rendering", () => {
 
   assert.doesNotMatch(mainJs, /initDarkAmbientMotion|ambientMedia|--dark-ambient-/);
   assert.doesNotMatch(mainJs, /quickSetter|quickTo/);
-  assert.doesNotMatch(mainJs, /pointermove|pointerleave|mousemove/);
+  assert.doesNotMatch(mainJs, /pointermove|mousemove/);
 });
 
 test("I-40: blog iframe and footer links use the hardened public-site defaults", () => {

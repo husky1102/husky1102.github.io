@@ -9,10 +9,16 @@ hide_title: true
 {% include base_path %}
 
 <section class="home-hero">
-  <div class="home-hero__stage">
-    <span class="home-hero__orbit home-hero__orbit--outer" aria-hidden="true"></span>
-    <span class="home-hero__orbit home-hero__orbit--inner" aria-hidden="true"></span>
-    <img class="home-hero__character" src="{{ '/images/avatar-gpt063.webp' | relative_url }}" alt="克苏鲁微糖 Husky 与机器人伙伴">
+  <div class="home-hero__stage" role="img" tabindex="0" aria-label="克苏鲁微糖 Husky 与机器人伙伴的角色插画">
+    <div class="home-hero__portrait">
+      <div class="home-hero__portrait-window">
+        <img class="home-hero__character home-hero__character--inside" src="{{ '/images/avatar-gpt063.webp' | relative_url }}" alt="" fetchpriority="high" decoding="async">
+      </div>
+      <span class="home-hero__portrait-ring" aria-hidden="true"></span>
+      <div class="home-hero__portrait-front" aria-hidden="true">
+        <img class="home-hero__character home-hero__character--front" src="{{ '/images/avatar-gpt063.webp' | relative_url }}" alt="" decoding="async">
+      </div>
+    </div>
     <p class="home-hero__stage-note"><span>在西安学习与研究</span><strong>Always curious.</strong></p>
   </div>
   <div class="home-hero__copy">

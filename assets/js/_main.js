@@ -159,11 +159,9 @@
       var motionMedia = gsapApi.matchMedia();
       motionMedia.add("(prefers-reduced-motion: no-preference)", function () {
         var stage = homeHero.querySelector(".home-hero__stage");
-        var character = homeHero.querySelector(".home-hero__character");
+        var portrait = homeHero.querySelector(".home-hero__portrait");
+        var portraitRing = homeHero.querySelector(".home-hero__portrait-ring");
         var stageNote = homeHero.querySelector(".home-hero__stage-note");
-        var outerOrbit = homeHero.querySelector(".home-hero__orbit--outer");
-        var innerOrbit = homeHero.querySelector(".home-hero__orbit--inner");
-        var orbitElements = homeHero.querySelectorAll(".home-hero__orbit");
         var copyElements = homeHero.querySelectorAll(
           ".home-hero__eyebrow, .home-hero h1, .home-hero__lead, .home-hero__lead-en, .home-hero__actions"
         );
@@ -171,6 +169,22 @@
         var entranceComplete = false;
         var stageIsVisible = true;
         var stageObserver = null;
+        var handlePortraitPointerEnter = function (event) {
+          if (event.pointerType === "mouse" || event.pointerType === "pen") {
+            stage.classList.add("is-popped");
+          }
+        };
+        var handlePortraitPointerLeave = function () {
+          stage.classList.remove("is-popped");
+        };
+        var handlePortraitFocus = function () {
+          if (stage.matches(":focus-visible")) {
+            stage.classList.add("is-popped");
+          }
+        };
+        var handlePortraitBlur = function () {
+          stage.classList.remove("is-popped");
+        };
         var homepageTimeline = gsapApi.timeline({
           paused: true,
           defaults: {
@@ -187,30 +201,30 @@
             0
           );
         }
-        if (orbitElements.length) {
+        if (portraitRing) {
           homepageTimeline.fromTo(
-            orbitElements,
-            { scale: 0.84, rotation: -9, opacity: 0.18 },
+            portraitRing,
+            { scale: 0.84, rotation: -8, opacity: 0.18 },
             {
               scale: 1,
               rotation: 0,
               opacity: 1,
-              stagger: 0.1,
               clearProps: "transform,opacity",
             },
             0.06
           );
         }
-        if (character) {
+        if (portrait) {
           homepageTimeline.fromTo(
-            character,
-            { yPercent: 9, scale: 0.955, rotation: -0.6, opacity: 0.82 },
+            portrait,
+            { xPercent: -50, yPercent: 9, scale: 0.955, rotation: -0.6, opacity: 0.82 },
             {
+              xPercent: -50,
               yPercent: 3,
               scale: 1,
               rotation: 0,
               opacity: 1,
-              clearProps: "transform,opacity",
+              clearProps: "opacity",
             },
             0.12
           );
@@ -237,33 +251,12 @@
           );
         }
 
-        if (character) {
-          ambientTweens.push(gsapApi.to(character, {
-            yPercent: 0.7,
+        if (portrait) {
+          ambientTweens.push(gsapApi.to(portrait, {
+            xPercent: -50,
+            yPercent: 0.65,
             rotation: 0.28,
             duration: 3.4,
-            ease: "sine.inOut",
-            paused: true,
-            repeat: -1,
-            yoyo: true,
-          }));
-        }
-        if (outerOrbit) {
-          ambientTweens.push(gsapApi.to(outerOrbit, {
-            rotation: 5,
-            scale: 1.012,
-            duration: 7.2,
-            ease: "sine.inOut",
-            paused: true,
-            repeat: -1,
-            yoyo: true,
-          }));
-        }
-        if (innerOrbit) {
-          ambientTweens.push(gsapApi.to(innerOrbit, {
-            rotation: -6,
-            scale: 0.985,
-            duration: 5.8,
             ease: "sine.inOut",
             paused: true,
             repeat: -1,
@@ -327,6 +320,12 @@
           });
           stageObserver.observe(stage);
         }
+        if (stage) {
+          stage.addEventListener("pointerenter", handlePortraitPointerEnter);
+          stage.addEventListener("pointerleave", handlePortraitPointerLeave);
+          stage.addEventListener("focus", handlePortraitFocus);
+          stage.addEventListener("blur", handlePortraitBlur);
+        }
         document.addEventListener("visibilitychange", handleDocumentVisibility);
         syncHomepageMotion();
 
@@ -337,6 +336,13 @@
           });
           if (stageObserver) {
             stageObserver.disconnect();
+          }
+          if (stage) {
+            stage.classList.remove("is-popped");
+            stage.removeEventListener("pointerenter", handlePortraitPointerEnter);
+            stage.removeEventListener("pointerleave", handlePortraitPointerLeave);
+            stage.removeEventListener("focus", handlePortraitFocus);
+            stage.removeEventListener("blur", handlePortraitBlur);
           }
           document.removeEventListener("visibilitychange", handleDocumentVisibility);
         };

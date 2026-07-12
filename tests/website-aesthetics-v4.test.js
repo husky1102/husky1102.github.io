@@ -98,7 +98,7 @@ test("I-42: homepage uses a character stage and differentiated information struc
   assert.match(custom, /\.home-hero__stage::after[\s\S]*?radial-gradient\(ellipse/);
   assert.match(custom, /\.home-hero__portrait-window \{[\s\S]*?clip-path:\s*circle\(42% at 50% 50%\)/);
   assert.match(custom, /\.home-hero__portrait-ring \{[\s\S]*?z-index:\s*2[\s\S]*?border:\s*2px solid/);
-  assert.match(custom, /\.home-hero__portrait-front \{[\s\S]*?z-index:\s*3[\s\S]*?clip-path:\s*polygon\([\s\S]*?50% 92%/);
+  assert.match(custom, /\.home-hero__portrait-front \{[\s\S]*?z-index:\s*3[\s\S]*?overflow:\s*visible[\s\S]*?clip-path:\s*polygon\([\s\S]*?78% 94%[\s\S]*?50% 66%[\s\S]*?22% 94%/);
   assert.match(custom, /\.home-research-track/);
   assert.match(custom, /\.home-now/);
   assert.match(custom, /\.home-destination-list/);
@@ -123,6 +123,10 @@ test("I-45: homepage portrait pops through its ring without desynchronizing laye
   assert.match(custom, /\.home-hero__stage:hover \.home-hero__character[\s\S]*?translate3d\(0, -6\.5%, 0\) scale\(1\.12\)/);
   assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__character/);
   assert.match(custom, /\.home-hero__stage:hover \.home-hero__portrait-ring[\s\S]*?transform:\s*scale\(0\.95\)/);
+  assert.match(custom, /\.home-hero__portrait-ring::before[\s\S]*?conic-gradient[\s\S]*?opacity:\s*0/);
+  assert.match(custom, /\.home-hero__portrait-ring::after[\s\S]*?background:\s*#f9c97f[\s\S]*?opacity:\s*0/);
+  assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__portrait-ring::before[\s\S]*?opacity:\s*0\.82/);
+  assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__portrait-ring::after[\s\S]*?opacity:\s*1/);
   assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__stage-note[\s\S]*?opacity:\s*0/);
   assert.match(custom, /\.home-hero__stage:focus-visible \.home-hero__portrait-ring/);
   assert.match(custom, /@media \(hover: none\), \(pointer: coarse\)[\s\S]*?\.home-hero__stage:hover:not\(\.is-popped\) \.home-hero__character[\s\S]*?transform:\s*none/);

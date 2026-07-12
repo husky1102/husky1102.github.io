@@ -6,6 +6,8 @@ author_profile: false
 embed_url: "https://www.husky1102.top/"
 ---
 
+{% assign blog_embed_url = site.blog_embed_url | default: page.embed_url %}
+
 <style>
   html,
   body {
@@ -78,10 +80,6 @@ embed_url: "https://www.husky1102.top/"
     transition: opacity 0.45s ease;
   }
 
-  html[data-theme="dark"] .blog-embed-iframe[data-theme-bridge="fallback"] {
-    filter: invert(0.88) hue-rotate(180deg) saturate(0.92) brightness(0.9);
-  }
-
   .blog-embed-shell.is-loaded .blog-embed-spinner {
     opacity: 0;
     pointer-events: none;
@@ -101,7 +99,7 @@ embed_url: "https://www.husky1102.top/"
 <div class="blog-embed-shell">
   <div class="blog-embed-frame">
     <div class="blog-embed-spinner" aria-hidden="true"></div>
-    <iframe class="blog-embed-iframe" src="{{ page.embed_url }}" title="个人博客" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads" data-theme-bridge="fallback"></iframe>
+    <iframe class="blog-embed-iframe" title="个人博客" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads" data-theme-bridge="pending"></iframe>
   </div>
 </div>
 
@@ -109,6 +107,13 @@ embed_url: "https://www.husky1102.top/"
   (function () {
     var shell = document.querySelector(".blog-embed-shell");
     var iframe = document.querySelector(".blog-embed-iframe");
+    var themeToggleButton = document.querySelector("#theme-toggle button");
+    var sourceUrl = {{ blog_embed_url | jsonify }};
+    var themeBridgeTypes = {
+      set: "husky-theme-sync:set",
+      request: "husky-theme-sync:request",
+      applied: "husky-theme-sync:applied"
+    };
     var observer = null;
 
     var markLoaded = function () {
@@ -119,17 +124,74 @@ embed_url: "https://www.husky1102.top/"
       return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
     };
 
-    var syncBlogTheme = function () {
-      iframe.dataset.themeBridge = getTheme() === "dark" ? "fallback" : "native";
+    var normalizeTheme = function (theme) {
+      return theme === "dark" || theme === "light" ? theme : null;
     };
 
-    iframe.addEventListener("load", markLoaded);
-    syncBlogTheme();
+    var buildEmbedUrl = function () {
+      var url = new URL(sourceUrl, window.location.href);
+      url.searchParams.set("embedded", "1");
+      url.searchParams.set("theme", getTheme());
+      return url.href;
+    };
+
+    var syncBlogTheme = function () {
+      if (!iframe.contentWindow) {
+        return;
+      }
+
+      // This sandbox gives the child an opaque origin, so
+      // targetOrigin must be "*". The payload is only a validated theme enum,
+      // and the child independently verifies this page's origin and window.
+      iframe.contentWindow.postMessage({
+        type: themeBridgeTypes.set,
+        theme: getTheme()
+      }, "*");
+    };
+
+    var handleBlogThemeMessage = function (event) {
+      if (event.source !== iframe.contentWindow) {
+        return;
+      }
+
+      var message = event.data;
+      if (!message || typeof message !== "object") {
+        return;
+      }
+
+      var theme = normalizeTheme(message.theme);
+      if (!theme) {
+        return;
+      }
+
+      if (message.type === themeBridgeTypes.applied) {
+        if (theme === getTheme()) {
+          iframe.dataset.themeBridge = "connected";
+        }
+        return;
+      }
+
+      if (
+        message.type === themeBridgeTypes.request
+        && theme !== getTheme()
+        && themeToggleButton
+      ) {
+        themeToggleButton.click();
+      }
+    };
+
+    iframe.addEventListener("load", function () {
+      markLoaded();
+      syncBlogTheme();
+    });
+    window.addEventListener("message", handleBlogThemeMessage);
 
     observer = new MutationObserver(syncBlogTheme);
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["data-theme"]
     });
+
+    iframe.src = buildEmbedUrl();
   }());
 </script>

@@ -328,7 +328,15 @@ test("I-40: blog iframe and footer links use the hardened public-site defaults",
   assert.doesNotMatch(blogEmbed, /fetch\(sourceUrl/);
   assert.doesNotMatch(blogEmbed, /allow-same-origin/);
   assert.match(blogEmbed, /new MutationObserver\(syncBlogTheme\)/);
-  assert.match(blogEmbed, /data-theme-bridge="fallback"/);
+  assert.match(blogEmbed, /data-theme-bridge="pending"/);
+  assert.match(blogEmbed, /site\.blog_embed_url \| default: page\.embed_url/);
+  assert.match(blogEmbed, /url\.searchParams\.set\("theme", getTheme\(\)\)/);
+  assert.match(blogEmbed, /iframe\.contentWindow\.postMessage\(\{/);
+  assert.match(blogEmbed, /type: themeBridgeTypes\.set/);
+  assert.match(blogEmbed, /event\.source !== iframe\.contentWindow/);
+  assert.match(blogEmbed, /iframe\.dataset\.themeBridge = "connected"/);
+  assert.match(blogEmbed, /themeToggleButton\.click\(\)/);
+  assert.doesNotMatch(blogEmbed, /filter:\s*invert/);
   assert.match(footer, /href="https:\/\/github\.com\/\{\{ site\.author\.github \}\}"/);
   assert.match(footer, /href="https:\/\/bitbucket\.org\/\{\{ site\.author\.bitbucket \}\}"/);
   assert.match(footer, /href="https:\/\/jekyllrb\.com"/);

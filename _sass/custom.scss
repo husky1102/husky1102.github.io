@@ -315,7 +315,12 @@ html[data-theme="dark"] blockquote {
 .home-hero__portrait-window {
   z-index: 1;
   clip-path: circle(42% at 50% 50%);
-  background: radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--global-link-color) 11%, var(--global-bg-color)) 0, color-mix(in srgb, var(--global-bg-color) 82%, transparent) 68%);
+  background: radial-gradient(
+    circle at 50% 42%,
+    color-mix(in srgb, var(--global-link-color) 10%, transparent) 0,
+    color-mix(in srgb, var(--global-link-color) 3%, transparent) 54%,
+    transparent 78%
+  );
 }
 
 .home-hero__portrait-ring {
@@ -394,15 +399,13 @@ html[data-theme="dark"] blockquote {
     128% -28%,
     128% 128%,
     78% 128%,
-    78% 94%,
-    75% 84%,
-    70% 76%,
-    62% 69%,
-    50% 66%,
-    38% 69%,
-    30% 76%,
-    25% 84%,
-    22% 94%,
+    78% 81%,
+    70% 86%,
+    62% 90%,
+    50% 92%,
+    38% 90%,
+    30% 86%,
+    22% 81%,
     22% 128%,
     -28% 128%
   );
@@ -767,7 +770,7 @@ html[data-theme="dark"] .home-hero__portrait {
 }
 
 html[data-theme="dark"] .home-hero__portrait-window {
-  background: radial-gradient(circle at 50% 42%, rgba(103, 232, 249, 0.10) 0, rgba(34, 37, 42, 0.38) 68%);
+  background: radial-gradient(circle at 50% 42%, rgba(103, 232, 249, 0.08) 0, rgba(103, 232, 249, 0.025) 54%, transparent 78%);
 }
 
 html[data-theme="dark"] .home-hero__portrait-ring {

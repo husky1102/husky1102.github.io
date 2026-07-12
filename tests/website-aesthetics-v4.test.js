@@ -96,9 +96,9 @@ test("I-42: homepage uses a character stage and differentiated information struc
   assert.doesNotMatch(stageRule, /border|linear-gradient/);
   assert.match(custom, /\.home-hero__stage::before[\s\S]*?radial-gradient/);
   assert.match(custom, /\.home-hero__stage::after[\s\S]*?radial-gradient\(ellipse/);
-  assert.match(custom, /\.home-hero__portrait-window \{[\s\S]*?clip-path:\s*circle\(42% at 50% 50%\)/);
+  assert.match(custom, /\.home-hero__portrait-window \{[\s\S]*?clip-path:\s*circle\(42% at 50% 50%\)[\s\S]*?transparent 78%/);
   assert.match(custom, /\.home-hero__portrait-ring \{[\s\S]*?z-index:\s*2[\s\S]*?border:\s*2px solid/);
-  assert.match(custom, /\.home-hero__portrait-front \{[\s\S]*?z-index:\s*3[\s\S]*?overflow:\s*visible[\s\S]*?clip-path:\s*polygon\([\s\S]*?78% 94%[\s\S]*?50% 66%[\s\S]*?22% 94%/);
+  assert.match(custom, /\.home-hero__portrait-front \{[\s\S]*?z-index:\s*3[\s\S]*?overflow:\s*visible[\s\S]*?clip-path:\s*polygon\([\s\S]*?78% 81%[\s\S]*?50% 92%[\s\S]*?22% 81%/);
   assert.match(custom, /\.home-research-track/);
   assert.match(custom, /\.home-now/);
   assert.match(custom, /\.home-destination-list/);

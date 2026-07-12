@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-12T15:17:15Z",
+  "title": "Design System: Husky Curious Workshop",
+  "extensions": {
+    "colorMeta": {
+      "light-canvas": {
+        "role": "neutral",
+        "displayName": "Clean Workshop Canvas",
+        "canonical": "#fbfaf7",
+        "tonalRamp": ["#272624", "#464440", "#66635e", "#87837c", "#aaa69e", "#ccc9c2", "#e9e7e2", "#fbfaf7"]
+      },
+      "light-surface": {
+        "role": "neutral",
+        "displayName": "Quiet Work Surface",
+        "canonical": "#f2efe9",
+        "tonalRamp": ["#252422", "#43413d", "#625f59", "#817d75", "#a29d94", "#c2beb5", "#dfdcd5", "#f2efe9"]
+      },
+      "light-ink": {
+        "role": "neutral",
+        "displayName": "Graphite Ink",
+        "canonical": "#27231f",
+        "tonalRamp": ["#171411", "#27231f", "#403a34", "#5c554d", "#7d756d", "#a39d96", "#ccc8c4", "#f2f0ee"]
+      },
+      "light-muted": {
+        "role": "neutral",
+        "displayName": "Warm Muted Copy",
+        "canonical": "#6f675c",
+        "tonalRamp": ["#1d1a17", "#37332d", "#514b43", "#6f675c", "#918a80", "#b3ada6", "#d4d0cb", "#f3f1ee"]
+      },
+      "light-border": {
+        "role": "neutral",
+        "displayName": "Pencil Rule",
+        "canonical": "#ded8cd",
+        "tonalRamp": ["#25231f", "#45413a", "#666158", "#898278", "#aaa39a", "#c9c3ba", "#ded8cd", "#f6f3ef"]
+      },
+      "curiosity-teal": {
+        "role": "primary",
+        "displayName": "Curiosity Teal",
+        "canonical": "#0f766e",
+        "tonalRamp": ["#062724", "#09423e", "#0c5c56", "#0f766e", "#2d9188", "#62aea7", "#9bcac6", "#d8e8e6"]
+      },
+      "curiosity-teal-hover": {
+        "role": "primary",
+        "displayName": "Deep Curiosity Teal",
+        "canonical": "#115e59",
+        "tonalRamp": ["#061f1d", "#0a3431", "#0d4945", "#115e59", "#347c77", "#689d99", "#a0c3c0", "#dbe8e7"]
+      },
+      "dark-canvas": {
+        "role": "neutral",
+        "displayName": "Low-Light Lab",
+        "canonical": "#17191d",
+        "tonalRamp": ["#111216", "#17191d", "#2c2f35", "#474b53", "#696e77", "#9499a1", "#c5c8cd", "#f0f1f3"]
+      },
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "Instrument Surface",
+        "canonical": "#22252a",
+        "tonalRamp": ["#141518", "#22252a", "#393d43", "#555a62", "#757b84", "#9ca1a9", "#c8cbd0", "#f1f2f3"]
+      },
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "Cool Reading Ink",
+        "canonical": "#e7edf4",
+        "tonalRamp": ["#20252b", "#39414a", "#56616d", "#748291", "#98a5b3", "#bcc6d0", "#d8e0e8", "#e7edf4"]
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Cool Muted Copy",
+        "canonical": "#a6b3c4",
+        "tonalRamp": ["#1d2228", "#333b45", "#4c5866", "#687789", "#8596aa", "#a6b3c4", "#c9d0d9", "#edf0f4"]
+      },
+      "signal-cyan": {
+        "role": "primary",
+        "displayName": "Signal Cyan",
+        "canonical": "#67e8f9",
+        "tonalRamp": ["#082b30", "#0d4d56", "#14707d", "#2595a5", "#48bccd", "#67e8f9", "#a5f3fc", "#e2fbfe"]
+      },
+      "warm-signal": {
+        "role": "secondary",
+        "displayName": "Curious Warm Signal",
+        "canonical": "#f9c97f",
+        "tonalRamp": ["#32250f", "#5b431d", "#86632b", "#b3853c", "#dca756", "#f9c97f", "#fce1b3", "#fff5e4"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Identity Display", "purpose": "Homepage identity statement only." },
+      "headline": { "displayName": "Research Headline", "purpose": "Page and section hierarchy." },
+      "body": { "displayName": "Human Reading Voice", "purpose": "Descriptions and long-form copy." },
+      "label": { "displayName": "Instrument Label", "purpose": "Navigation, metadata, and compact actions." }
+    },
+    "shadows": [
+      { "name": "quiet-lift", "value": "0 6px 18px rgba(15, 23, 42, 0.05)", "purpose": "Separates one primary object from the canvas." },
+      { "name": "interactive-lift", "value": "0 14px 30px rgba(15, 23, 42, 0.09)", "purpose": "Appears only during hover or keyboard focus." }
+    ],
+    "motion": [
+      { "name": "state", "value": "280ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Controls and small state changes." },
+      { "name": "entrance", "value": "850ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "One orchestrated homepage entrance." },
+      { "name": "reduced", "value": "crossfade-or-instant", "purpose": "No translation, tracking, breathing, or looping." }
+    ],
+    "breakpoints": [
+      { "name": "small", "value": "600px" },
+      { "name": "medium", "value": "768px" },
+      { "name": "large", "value": "925px" },
+      { "name": "wide", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Destination",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one strongest next step in a section.",
+      "html": "<a class=\"ds-primary\" href=\"#\">View CV</a>",
+      "css": ".ds-primary { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:.72rem 1rem; border:1px solid #0f766e; border-radius:7px; background:#0f766e; color:#fbfaf7; font:700 .8rem/1.3 'Maple Mono NF CN',monospace; text-decoration:none; transition:transform 280ms cubic-bezier(.22,1,.36,1),background-color 280ms ease; } .ds-primary:hover { background:#115e59; transform:translateY(-2px); } .ds-primary:focus-visible { outline:2px solid #0f766e; outline-offset:3px; }"
+    },
+    {
+      "name": "Quiet Destination",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A supporting path that stays visually quieter.",
+      "html": "<a class=\"ds-secondary\" href=\"#\">Read the blog</a>",
+      "css": ".ds-secondary { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:.72rem 1rem; border:1px solid #ded8cd; border-radius:7px; background:#f2efe9; color:#0f766e; font:700 .8rem/1.3 'Maple Mono NF CN',monospace; text-decoration:none; transition:transform 280ms cubic-bezier(.22,1,.36,1),border-color 280ms ease; } .ds-secondary:hover { border-color:#0f766e; transform:translateY(-1px); } .ds-secondary:focus-visible { outline:2px solid #0f766e; outline-offset:3px; }"
+    },
+    {
+      "name": "Research Track",
+      "kind": "custom",
+      "refersTo": "research-surface",
+      "description": "A directional research interest, not a generic feature card.",
+      "html": "<article class=\"ds-track\"><span class=\"ds-track__signal\"></span><div><strong>Embodied AI</strong><p>Agents that learn through action in the world.</p></div></article>",
+      "css": ".ds-track { display:grid; grid-template-columns:6px 1fr; gap:1rem; padding:1rem 0; border-bottom:1px solid #ded8cd; color:#27231f; } .ds-track__signal { border-radius:999px; background:#0f766e; } .ds-track strong { font:700 1rem/1.3 'Maple Mono NF CN',monospace; } .ds-track p { margin:.3rem 0 0; max-width:46ch; color:#6f675c; font:400 1rem/1.65 'LXGW WenKai Screen',sans-serif; } .ds-track:focus-within { outline:2px solid #0f766e; outline-offset:4px; }"
+    },
+    {
+      "name": "Profile Link",
+      "kind": "custom",
+      "description": "A compact identity or external destination link.",
+      "html": "<a class=\"ds-profile-link\" href=\"#\"><span>GitHub</span><span aria-hidden=\"true\">↗</span></a>",
+      "css": ".ds-profile-link { display:flex; align-items:center; justify-content:space-between; gap:1rem; min-height:44px; padding:.35rem 0; border-bottom:1px solid #ded8cd; color:#27231f; font:700 .8rem/1.3 'Maple Mono NF CN',monospace; text-decoration:none; transition:color 220ms ease,padding-left 280ms cubic-bezier(.22,1,.36,1); } .ds-profile-link:hover { padding-left:.35rem; color:#0f766e; } .ds-profile-link:focus-visible { outline:2px solid #0f766e; outline-offset:3px; }"
+    },
+    {
+      "name": "Resource Chip",
+      "kind": "chip",
+      "description": "A compact label for a real resource type.",
+      "html": "<a class=\"ds-chip\" href=\"#\">PDF</a>",
+      "css": ".ds-chip { display:inline-flex; align-items:center; min-height:30px; padding:.2rem .58rem; border:1px solid #7dafaa; border-radius:999px; background:transparent; color:#0f766e; font:700 .78rem/1.2 'Maple Mono NF CN',monospace; text-decoration:none; transition:background-color 220ms ease,color 220ms ease; } .ds-chip:hover { background:#0f766e; color:#fbfaf7; } .ds-chip:focus-visible { outline:2px solid #0f766e; outline-offset:3px; }"
+    },
+    {
+      "name": "Navigation Link",
+      "kind": "nav",
+      "description": "A low-noise navigation item with a positional cue.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav__link ds-nav__link--active\" href=\"#\">Home</a><a class=\"ds-nav__link\" href=\"#\">CV</a></nav>",
+      "css": ".ds-nav { display:flex; gap:1.25rem; border-bottom:1px solid #ded8cd; } .ds-nav__link { position:relative; min-height:44px; padding:.65rem 0; color:#27231f; font:700 .85rem/1.3 'Maple Mono NF CN',monospace; text-decoration:none; } .ds-nav__link:hover { color:#0f766e; } .ds-nav__link--active::after { content:''; position:absolute; right:0; bottom:-1px; left:0; height:2px; background:#0f766e; } .ds-nav__link:focus-visible { outline:2px solid #0f766e; outline-offset:3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "好奇心工作台",
+    "overview": "界面像一张正在使用的研究工作台：线索、兴趣与入口围绕一个鲜明的人格中心组织，而不是被平均分配进一组模板卡片。整体保持冷静的阅读秩序，用角色头像、不对称构图和少量机敏动效表达好奇与灵动。这个系统服务于个人品牌，而非传统学院模板。",
+    "keyCharacteristics": [
+      "角色资产是叙事主角，不是侧栏缩略图。",
+      "单色青绿负责导航与行动，暖黄只作微量性格信号。",
+      "信息以轨道、清单和开放布局组织，同构卡片只用于真正独立的对象。",
+      "动画集中在首屏编排、状态反馈与空间关系，内容默认始终可见。",
+      "移动端重新编排主次，不机械压缩桌面布局。"
+    ],
+    "rules": [
+      { "name": "The Sparse Signal Rule", "body": "强调色只标记行动、焦点与叙事线索；如果一个视口里每个边框都在发光，强调就已经失效。", "section": "colors" },
+      { "name": "The Avatar Palette Rule", "body": "不从头像里机械复制整套青、黄、红色；页面用青绿建立身份，暖黄仅作一次呼应。", "section": "colors" },
+      { "name": "The Two-Voice Rule", "body": "标题与标签使用 Maple Mono，叙述使用霞鹜文楷；一个区块只能有一个主导声音。", "section": "typography" },
+      { "name": "The No-Cropping Rule", "body": "标题必须在 320px 视口完整换行，禁止依赖隐藏溢出来维持构图。", "section": "typography" },
+      { "name": "The Resting Surface Rule", "body": "同类内容在静止状态不同时拥有边框、宽阴影、渐变和光晕；最多选择一种主层级手段。", "section": "elevation" }
+    ],
+    "dos": [
+      "Do 让角色头像、姓名和一句清晰定位共同占据首屏主要注意力。",
+      "Do 用不对称构图与不同信息密度建立节奏，而不是复制同尺寸卡片。",
+      "Do 确保内容在动画运行前就可见，JS 只增强已有呈现。",
+      "Do 将高频动画限制在 transform 与 opacity，并在离屏、隐藏标签页或减少动态环境中停止。",
+      "Do 在 320px、390px、768px、1024px 与 1440px 宽度检查标题、按钮、导航和角色图。"
+    ],
+    "donts": [
+      "Don't 回到通用 SaaS 落地页的重复卡片与渐变装饰。",
+      "Don't 使用杂志模板式的排版腔调代替真实个人气质。",
+      "Don't 使用廉价赛博霓虹、过量玻璃效果或让每个深色表面持续发光。",
+      "Don't 使用无意义的滚动淡入，让未进入视口的内容暂时不可见。",
+      "Don't 为同一身份在侧栏和首屏重复完整姓名、头像、简介与链接。",
+      "Don't 通过超过 16px 的卡片圆角、渐变文字或宽阴影加细边框制造高级感。"
+    ]
+  }
+}

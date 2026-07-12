@@ -19,6 +19,8 @@
     var themeToggle = document.getElementById("theme-toggle");
     var themeToggleButton = themeToggle ? themeToggle.querySelector("button") : null;
     var themeIcon = document.getElementById("theme-icon");
+    var themeMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var themeSwitchInProgress = false;
 
     // Set the theme on page load or when explicitly called.
     var setTheme = function (theme) {
@@ -56,10 +58,18 @@
 
     setTheme();
 
+    var setThemeWithoutMotion = function (theme) {
+      root.classList.add("is-theme-syncing");
+      setTheme(theme);
+      window.requestAnimationFrame(function () {
+        root.classList.remove("is-theme-syncing");
+      });
+    };
+
     // If user hasn't chosen a theme, follow OS changes.
     var handlePreferenceChange = function (event) {
       if (!localStorage.getItem("theme")) {
-        setTheme(event.matches ? "dark" : "light");
+        setThemeWithoutMotion(event.matches ? "dark" : "light");
       }
     };
     if (prefersDarkMedia.addEventListener) {
@@ -70,19 +80,55 @@
 
     // Toggle the theme manually.
     var toggleTheme = function () {
+      if (themeSwitchInProgress) {
+        return;
+      }
+
       var currentTheme = root.getAttribute("data-theme");
       var newTheme = currentTheme === "dark" ? "light" : "dark";
+      var canAnimateTheme =
+        themeToggleButton &&
+        !themeMotionMedia.matches &&
+        typeof document.startViewTransition === "function";
+      var finishThemeSwitch = function () {
+        root.classList.remove("is-theme-transitioning");
+        if (themeToggle) {
+          themeToggle.classList.remove("is-switching");
+        }
+        themeSwitchInProgress = false;
+      };
+
+      themeSwitchInProgress = true;
 
       if (themeToggle) {
         themeToggle.classList.add("is-switching");
       }
-      localStorage.setItem("theme", newTheme);
-      setTheme(newTheme);
-      window.setTimeout(function () {
-        if (themeToggle) {
-          themeToggle.classList.remove("is-switching");
-        }
-      }, 320);
+
+      if (!canAnimateTheme) {
+        localStorage.setItem("theme", newTheme);
+        setTheme(newTheme);
+        window.setTimeout(finishThemeSwitch, 320);
+        return;
+      }
+
+      var themeToggleBounds = themeToggleButton.getBoundingClientRect();
+      var themeTransitionX = themeToggleBounds.left + themeToggleBounds.width / 2;
+      var themeTransitionY = themeToggleBounds.top + themeToggleBounds.height / 2;
+      var farthestX = Math.max(themeTransitionX, window.innerWidth - themeTransitionX);
+      var farthestY = Math.max(themeTransitionY, window.innerHeight - themeTransitionY);
+      var themeTransitionRadius = Math.hypot(farthestX, farthestY);
+
+      root.style.setProperty("--theme-transition-x", themeTransitionX + "px");
+      root.style.setProperty("--theme-transition-y", themeTransitionY + "px");
+      root.style.setProperty("--theme-transition-radius", themeTransitionRadius + "px");
+      root.classList.add("is-theme-transitioning");
+
+      var themeTransition = document.startViewTransition(function () {
+        localStorage.setItem("theme", newTheme);
+        setTheme(newTheme);
+      });
+
+      themeTransition.finished.then(finishThemeSwitch, finishThemeSwitch);
     };
 
     if (themeToggle) {

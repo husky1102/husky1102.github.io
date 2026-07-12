@@ -140,6 +140,26 @@ test("I-45: homepage portrait pops through its ring without desynchronizing laye
   assert.doesNotMatch(mainJs, /outerOrbit|innerOrbit|orbitElements/);
 });
 
+test("I-46: manual theme switching reveals from the toggle with an accessible fallback", () => {
+  const custom = read("_sass/custom.scss");
+  const mainJs = read("assets/js/_main.js");
+
+  assert.match(mainJs, /var themeMotionMedia = window\.matchMedia\("\(prefers-reduced-motion: reduce\)"\)/);
+  assert.match(mainJs, /typeof document\.startViewTransition === "function"/);
+  assert.match(mainJs, /themeToggleButton\.getBoundingClientRect\(\)/);
+  assert.match(mainJs, /Math\.hypot\(/);
+  assert.match(mainJs, /--theme-transition-x/);
+  assert.match(mainJs, /--theme-transition-y/);
+  assert.match(mainJs, /--theme-transition-radius/);
+  assert.match(mainJs, /document\.startViewTransition\(function \(\) \{[\s\S]*?setTheme\(newTheme\)/);
+  assert.match(mainJs, /themeTransition\.finished\.then\(finishThemeSwitch, finishThemeSwitch\)/);
+  assert.match(mainJs, /if \(!canAnimateTheme\) \{[\s\S]*?setTheme\(newTheme\)/);
+  assert.match(custom, /::view-transition-old\(root\),[\s\S]*?::view-transition-new\(root\)/);
+  assert.match(custom, /@keyframes theme-reveal[\s\S]*?clip-path:\s*circle\(0 at var\(--theme-transition-x\) var\(--theme-transition-y\)\)/);
+  assert.match(custom, /clip-path:\s*circle\(var\(--theme-transition-radius\) at var\(--theme-transition-x\) var\(--theme-transition-y\)\)/);
+  assert.match(custom, /html\.is-theme-transitioning \*[\s\S]*?transition-duration:\s*0s !important/);
+});
+
 test("I-42: homepage destinations keep accepted URLs and describe the action", () => {
   const home = read("_pages/home.md");
 

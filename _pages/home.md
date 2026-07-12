@@ -56,9 +56,9 @@ hide_title: true
   <div class="home-now">
     <h2>此刻 / Now</h2>
     <dl class="home-now__list">
-      <div><dt>学习</dt><dd>西安交通大学，人工智能硕士在读</dd></div>
-      <div><dt>基础</dt><dd>湖南大学，机器人工程学士，2025</dd></div>
-      <div><dt>所在</dt><dd>中国陕西省西安市</dd></div>
+      <div><dt>硕士</dt><dd>西安交通大学，人工智能硕士在读</dd></div>
+      <div><dt>本科</dt><dd>湖南大学，机器人工程学士，2025</dd></div>
+      <div><dt>现居</dt><dd>中国陕西省西安市</dd></div>
     </dl>
   </div>
   <nav class="home-destinations" aria-labelledby="home-destinations-title">

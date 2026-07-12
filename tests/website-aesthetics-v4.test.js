@@ -78,6 +78,7 @@ test("I-42: homepage keeps unTitled while reserving identity for the main stage"
 test("I-42: homepage uses a character stage and differentiated information structures", () => {
   const home = read("_pages/home.md");
   const custom = read("_sass/custom.scss");
+  const stageRule = custom.match(/\.home-hero__stage \{[\s\S]*?\n\}/)[0];
 
   assert.match(home, /class="home-hero__stage"/);
   assert.match(home, /avatar-gpt063\.webp[\s\S]*?relative_url/);
@@ -87,9 +88,25 @@ test("I-42: homepage uses a character stage and differentiated information struc
   assert.doesNotMatch(home, /home-card-grid|home-info-card/);
   assert.match(custom, /\.home-hero__lead \{[\s\S]*?font-family:\s*"LXGW WenKai Screen"[\s\S]*?line-height:\s*1\.72/);
   assert.match(custom, /\.home-hero__stage \{[\s\S]*?isolation:\s*isolate/);
+  assert.match(stageRule, /overflow:\s*visible/);
+  assert.doesNotMatch(stageRule, /border|linear-gradient/);
+  assert.match(custom, /\.home-hero__stage::before[\s\S]*?radial-gradient/);
+  assert.match(custom, /\.home-hero__stage::after[\s\S]*?radial-gradient\(ellipse/);
   assert.match(custom, /\.home-research-track/);
   assert.match(custom, /\.home-now/);
   assert.match(custom, /\.home-destination-list/);
+});
+
+test("I-44: homepage profile labels name education stages and current city directly", () => {
+  const home = read("_pages/home.md");
+  const custom = read("_sass/custom.scss");
+
+  assert.match(home, /<dt>硕士<\/dt><dd>西安交通大学，人工智能硕士在读<\/dd>/);
+  assert.match(home, /<dt>本科<\/dt><dd>湖南大学，机器人工程学士，2025<\/dd>/);
+  assert.match(home, /<dt>现居<\/dt><dd>中国陕西省西安市<\/dd>/);
+  assert.doesNotMatch(home, /<dt>(学习|基础|所在)<\/dt>/);
+  assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__stage-note \{[\s\S]*?display:\s*none/);
+  assert.match(custom, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.home-hero__character[\s\S]*?will-change:\s*auto/);
 });
 
 test("I-42: homepage destinations keep accepted URLs and describe the action", () => {
@@ -193,7 +210,7 @@ test("I-38: local sidebar avatar uses a deploy-safe relative image URL", () => {
   assert.doesNotMatch(include, /<img[^>]+class="author__avatar"/);
 });
 
-test("I-39: GSAP runs one visible-baseline homepage timeline and keeps scroll progress", () => {
+test("I-39: GSAP runs a visible-baseline, lifecycle-aware homepage motion system", () => {
   const pkg = JSON.parse(read("package.json"));
   const mainJs = read("assets/js/_main.js");
 
@@ -214,6 +231,11 @@ test("I-39: GSAP runs one visible-baseline homepage timeline and keeps scroll pr
   assert.match(mainJs, /opacity:\s*0\.78/);
   assert.match(mainJs, /opacity:\s*0\.82/);
   assert.doesNotMatch(mainJs, /autoAlpha:\s*0/);
+  assert.match(mainJs, /repeat:\s*-1/);
+  assert.match(mainJs, /IntersectionObserver/);
+  assert.match(mainJs, /document\.hidden/);
+  assert.match(mainJs, /visibilitychange/);
+  assert.match(mainJs, /stageObserver\.disconnect\(\)/);
   assert.doesNotMatch(mainJs, /scrollTriggerApi\.batch|\.archive__item--card|\.home-info-card/);
   assert.match(mainJs, /id:\s*"site-scroll-progress"/);
   assert.match(mainJs, /scaleX:\s*1/);

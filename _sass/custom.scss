@@ -227,31 +227,137 @@ html[data-theme="dark"] blockquote {
 }
 
 .home-hero {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1.5rem;
+  grid-template-areas:
+    "stage"
+    "copy";
+  gap: clamp(1.5rem, 5vw, 4.5rem);
   align-items: center;
-  margin-bottom: 2rem;
-  padding: 1.25rem 0 1.75rem;
+  min-width: 0;
+  margin-bottom: clamp(3.5rem, 8vw, 6.5rem);
+  padding: clamp(0.75rem, 3vw, 2rem) 0 clamp(2.25rem, 5vw, 4rem);
   border-bottom: 1px solid var(--global-border-color);
 }
 
+.home-hero__copy {
+  grid-area: copy;
+  min-width: 0;
+}
+
+.home-hero__stage {
+  position: relative;
+  grid-area: stage;
+  display: grid;
+  place-items: end center;
+  isolation: isolate;
+  min-width: 0;
+  min-height: clamp(17rem, 78vw, 25rem);
+  overflow: hidden;
+  border-bottom: 1px solid color-mix(in srgb, var(--global-link-color) 34%, var(--global-border-color));
+  background:
+    radial-gradient(circle at 50% 64%, color-mix(in srgb, var(--global-link-color) 13%, transparent) 0, transparent 48%),
+    linear-gradient(180deg, transparent 30%, color-mix(in srgb, var(--global-footer-bg-color) 78%, transparent) 100%);
+}
+
+.home-hero__orbit {
+  position: absolute;
+  left: 50%;
+  z-index: -1;
+  display: block;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--global-link-color) 42%, transparent);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.home-hero__orbit--outer {
+  bottom: -19%;
+  width: min(88%, 22rem);
+}
+
+.home-hero__orbit--inner {
+  bottom: -5%;
+  width: min(58%, 14rem);
+  border-color: color-mix(in srgb, #f9c97f 46%, transparent);
+}
+
+.home-hero__character {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: min(88%, 24rem);
+  max-width: none;
+  margin: 0 auto;
+  filter: drop-shadow(0 16px 24px rgba(15, 23, 42, 0.14));
+  transform: translateY(3%);
+}
+
+.home-hero__stage-note {
+  position: absolute;
+  top: 0.75rem;
+  right: 0;
+  z-index: 2;
+  display: grid;
+  gap: 0.05rem;
+  margin: 0;
+  padding: 0.45rem 0 0.45rem 0.75rem;
+  border-left: 1px solid var(--global-link-color);
+  color: var(--global-text-color-light);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.home-hero__stage-note strong {
+  color: var(--global-text-color);
+  font-size: 0.78rem;
+}
+
 .home-hero__eyebrow {
-  margin-bottom: 0.75rem;
+  margin: 0 0 0.85rem;
   color: var(--global-text-color-light);
   font-size: 0.8rem;
 }
 
 .home-hero h1 {
-  margin-bottom: 0.75rem;
-  font-size: clamp(2.1rem, calc(1.5rem + 3vw), 3rem);
+  margin: 0 0 1rem;
+  font-size: clamp(2.65rem, calc(1.6rem + 7vw), 5.4rem);
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.home-hero h1 > span {
+  display: block;
+}
+
+.home-hero__name-latin {
+  margin-top: 0.08em;
+  color: var(--global-link-color);
+  font-size: 0.72em;
+  letter-spacing: -0.02em;
 }
 
 .home-hero__lead {
-  max-width: 38rem;
+  max-width: 36rem;
+  margin-bottom: 0.45rem;
   font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 1.05rem;
+  font-size: clamp(1.04rem, calc(0.96rem + 0.35vw), 1.2rem);
   line-height: 1.72;
+  text-wrap: pretty;
+}
+
+.home-hero__lead-en {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--global-text-color-light);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .home-hero__actions {
@@ -266,11 +372,13 @@ html[data-theme="dark"] blockquote {
   align-items: center;
   justify-content: center;
   min-height: 2.75rem;
+  padding: 0.62rem 0.9rem;
   border-color: color-mix(in srgb, var(--global-link-color) 38%, var(--global-border-color));
   border-radius: 7px;
   /* the hero pill sits on a light surface, so its label must be the brand color,
      not the inherited white (which would vanish on the light gradient) */
   color: var(--global-link-color) !important;
+  text-decoration: none;
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 14%, transparent), transparent 60%),
     var(--global-bg-color);
@@ -284,6 +392,12 @@ html[data-theme="dark"] blockquote {
     transform 0.28s ease;
 }
 
+.home-hero__actions .home-hero__action--primary {
+  border-color: var(--global-link-color);
+  background: var(--global-link-color);
+  color: var(--global-bg-color) !important;
+}
+
 .home-hero__actions .btn:hover,
 .home-hero__actions .btn:focus-visible {
   border-color: var(--global-link-color);
@@ -294,75 +408,204 @@ html[data-theme="dark"] blockquote {
 }
 
 .home-section {
-  margin: 0 0 2.25rem;
+  min-width: 0;
+  margin: 0 0 clamp(3.5rem, 7vw, 6rem);
 }
 
-.home-section > h2 {
-  margin: 0 0 0.9rem;
+.home-section__header {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: clamp(1.5rem, 4vw, 2.75rem);
 }
 
-.home-card-grid,
-.home-link-list {
-  margin-left: 0;
-  padding-left: 0;
-  list-style: none;
+.home-section__header h2,
+.home-now h2,
+.home-destinations h2 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: clamp(1.55rem, calc(1.2rem + 1.5vw), 2.35rem);
 }
 
-.home-card-grid {
+.home-section__header p {
+  max-width: 48rem;
+  margin: 0;
+  color: var(--global-text-color-light);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.65;
+}
+
+.home-research-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 0.8rem;
+  gap: 0 1.5rem;
 }
 
-.home-info-card,
-.home-link-list li {
+.home-research-track {
+  position: relative;
   display: grid;
-  align-content: start;
-  grid-auto-rows: max-content;
-  gap: 0.25rem;
-  padding: 1rem;
-  border: 1px solid var(--global-border-color);
-  border-radius: 8px;
-  /* I-35 quiet tier: flat, bordered surface at rest (no resting shadow, no
-     gradient wash). Elevation is reserved for the primary tier + hover. */
-  background: color-mix(in srgb, var(--global-footer-bg-color) 52%, var(--global-bg-color));
-  box-shadow: none;
-  transform: translateY(0);
-  transition:
-    background-color 0.28s ease,
-    border-color 0.28s ease,
-    box-shadow 0.28s ease,
-    transform 0.28s ease;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 1.15rem 0 1.55rem 1rem;
+  border-top: 1px solid var(--global-border-color);
 }
 
-.home-info-card {
-  /* I-35 primary tier: the brand wash + a soft resting lift set the feature
-     cards apart from the quieter list/archive surfaces. */
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 8%, transparent), transparent 58%),
-    color-mix(in srgb, var(--global-footer-bg-color) 62%, var(--global-bg-color));
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+.home-research-track__signal {
+  position: absolute;
+  top: 1.35rem;
+  left: 0;
+  width: 0.24rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: var(--global-link-color);
 }
 
-.home-info-card:hover,
-.home-info-card:focus-within,
-.home-link-list li:hover,
-.home-link-list li:focus-within {
-  border-color: color-mix(in srgb, var(--global-link-color) 48%, var(--global-border-color));
-  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.09);
-  transform: translateY(-2px);
+.home-research-track:nth-child(2) .home-research-track__signal {
+  background: color-mix(in srgb, var(--global-link-color) 68%, var(--global-text-color-light));
 }
 
-.home-info-card strong,
-.home-link-list strong {
-  color: var(--global-text-color);
+.home-research-track:nth-child(3) .home-research-track__signal {
+  background: #d79b4d;
 }
 
-.home-info-card span,
-.home-link-list span {
+.home-research-track h3 {
+  margin: 0;
+  font-size: clamp(1.05rem, calc(0.98rem + 0.4vw), 1.25rem);
+}
+
+.home-research-track p {
+  max-width: 42ch;
+  margin: 0;
   color: var(--global-text-color-light);
   font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.68;
+  text-wrap: pretty;
+}
+
+.home-section--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 7vw, 5rem);
+  align-items: start;
+}
+
+.home-now,
+.home-destinations {
+  min-width: 0;
+}
+
+.home-now__list {
+  margin: 1.25rem 0 0;
+}
+
+.home-now__list > div {
+  display: grid;
+  grid-template-columns: minmax(4rem, 0.28fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.95rem 0;
+  border-top: 1px solid var(--global-border-color);
+}
+
+.home-now__list dt,
+.home-now__list dd {
+  margin: 0;
+}
+
+.home-now__list dt {
+  color: var(--global-link-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.home-now__list dd {
+  color: var(--global-text-color-light);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.6;
+}
+
+.home-destination-list {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-destination-list li {
+  margin: 0;
+  border-top: 1px solid var(--global-border-color);
+}
+
+.home-destination-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.25rem;
+  padding: 0.55rem 0;
+  color: var(--global-text-color);
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    color 0.24s ease,
+    padding-left 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-destination-list a:hover,
+.home-destination-list a:focus-visible {
+  padding-left: 0.35rem;
+  color: var(--global-link-color);
+  text-decoration: none;
+}
+
+.home-destination-list a span:last-child {
+  color: var(--global-link-color);
+  font-size: 1.1rem;
+}
+
+html[data-theme="dark"] .home-hero__stage {
+  background:
+    radial-gradient(circle at 50% 64%, rgba(103, 232, 249, 0.11) 0, transparent 48%),
+    linear-gradient(180deg, transparent 30%, rgba(34, 37, 42, 0.72) 100%);
+}
+
+html[data-theme="dark"] .home-hero__character {
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.34));
+}
+
+@media (min-width: 48em) {
+  .home-hero {
+    grid-template-columns: minmax(0, 1.16fr) minmax(17rem, 0.84fr);
+    grid-template-areas: "copy stage";
+  }
+
+  .home-hero__stage {
+    min-height: clamp(23rem, 42vw, 32rem);
+  }
+
+  .home-research-list {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home-research-track:nth-child(1) {
+    grid-column: span 7;
+  }
+
+  .home-research-track:nth-child(2) {
+    grid-column: span 5;
+  }
+
+  .home-research-track:nth-child(3) {
+    grid-column: 3 / span 8;
+  }
+
+  .home-section--split {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  }
+}
+
+@media (min-width: 80em) {
+  .home-hero {
+    min-height: calc(100svh - 10rem);
+  }
 }
 
 .publication-resource-links,

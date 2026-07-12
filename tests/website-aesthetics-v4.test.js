@@ -57,13 +57,13 @@ test("I-34: 404 is a recovery page with a code glyph and action buttons", () => 
   assert.match(custom, /\.error-404__code \{[\s\S]*?clamp\(/);
 });
 
-test("I-35: card elevation is tiered (quiet archive cards, washed+lifted primary info card)", () => {
+test("I-35: archive cards stay quiet while homepage research uses open tracks", () => {
   const custom = read("_sass/custom.scss");
   assert.match(custom, /\.archive__item--card \{[\s\S]*?box-shadow:\s*none/);
-  assert.match(custom, /\.home-info-card \{[\s\S]*?linear-gradient[\s\S]*?box-shadow:\s*0 6px 18px/);
+  assert.match(custom, /\.home-research-track \{[\s\S]*?border-top:\s*1px solid var\(--global-border-color\)/);
 });
 
-test("I-42: homepage keeps unTitled while suppressing only its duplicate layout title", () => {
+test("I-42: homepage keeps unTitled while reserving identity for the main stage", () => {
   const config = read("_config.yml");
   const home = read("_pages/home.md");
   const archive = read("_layouts/archive.html");
@@ -71,16 +71,36 @@ test("I-42: homepage keeps unTitled while suppressing only its duplicate layout 
   assert.match(config, /title\s*:\s*"unTitled"/);
   assert.match(home, /title:\s*"Husky1102"/);
   assert.match(home, /hide_title:\s*true/);
+  assert.match(home, /author_profile:\s*false/);
   assert.match(archive, /\{% unless page\.hide_title %\}[\s\S]*?<h1 class="page__title">\{\{ page\.title \}\}<\/h1>[\s\S]*?\{% endunless %\}/);
 });
 
-test("I-42: homepage reading copy, cards, and section rhythm are deliberately scoped", () => {
+test("I-42: homepage uses a character stage and differentiated information structures", () => {
+  const home = read("_pages/home.md");
   const custom = read("_sass/custom.scss");
 
+  assert.match(home, /class="home-hero__stage"/);
+  assert.match(home, /avatar-gpt063\.webp[\s\S]*?relative_url/);
+  assert.equal((home.match(/class="home-research-track"/g) || []).length, 3);
+  assert.match(home, /class="home-now"/);
+  assert.match(home, /class="home-destination-list"/);
+  assert.doesNotMatch(home, /home-card-grid|home-info-card/);
   assert.match(custom, /\.home-hero__lead \{[\s\S]*?font-family:\s*"LXGW WenKai Screen"[\s\S]*?line-height:\s*1\.72/);
-  assert.match(custom, /\.home-info-card,[\s\S]*?align-content:\s*start[\s\S]*?grid-auto-rows:\s*max-content/);
-  assert.match(custom, /\.home-info-card span,[\s\S]*?font-family:\s*"LXGW WenKai Screen"[\s\S]*?line-height:\s*1\.68/);
-  assert.match(custom, /\.home-section > h2 \{[\s\S]*?margin:\s*0 0 0\.9rem/);
+  assert.match(custom, /\.home-hero__stage \{[\s\S]*?isolation:\s*isolate/);
+  assert.match(custom, /\.home-research-track/);
+  assert.match(custom, /\.home-now/);
+  assert.match(custom, /\.home-destination-list/);
+});
+
+test("I-42: homepage destinations keep accepted URLs and describe the action", () => {
+  const home = read("_pages/home.md");
+
+  assert.match(home, /href="\{\{ base_path \}\}\/cv\/">查看英文 CV<\/a>/);
+  assert.match(home, /href="\{\{ base_path \}\}\/cv_zh\/">查看中文简历<\/a>/);
+  assert.match(home, /href="\{\{ base_path \}\}\/blog_embed\/">阅读个人博客<\/a>/);
+  assert.match(home, /href="https:\/\/github\.com\/husky1102"/);
+  assert.match(home, /href="https:\/\/kaggle\.com\/husky1102"/);
+  assert.match(home, /href="\{\{ base_path \}\}\/about\/"/);
 });
 
 test("I-42: mobile homepage controls expose at least 44px targets", () => {

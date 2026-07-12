@@ -3,6 +3,7 @@ layout: archive
 title: "Husky1102"
 permalink: /
 author_profile: true
+hide_title: true
 ---
 
 {% include base_path %}

@@ -191,7 +191,7 @@
 
   button {
     position: absolute;
-    height: 2.5rem;
+    height: 2.75rem;
     min-width: 2.75rem;
     right: 0;
     padding: 0 0.55rem;
@@ -256,8 +256,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 2.25rem;
-        height: 2.25rem;
+        width: 2.75rem;
+        height: 2.75rem;
         margin: 0 0.35rem;
         padding: 0;
         border-radius: 6px;
@@ -287,9 +287,9 @@
            absolutely-positioned overflow-toggle styles from `.greedy-nav button`.
            Reset it back to a plain inline nav icon. */
         position: static;
-        width: 2.25rem;
+        width: 2.75rem;
         min-width: 0;
-        height: 2.25rem;
+        height: 2.75rem;
         margin: 0 0 0 0.35rem;
         padding: 0;
         display: flex;

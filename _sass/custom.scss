@@ -231,8 +231,8 @@ html[data-theme="dark"] blockquote {
   grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
   align-items: center;
-  margin-bottom: 2.5rem;
-  padding: 1.25rem 0 2rem;
+  margin-bottom: 2rem;
+  padding: 1.25rem 0 1.75rem;
   border-bottom: 1px solid var(--global-border-color);
 }
 
@@ -249,7 +249,9 @@ html[data-theme="dark"] blockquote {
 
 .home-hero__lead {
   max-width: 38rem;
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 1.05rem;
+  line-height: 1.72;
 }
 
 .home-hero__actions {
@@ -260,6 +262,10 @@ html[data-theme="dark"] blockquote {
 }
 
 .home-hero__actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
   border-color: color-mix(in srgb, var(--global-link-color) 38%, var(--global-border-color));
   border-radius: 7px;
   /* the hero pill sits on a light surface, so its label must be the brand color,
@@ -288,7 +294,11 @@ html[data-theme="dark"] blockquote {
 }
 
 .home-section {
-  margin: 2rem 0;
+  margin: 0 0 2.25rem;
+}
+
+.home-section > h2 {
+  margin: 0 0 0.9rem;
 }
 
 .home-card-grid,
@@ -307,6 +317,8 @@ html[data-theme="dark"] blockquote {
 .home-info-card,
 .home-link-list li {
   display: grid;
+  align-content: start;
+  grid-auto-rows: max-content;
   gap: 0.25rem;
   padding: 1rem;
   border: 1px solid var(--global-border-color);
@@ -349,6 +361,8 @@ html[data-theme="dark"] blockquote {
 .home-info-card span,
 .home-link-list span {
   color: var(--global-text-color-light);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.68;
 }
 
 .publication-resource-links,

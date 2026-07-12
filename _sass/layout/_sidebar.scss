@@ -415,6 +415,10 @@
   }
 
   button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
     margin-bottom: 0;
 
     @include breakpoint($large) {

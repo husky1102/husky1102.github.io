@@ -63,6 +63,38 @@ test("I-35: card elevation is tiered (quiet archive cards, washed+lifted primary
   assert.match(custom, /\.home-info-card \{[\s\S]*?linear-gradient[\s\S]*?box-shadow:\s*0 6px 18px/);
 });
 
+test("I-42: homepage keeps unTitled while suppressing only its duplicate layout title", () => {
+  const config = read("_config.yml");
+  const home = read("_pages/home.md");
+  const archive = read("_layouts/archive.html");
+
+  assert.match(config, /title\s*:\s*"unTitled"/);
+  assert.match(home, /title:\s*"Husky1102"/);
+  assert.match(home, /hide_title:\s*true/);
+  assert.match(archive, /\{% unless page\.hide_title %\}[\s\S]*?<h1 class="page__title">\{\{ page\.title \}\}<\/h1>[\s\S]*?\{% endunless %\}/);
+});
+
+test("I-42: homepage reading copy, cards, and section rhythm are deliberately scoped", () => {
+  const custom = read("_sass/custom.scss");
+
+  assert.match(custom, /\.home-hero__lead \{[\s\S]*?font-family:\s*"LXGW WenKai Screen"[\s\S]*?line-height:\s*1\.72/);
+  assert.match(custom, /\.home-info-card,[\s\S]*?align-content:\s*start[\s\S]*?grid-auto-rows:\s*max-content/);
+  assert.match(custom, /\.home-info-card span,[\s\S]*?font-family:\s*"LXGW WenKai Screen"[\s\S]*?line-height:\s*1\.68/);
+  assert.match(custom, /\.home-section > h2 \{[\s\S]*?margin:\s*0 0 0\.9rem/);
+});
+
+test("I-42: mobile homepage controls expose at least 44px targets", () => {
+  const custom = read("_sass/custom.scss");
+  const navigation = read("_sass/layout/_navigation.scss");
+  const sidebar = read("_sass/layout/_sidebar.scss");
+
+  assert.match(custom, /\.home-hero__actions \.btn \{[\s\S]*?min-height:\s*2\.75rem/);
+  assert.match(navigation, /\.greedy-nav \{[\s\S]*?button \{[\s\S]*?height:\s*2\.75rem/);
+  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?width:\s*2\.75rem[\s\S]*?height:\s*2\.75rem/);
+  assert.match(navigation, /#theme-toggle[\s\S]*?width:\s*2\.75rem[\s\S]*?height:\s*2\.75rem/);
+  assert.match(sidebar, /\.author__urls-wrapper[\s\S]*?button \{[\s\S]*?min-height:\s*2\.75rem/);
+});
+
 test("Minor: forms get a visible focus ring + theme-aware background; selection is branded", () => {
   const forms = read("_sass/layout/_forms.scss");
   assert.match(forms, /:focus-visible[\s\S]*?outline:\s*2px solid var\(--global-link-color\)/);

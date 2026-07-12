@@ -40,13 +40,13 @@ test("Theme toggle stays visible and independent from greedy overflow menu", () 
   assert.match(mainJs, /切换到浅色模式/);
 });
 
-test("Masthead action icons use a stable square focus target", () => {
+test("Masthead action icons use an accessible square focus target", () => {
   const navigation = read("_sass/layout/_navigation.scss");
   const blogEmbed = read("_pages/blog_embed.md");
 
   assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?display:\s*inline-flex/);
-  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?width:\s*2\.25rem/);
-  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?height:\s*2\.25rem/);
+  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?width:\s*2\.75rem/);
+  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?height:\s*2\.75rem/);
   assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?&:focus[\s\S]*?outline:\s*none/);
   assert.match(navigation, /a,\s*\n\s*\.theme-toggle__btn\s*\{[\s\S]*?&:before/);
   assert.match(navigation, /&:hover,\s*\n\s*&:focus-visible\s*\{[\s\S]*?color:\s*var\(--global-masthead-link-color-hover\)/);

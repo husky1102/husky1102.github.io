@@ -133,7 +133,7 @@ test("I-43: bilingual CVs omit unsupported experience and wrap the full publicat
   assert.doesNotMatch(cvZh, /cv-empty|当前没有列出的论文条目/);
 });
 
-test("I-43: dark theme uses graphite surfaces and a restrained warm ambient trace", () => {
+test("I-43: dark theme uses graphite surfaces and a restrained static ambient trace", () => {
   const dark = read("_sass/theme/_dark.scss");
   const custom = read("_sass/custom.scss");
 
@@ -142,10 +142,9 @@ test("I-43: dark theme uses graphite surfaces and a restrained warm ambient trac
   assert.match(dark, /--global-thead-color\s*:\s*#25292f/);
   assert.doesNotMatch(dark, /#0f172a|#111c31/);
   assert.match(custom, /radial-gradient\(circle at 86% 4%, rgba\(246, 173, 99, 0\.04\)/);
-  assert.match(custom, /linear-gradient\(315deg, rgba\(246, 173, 99, 0\.045\)/);
+  assert.match(custom, /html\[data-theme="dark"\] body \{[\s\S]*?background-repeat:\s*no-repeat/);
   assert.doesNotMatch(custom, /rgba\(196, 181, 253/);
-  assert.match(custom, /#67e8f9/);
-  assert.match(custom, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?animation:\s*none/);
+  assert.match(custom, /rgba\(103, 232, 249, 0\.055\)/);
 });
 
 test("Minor: forms get a visible focus ring + theme-aware background; selection is branded", () => {
@@ -156,23 +155,20 @@ test("Minor: forms get a visible focus ring + theme-aware background; selection 
   assert.match(custom, /::selection \{[\s\S]*?color-mix/);
 });
 
-test("I-36: avatar hover uses overflow visible, rotating gradient ring, and unified shadow", () => {
+test("I-36: avatar hover and keyboard focus use a finite pop-out response", () => {
   const sidebar = read("_sass/layout/_sidebar.scss");
 
-  // container unclips to let image expand
-  assert.match(sidebar, /overflow:\s*visible/);
-  // character sits lower in the ring so it covers the cropped legs
   assert.match(sidebar, /--avatar-art-y:\s*10px/);
-  assert.match(sidebar, /animation:\s*avatar-spin/);
-  assert.match(sidebar, /filter:\s*drop-shadow/);
-  // the lower image mask snaps into place while only the pop-out scale animates,
-  // so the ring does not visually chase the enlarged avatar.
-  assert.match(sidebar, /transform 0\.4s cubic-bezier\(0\.34,\s*1\.56,\s*0\.64,\s*1\);\s*\/\/ gentle leap overshoot; mask snaps into place/);
-  assert.doesNotMatch(sidebar, /clip-path\s+0\.08s ease-out/);
-  assert.match(sidebar, /will-change:\s*transform,\s*clip-path/);
+  assert.match(
+    sidebar,
+    /\.author__profile > \.author__avatar:hover,\s*\.author__profile:focus-within > \.author__avatar \{[\s\S]*?overflow:\s*visible[\s\S]*?filter:\s*drop-shadow[\s\S]*?transform:\s*scale\(1\.06\)/
+  );
+  assert.match(sidebar, /conic-gradient\(\s*from 210deg/);
+  assert.doesNotMatch(sidebar, /@keyframes avatar|animation:\s*avatar|animation-duration|infinite/);
+  assert.doesNotMatch(sidebar, /will-change:/);
 });
 
-test("I-37: avatar hover respects reduced motion and matches sidebar backdrop", () => {
+test("I-37: avatar finite response respects reduced motion and matches sidebar backdrop", () => {
   const sidebar = read("_sass/layout/_sidebar.scss");
 
   assert.match(
@@ -181,15 +177,11 @@ test("I-37: avatar hover respects reduced motion and matches sidebar backdrop", 
   );
   assert.match(
     sidebar,
-    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&::before,\s*&::after\s*\{[\s\S]*?animation:\s*none/
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.author__profile > \.author__avatar:hover,[\s\S]*?\.author__profile:focus-within > \.author__avatar[\s\S]*?transform:\s*none[\s\S]*?overflow:\s*hidden/
   );
   assert.match(
     sidebar,
-    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&:hover\s*\{[\s\S]*?transform:\s*none[\s\S]*?filter:\s*drop-shadow/
-  );
-  assert.match(
-    sidebar,
-    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?&:hover img\s*\{[\s\S]*?transform:\s*translateY\(var\(--avatar-art-y\)\)[\s\S]*?filter:\s*none/
+    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.author__profile > \.author__avatar:hover[\s\S]*?img\s*\{[\s\S]*?transform:\s*translateY\(var\(--avatar-art-y\)\)[\s\S]*?filter:\s*none/
   );
 });
 
@@ -201,7 +193,7 @@ test("I-38: local sidebar avatar uses a deploy-safe relative image URL", () => {
   assert.doesNotMatch(include, /<img[^>]+class="author__avatar"/);
 });
 
-test("I-39: GSAP motion is bundled locally and respects reduced motion", () => {
+test("I-39: GSAP runs one visible-baseline homepage timeline and keeps scroll progress", () => {
   const pkg = JSON.parse(read("package.json"));
   const mainJs = read("assets/js/_main.js");
 
@@ -213,45 +205,41 @@ test("I-39: GSAP motion is bundled locally and respects reduced motion", () => {
   assert.match(mainJs, /gsapApi\.registerPlugin\(scrollTriggerApi\)/);
   assert.match(mainJs, /gsapApi\.matchMedia\(\)/);
   assert.match(mainJs, /\(prefers-reduced-motion: no-preference\)/);
-  assert.match(mainJs, /\.home-hero__eyebrow, \.home-hero h1, \.home-hero__lead, \.home-hero__actions/);
-  assert.match(mainJs, /scrollTriggerApi\.batch\("\.home-info-card, \.archive__item--card"/);
+  assert.match(mainJs, /var initHomepageMotion = function \(\)/);
+  assert.match(mainJs, /gsapApi\.timeline\(\{[\s\S]*?defaults:/);
+  assert.match(mainJs, /\.home-hero__stage/);
+  assert.match(mainJs, /\.home-hero__character/);
+  assert.match(mainJs, /\.home-hero__lead-en/);
+  assert.match(mainJs, /opacity:\s*0\.72/);
+  assert.match(mainJs, /opacity:\s*0\.78/);
+  assert.match(mainJs, /opacity:\s*0\.82/);
+  assert.doesNotMatch(mainJs, /autoAlpha:\s*0/);
+  assert.doesNotMatch(mainJs, /scrollTriggerApi\.batch|\.archive__item--card|\.home-info-card/);
   assert.match(mainJs, /id:\s*"site-scroll-progress"/);
   assert.match(mainJs, /scaleX:\s*1/);
+  assert.equal((mainJs.match(/scrollTrigger:/g) || []).length, 1);
   assert.match(mainJs, /if \(!useGsapScrollProgress\)[\s\S]*updateScrollProgressFallback\(scrollTop, scrollHeight\)/);
   assert.equal((mainJs.match(/scrollProgress\.style\.width =/g) || []).length, 1);
 });
 
-test("I-41: dark ambient layer is dark-scoped, surface-scoped, and reduced-motion safe", () => {
+test("I-41: dark ambient rendering is static and has no continuous card loops", () => {
   const custom = read("_sass/custom.scss");
 
-  assert.match(custom, /html\[data-theme="dark"\]\s*\{[\s\S]*?--dark-ambient-x:\s*50%/);
   assert.match(
     custom,
-    /html\[data-theme="dark"\] body \{[\s\S]*?radial-gradient\(circle at var\(--dark-ambient-x\) var\(--dark-ambient-y\)/
+    /html\[data-theme="dark"\] body \{[\s\S]*?radial-gradient\(circle at 50% 8%, rgba\(103, 232, 249, 0\.055\)/
   );
-  assert.match(custom, /html\[data-theme="dark"\] \.home-info-card::before/);
-  assert.match(custom, /html\[data-theme="dark"\] \.archive__item--card::before/);
-  assert.match(custom, /html\[data-theme="dark"\] \.about-entry-card::before/);
-  assert.match(custom, /@keyframes darkAmbientCardBreath/);
-  assert.match(
-    custom,
-    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?html\[data-theme="dark"\] \.home-info-card::before[\s\S]*?animation:\s*none/
-  );
+  assert.doesNotMatch(custom, /--dark-ambient-|background-attachment/);
+  assert.doesNotMatch(custom, /darkAmbientCardBreath|\.archive__item--card::before|\.about-entry-card::before/);
+  assert.doesNotMatch(custom, /animation:[^;]*infinite/);
 });
 
-test("I-41: GSAP ambient pointer glow is gated to dark-capable fine-pointer motion", () => {
+test("I-41: JavaScript performs no ambient pointer-driven rendering", () => {
   const mainJs = read("assets/js/_main.js");
 
-  assert.match(mainJs, /var initDarkAmbientMotion = function \(\)/);
-  assert.match(mainJs, /ambientMedia\.add\("\(prefers-reduced-motion: no-preference\) and \(pointer: fine\)"/);
-  assert.match(mainJs, /gsapApi\.quickSetter\(root, "--dark-ambient-x"\)/);
-  assert.match(mainJs, /gsapApi\.quickSetter\(root, "--dark-ambient-y"\)/);
-  assert.match(mainJs, /gsapApi\.quickTo\(root, "--dark-ambient-spotlight-alpha"/);
-  assert.match(mainJs, /root\.classList\.toggle\("has-dark-ambient-motion", shouldRun\)/);
-  assert.match(mainJs, /window\.addEventListener\("pointermove", handlePointerMove, \{ passive: true \}\)/);
-  assert.match(mainJs, /window\.removeEventListener\("pointermove", handlePointerMove\)/);
-  assert.match(mainJs, /MutationObserver\(syncAmbientTheme\)/);
-  assert.doesNotMatch(mainJs, /mousemove/);
+  assert.doesNotMatch(mainJs, /initDarkAmbientMotion|ambientMedia|--dark-ambient-/);
+  assert.doesNotMatch(mainJs, /quickSetter|quickTo/);
+  assert.doesNotMatch(mainJs, /pointermove|pointerleave|mousemove/);
 });
 
 test("I-40: blog iframe and footer links use the hardened public-site defaults", () => {

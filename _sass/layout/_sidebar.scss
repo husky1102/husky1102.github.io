@@ -95,22 +95,6 @@
   }
 }
 
-@keyframes avatar-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@property --avatar-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 210deg;
-}
-
-@keyframes avatar-spin-angle {
-  from { --avatar-angle: 210deg; }
-  to { --avatar-angle: 570deg; }
-}
-
 .author__profile > .author__avatar {
   display: table-cell;
   vertical-align: top;
@@ -151,7 +135,7 @@
       padding: 3px;
       box-sizing: border-box;
       background: conic-gradient(
-        from var(--avatar-angle),
+        from 210deg,
         transparent 0deg,
         color-mix(in srgb, var(--global-link-color) 20%, transparent) 90deg,
         var(--global-link-color) 180deg,
@@ -169,11 +153,8 @@
       /* Only show the bottom half (from 50% Y downwards) */
       clip-path: polygon(-50% 50%, 150% 50%, 150% 150%, -50% 150%);
       z-index: 3;
-      animation: avatar-spin-angle 16s linear infinite;
       pointer-events: none;
-      transition:
-        animation-duration 0.6s ease,
-        filter 0.4s ease;
+      transition: transform 0.32s ease;
     }
 
     /* 3D Pop-out: Back Ring + Solid Backdrop
@@ -193,7 +174,7 @@
           color-mix(in srgb, var(--global-footer-bg-color) 55%, var(--global-bg-color))
         ),
         conic-gradient(
-          from var(--avatar-angle),
+          from 210deg,
           transparent 0deg,
           color-mix(in srgb, var(--global-link-color) 20%, transparent) 90deg,
           var(--global-link-color) 180deg,
@@ -205,10 +186,7 @@
       background-clip: content-box, border-box;
       background-origin: border-box, border-box;
       z-index: 0;
-      animation: avatar-spin-angle 16s linear infinite;
-      transition:
-        animation-duration 0.6s ease,
-        filter 0.4s ease;
+      transition: transform 0.32s ease;
     }
   }
 
@@ -239,81 +217,65 @@
       );
       transition:
         transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); // gentle leap overshoot; mask snaps into place
-      will-change: transform, clip-path;
     }
   }
+}
 
-  /* 跃然纸上 — on hover the container unclips, allowing the image to expand out.
-     The unified drop-shadow beautifully captures the new silhouette + circular ring. */
-  &:hover {
-    @include breakpoint($large) {
-      overflow: visible; // unclip contents!
-      transform: scale(1.06);
-      /* Unified glowing drop-shadow */
-      filter: drop-shadow(0 12px 28px color-mix(in srgb, var(--global-link-color) 40%, rgba(0,0,0,0.15)));
-
-      /* Both rings accelerate, removed blur for a crisp, high-tech neon look */
-      &::before, &::after {
-        animation-duration: 4s;
-        transform: scale(1.02);
-      }
-
-      img {
-        border-radius: 0;
-        box-shadow: none;
-        /* 跃然纸上: scale up from bottom-center origin so upper body pops
-           out above the ring. Reduced translateY to 0px so the legs show much more! */
-        transform: translateY(0px) scale(1.35);
-        /* NO filter on the image, handled by parent container's unified drop-shadow */
-        filter: none;
-        /* Mathematically precise 17-point polygon that traces the container's bottom circular arc.
-           Since S=1.35 and Y=0, the arc radius is 37%, centered at Y=63%.
-           This flawlessly curves the image's bottom to fit exactly inside the 3px front ring,
-           eliminating flat cuts and corner poke-outs completely! */
-        clip-path: polygon(
-          -50% -50%, 150% -50%, 150% 63.0%, 
-          87.0% 63.0%, 85.7% 72.6%, 82.0% 81.5%, 76.2% 89.2%, 68.5% 95.0%, 59.6% 98.7%, 50.0% 100.0%, 
-          40.4% 98.7%, 31.5% 95.0%, 23.8% 89.2%, 18.0% 81.5%, 14.3% 72.6%, 13.0% 63.0%, 
-          -50% 63.0%
-        );
-      }
-    }
+@include breakpoint($large) {
+  .author__profile > .author__avatar:hover,
+  .author__profile:focus-within > .author__avatar {
+    overflow: visible;
+    filter: drop-shadow(0 12px 28px color-mix(in srgb, var(--global-link-color) 40%, rgba(0,0,0,0.15)));
+    transform: scale(1.06);
   }
 
-  @include breakpoint($large) {
-    /* Reduced-motion: disable all animations, transforms, and glows. */
-    @media (prefers-reduced-motion: reduce) {
-      &::before, &::after {
-        animation: none;
-      }
+  .author__profile > .author__avatar:hover::before,
+  .author__profile > .author__avatar:hover::after,
+  .author__profile:focus-within > .author__avatar::before,
+  .author__profile:focus-within > .author__avatar::after {
+    transform: scale(1.02);
+  }
 
-      &:hover {
-        transform: none;
-        overflow: hidden; // stay circular
-        filter: drop-shadow(0 8px 20px rgba(0,0,0,0.12));
-      }
+  .author__profile > .author__avatar:hover img,
+  .author__profile:focus-within > .author__avatar img {
+    border-radius: 0;
+    box-shadow: none;
+    transform: translateY(0) scale(1.35);
+    filter: none;
+    clip-path: polygon(
+      -50% -50%, 150% -50%, 150% 63.0%,
+      87.0% 63.0%, 85.7% 72.6%, 82.0% 81.5%, 76.2% 89.2%, 68.5% 95.0%, 59.6% 98.7%, 50.0% 100.0%,
+      40.4% 98.7%, 31.5% 95.0%, 23.8% 89.2%, 18.0% 81.5%, 14.3% 72.6%, 13.0% 63.0%,
+      -50% 63.0%
+    );
+  }
 
-      &:hover::before, &:hover::after {
-        animation: none;
-        transform: none;
-      }
+  @media (prefers-reduced-motion: reduce) {
+    .author__profile > .author__avatar:hover,
+    .author__profile:focus-within > .author__avatar {
+      transform: none;
+      overflow: hidden;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.12));
+    }
 
-      img {
-        transition: clip-path 0.2s ease, transform 0.2s ease;
-        transform: translateY(var(--avatar-art-y));
-        filter: none;
-        clip-path: polygon(
-          -50% -50%, 150% -50%, 150% 150%, 
-          87.0% 150%, 85.7% 150%, 82.0% 150%, 76.2% 150%, 68.5% 150%, 59.6% 150%, 50.0% 150%, 
-          40.4% 150%, 31.5% 150%, 23.8% 150%, 18.0% 150%, 14.3% 150%, 13.0% 150%, 
-          -50% 150%
-        );
-      }
+    .author__profile > .author__avatar:hover::before,
+    .author__profile > .author__avatar:hover::after,
+    .author__profile:focus-within > .author__avatar::before,
+    .author__profile:focus-within > .author__avatar::after {
+      transform: none;
+    }
 
-      &:hover img {
-        transform: translateY(var(--avatar-art-y));
-        filter: none;
-      }
+    .author__profile > .author__avatar:hover img,
+    .author__profile:focus-within > .author__avatar img {
+      border-radius: 50%;
+      transform: translateY(var(--avatar-art-y));
+      filter: none;
+      clip-path: polygon(
+        -50% -50%, 150% -50%, 150% 150%,
+        87.0% 150%, 85.7% 150%, 82.0% 150%, 76.2% 150%, 68.5% 150%, 59.6% 150%, 50.0% 150%,
+        40.4% 150%, 31.5% 150%, 23.8% 150%, 18.0% 150%, 14.3% 150%, 13.0% 150%,
+        -50% 150%
+      );
     }
   }
 }

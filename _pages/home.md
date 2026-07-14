@@ -9,7 +9,7 @@ hide_title: true
 {% include base_path %}
 
 <section class="home-hero">
-  <div class="home-hero__stage" role="img" tabindex="0" aria-label="克苏鲁微糖 Husky 与机器人伙伴的角色插画">
+  <div class="home-hero__stage" role="img" aria-label="克苏鲁微糖 Husky 与机器人伙伴的角色插画">
     <div class="home-hero__portrait">
       <div class="home-hero__portrait-window">
         <img class="home-hero__character home-hero__character--inside" src="{{ '/images/avatar-gpt063.webp' | relative_url }}" alt="" fetchpriority="high" decoding="async">

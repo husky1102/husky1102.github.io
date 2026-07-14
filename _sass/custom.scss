@@ -291,10 +291,6 @@ html[data-theme="dark"] blockquote {
   overflow: visible;
 }
 
-.home-hero__stage:focus-visible {
-  outline: none;
-}
-
 .home-hero__stage::before,
 .home-hero__stage::after {
   content: "";
@@ -459,19 +455,16 @@ html[data-theme="dark"] blockquote {
 }
 
 .home-hero__stage:hover .home-hero__character,
-.home-hero__stage:focus-visible .home-hero__character,
 .home-hero__stage.is-popped .home-hero__character {
   transform: translate3d(0, -6.5%, 0) scale(1.12);
 }
 
 .home-hero__stage:hover .home-hero__portrait,
-.home-hero__stage:focus-visible .home-hero__portrait,
 .home-hero__stage.is-popped .home-hero__portrait {
   filter: drop-shadow(0 28px 26px rgba(15, 23, 42, 0.24));
 }
 
 .home-hero__stage:hover .home-hero__portrait-ring,
-.home-hero__stage:focus-visible .home-hero__portrait-ring,
 .home-hero__stage.is-popped .home-hero__portrait-ring {
   border-color: color-mix(in srgb, var(--global-link-color) 72%, var(--global-border-color));
   box-shadow:
@@ -483,24 +476,15 @@ html[data-theme="dark"] blockquote {
 }
 
 .home-hero__stage:hover .home-hero__portrait-ring::before,
-.home-hero__stage:focus-visible .home-hero__portrait-ring::before,
 .home-hero__stage.is-popped .home-hero__portrait-ring::before {
   opacity: 0.82;
   transform: rotate(0) scale(1);
 }
 
 .home-hero__stage:hover .home-hero__portrait-ring::after,
-.home-hero__stage:focus-visible .home-hero__portrait-ring::after,
 .home-hero__stage.is-popped .home-hero__portrait-ring::after {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
-}
-
-.home-hero__stage:focus-visible .home-hero__portrait-ring {
-  border-color: var(--global-link-color);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--global-bg-color) 58%, transparent),
-    0 0 0 3px color-mix(in srgb, var(--global-link-color) 24%, transparent);
 }
 
 .home-hero__stage-note {
@@ -522,7 +506,6 @@ html[data-theme="dark"] blockquote {
 }
 
 .home-hero__stage:hover .home-hero__stage-note,
-.home-hero__stage:focus-visible .home-hero__stage-note,
 .home-hero__stage.is-popped .home-hero__stage-note {
   opacity: 0;
 }
@@ -815,7 +798,6 @@ html[data-theme="dark"] .home-hero__portrait-ring {
 }
 
 html[data-theme="dark"] .home-hero__stage:hover .home-hero__portrait-ring,
-html[data-theme="dark"] .home-hero__stage:focus-visible .home-hero__portrait-ring,
 html[data-theme="dark"] .home-hero__stage.is-popped .home-hero__portrait-ring {
   border-color: rgba(103, 232, 249, 0.62);
   box-shadow:
@@ -825,7 +807,6 @@ html[data-theme="dark"] .home-hero__stage.is-popped .home-hero__portrait-ring {
 }
 
 html[data-theme="dark"] .home-hero__stage:hover .home-hero__portrait,
-html[data-theme="dark"] .home-hero__stage:focus-visible .home-hero__portrait,
 html[data-theme="dark"] .home-hero__stage.is-popped .home-hero__portrait {
   filter:
     drop-shadow(0 26px 26px rgba(0, 0, 0, 0.50))
@@ -1292,10 +1273,8 @@ html[data-theme="dark"] .error-404__code {
   }
 
   .home-hero__stage:hover .home-hero__character,
-  .home-hero__stage:focus-visible .home-hero__character,
   .home-hero__stage.is-popped .home-hero__character,
   .home-hero__stage:hover .home-hero__portrait-ring,
-  .home-hero__stage:focus-visible .home-hero__portrait-ring,
   .home-hero__stage.is-popped .home-hero__portrait-ring {
     transform: none;
   }

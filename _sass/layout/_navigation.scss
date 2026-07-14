@@ -14,11 +14,6 @@
   padding-left: 2em;
   padding-right: 2em;
   font-family: $sans-serif;
-  -webkit-animation: intro 0.3s both;
-          animation: intro 0.3s both;
-  -webkit-animation-delay: 0.30s;
-          animation-delay: 0.30s;
-
   @include breakpoint($large) {
     padding-left: 1em;
     padding-right: 1em;
@@ -340,8 +335,8 @@
         border-radius: 999px;
         background: var(--global-masthead-link-color-hover);
         width: 100%;
-        -webkit-transition: $global-transition;
-        transition: $global-transition;
+        -webkit-transition: -webkit-transform 0.2s ease-in-out;
+                transition: transform 0.2s ease-in-out;
         -webkit-transform-origin: center;
             -ms-transform-origin: center;
                 transform-origin: center;
@@ -377,7 +372,7 @@
     padding: 0.35rem;
     border: 1px solid color-mix(in srgb, var(--global-link-color) 18%, var(--global-border-color));
     border-radius: 8px;
-    background: color-mix(in srgb, var(--global-bg-color) 88%, transparent);
+    background: color-mix(in srgb, var(--global-bg-color) 97%, transparent);
     -webkit-backdrop-filter: blur(12px) saturate(1.2);
             backdrop-filter: blur(12px) saturate(1.2);
     box-shadow:
@@ -385,23 +380,27 @@
       0 0 0 1px color-mix(in srgb, #fff 18%, transparent);
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
     -webkit-transform: translateY(-6px) scale(0.98);
         -ms-transform: translateY(-6px) scale(0.98);
             transform: translateY(-6px) scale(0.98);
     -webkit-transform-origin: top right;
         -ms-transform-origin: top right;
             transform-origin: top right;
-    -webkit-transition: opacity 0.25s ease, transform 0.25s ease;
-            transition: opacity 0.25s ease, transform 0.25s ease;
+    -webkit-transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
 
     &.hidden {
       display: block;
-      visibility: visible;
+      visibility: hidden;
     }
 
     &:not(.hidden) {
       opacity: 1;
       pointer-events: auto;
+      visibility: visible;
+      -webkit-transition-delay: 0s;
+              transition-delay: 0s;
       -webkit-transform: translateY(0) scale(1);
           -ms-transform: translateY(0) scale(1);
               transform: translateY(0) scale(1);
@@ -445,7 +444,7 @@
       width: 0;
       border-style: solid;
       border-width: 0 10px 10px;
-      border-color: color-mix(in srgb, var(--global-bg-color) 88%, transparent) transparent;
+      border-color: color-mix(in srgb, var(--global-bg-color) 97%, transparent) transparent;
       display: block;
       z-index: 1;
     }

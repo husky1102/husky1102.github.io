@@ -23,7 +23,43 @@ test("Greedy navigation overflow menu uses rounded glass motion", () => {
   assert.match(navigation, /\.greedy-nav[\s\S]*button[\s\S]*backdrop-filter:\s*blur/);
   assert.match(navigation, /\.hidden-links[\s\S]*opacity[\s\S]*transform[\s\S]*transition:/);
   assert.match(navigation, /\.hidden-links[\s\S]*&:not\(\.hidden\)/);
+  assert.match(navigation, /\.hidden-links[\s\S]*visibility:\s*hidden[\s\S]*&:not\(\.hidden\)[\s\S]*visibility:\s*visible/);
   assert.match(utilities, /\.greedy-nav button:hover \.navicon/);
+});
+
+test("Greedy navigation keeps closed links out of the keyboard path", () => {
+  const masthead = read("_includes/masthead.html");
+  const greedyNav = read("assets/js/plugins/jquery.greedy-navigation.js");
+
+  assert.match(masthead, /id="site-nav-hidden-links"[^>]*aria-hidden="true"[^>]*inert/);
+  assert.match(greedyNav, /hiddenLinks\.toggleAttribute\("inert", !shouldOpen\)/);
+  assert.match(greedyNav, /shouldOpen \? "关闭导航菜单" : "打开导航菜单"/);
+  assert.match(greedyNav, /event\.key === "Escape"[\s\S]*setHiddenLinksOpen\(false, true\)/);
+  assert.match(greedyNav, /document\.addEventListener\("pointerdown"[\s\S]*!nav\.contains\(event\.target\)/);
+  assert.match(greedyNav, /if \(!shouldOpen && shouldReturnFocus\)[\s\S]*btn\.focus\(\)/);
+});
+
+test("Shared layouts expose one stable main landmark without template fades", () => {
+  const defaultLayout = read("_layouts/default.html");
+  const cvLayout = read("_layouts/cv-layout.html");
+  const page = read("_sass/layout/_page.scss");
+  const masthead = read("_sass/layout/_masthead.scss");
+  const footer = read("_sass/layout/_footer.scss");
+  const navigation = read("_sass/layout/_navigation.scss");
+  const base = read("_sass/layout/_base.scss");
+  const defaultTheme = read("_sass/theme/_default.scss");
+  const darkTheme = read("_sass/theme/_dark.scss");
+
+  assert.match(defaultLayout, /class="screen-reader-shortcut" href="#main">跳到主要内容/);
+  assert.match(cvLayout, /class="screen-reader-shortcut" href="#main">跳到主要内容/);
+  assert.match(cvLayout, /<main id="main" class="cv-main"[\s\S]*?<div class="cv-page">/);
+  assert.equal((cvLayout.match(/<main\b/g) || []).length, 1);
+  [page, masthead, footer, navigation].forEach((source) => {
+    assert.doesNotMatch(source, /animation(?:-delay)?:\s*intro|animation:\s*intro/);
+  });
+  [base, page, navigation, defaultTheme, darkTheme].forEach((source) => {
+    assert.doesNotMatch(source, /\$global-transition|transition:\s*all/);
+  });
 });
 
 test("Theme toggle stays visible and independent from greedy overflow menu", () => {
@@ -62,7 +98,7 @@ test("jQuery stage 1 vanillaizes local navigation and chrome while keeping plugi
   const pluginTail = mainJs.slice(pluginStart);
 
   assert.match(greedyNav, /document\.getElementById\("site-nav"\)/);
-  assert.match(greedyNav, /classList\.toggle\("hidden", !isOpen\)/);
+  assert.match(greedyNav, /classList\.toggle\("hidden", !shouldOpen\)/);
   assert.match(greedyNav, /insertBefore\(movableLinks\[movableLinks\.length - 1\], hiddenLinks\.firstElementChild\)/);
   assert.doesNotMatch(greedyNav, /\$\(|jQuery/);
 

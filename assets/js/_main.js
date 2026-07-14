@@ -52,7 +52,7 @@
 
       var themeColorMeta = document.querySelector('meta[name="theme-color"]');
       if (themeColorMeta) {
-        themeColorMeta.setAttribute("content", isDark ? "#0f172a" : "#fbfaf7");
+        themeColorMeta.setAttribute("content", isDark ? "#17191d" : "#fbfaf7");
       }
     };
 
@@ -223,14 +223,6 @@
         var handlePortraitPointerLeave = function () {
           stage.classList.remove("is-popped");
         };
-        var handlePortraitFocus = function () {
-          if (stage.matches(":focus-visible")) {
-            stage.classList.add("is-popped");
-          }
-        };
-        var handlePortraitBlur = function () {
-          stage.classList.remove("is-popped");
-        };
         var homepageTimeline = gsapApi.timeline({
           paused: true,
           defaults: {
@@ -369,8 +361,6 @@
         if (stage) {
           stage.addEventListener("pointerenter", handlePortraitPointerEnter);
           stage.addEventListener("pointerleave", handlePortraitPointerLeave);
-          stage.addEventListener("focus", handlePortraitFocus);
-          stage.addEventListener("blur", handlePortraitBlur);
         }
         document.addEventListener("visibilitychange", handleDocumentVisibility);
         syncHomepageMotion();
@@ -387,8 +377,6 @@
             stage.classList.remove("is-popped");
             stage.removeEventListener("pointerenter", handlePortraitPointerEnter);
             stage.removeEventListener("pointerleave", handlePortraitPointerLeave);
-            stage.removeEventListener("focus", handlePortraitFocus);
-            stage.removeEventListener("blur", handlePortraitBlur);
           }
           document.removeEventListener("visibilitychange", handleDocumentVisibility);
         };

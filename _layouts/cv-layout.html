@@ -15,16 +15,17 @@ layout: compress
 
   <body class="cv-layout">
     {% include browser-upgrade.html %}
+    <a class="screen-reader-shortcut" href="#main">跳到主要内容</a>
     {% include masthead.html %}
     <div class="scroll-progress" aria-hidden="true"><span></span></div>
 
-    <div id="main" class="cv-main" role="main">
+    <main id="main" class="cv-main" aria-label="{{ page.title | default: "CV" }}">
       {% include sidebar.html %}
 
-      <main class="cv-page" aria-label="{{ page.title | default: "CV" }}">
+      <div class="cv-page">
         {{ content }}
-      </main>
-    </div>
+      </div>
+    </main>
 
     <div class="page__footer">
       <footer>

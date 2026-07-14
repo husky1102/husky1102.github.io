@@ -83,7 +83,8 @@ test("I-42: homepage uses a character stage and differentiated information struc
   assert.match(home, /class="home-hero__stage"/);
   assert.equal((home.match(/avatar-gpt063\.webp/g) || []).length, 2);
   assert.match(home, /home-hero__portrait-window[\s\S]*?home-hero__character--inside[\s\S]*?home-hero__portrait-ring[\s\S]*?home-hero__portrait-front[\s\S]*?home-hero__character--front/);
-  assert.match(home, /home-hero__stage" role="img" tabindex="0" aria-label=/);
+  assert.match(home, /home-hero__stage" role="img" aria-label=/);
+  assert.doesNotMatch(home, /home-hero__stage"[^>]*tabindex=/);
   assert.equal((home.match(/class="home-hero__character[^>]*alt=""/g) || []).length, 2);
   assert.doesNotMatch(home, /home-hero__orbit/);
   assert.equal((home.match(/class="home-research-track"/g) || []).length, 3);
@@ -116,7 +117,7 @@ test("I-44: homepage profile labels name education stages and current city direc
   assert.match(custom, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.home-hero__character[\s\S]*?will-change:\s*auto/);
 });
 
-test("I-45: homepage portrait pops through its ring without desynchronizing layers", () => {
+test("I-45: homepage portrait responds to pointing without entering keyboard order", () => {
   const custom = read("_sass/custom.scss");
   const mainJs = read("assets/js/_main.js");
 
@@ -128,14 +129,14 @@ test("I-45: homepage portrait pops through its ring without desynchronizing laye
   assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__portrait-ring::before[\s\S]*?opacity:\s*0\.82/);
   assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__portrait-ring::after[\s\S]*?opacity:\s*1/);
   assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__stage-note[\s\S]*?opacity:\s*0/);
-  assert.match(custom, /\.home-hero__stage:focus-visible \.home-hero__portrait-ring/);
+  assert.doesNotMatch(custom, /\.home-hero__stage:focus-visible/);
   assert.match(custom, /@media \(hover: none\), \(pointer: coarse\)[\s\S]*?\.home-hero__stage:hover:not\(\.is-popped\) \.home-hero__character[\s\S]*?transform:\s*none/);
   assert.match(mainJs, /var portrait = homeHero\.querySelector\("\.home-hero__portrait"\)/);
   assert.match(mainJs, /event\.pointerType === "mouse" \|\| event\.pointerType === "pen"/);
-  assert.match(mainJs, /stage\.matches\(":focus-visible"\)[\s\S]*?stage\.classList\.add\("is-popped"\)/);
   assert.match(mainJs, /stage\.classList\.add\("is-popped"\)/);
   assert.match(mainJs, /stage\.addEventListener\("pointerenter", handlePortraitPointerEnter\)/);
   assert.match(mainJs, /stage\.removeEventListener\("pointerenter", handlePortraitPointerEnter\)/);
+  assert.doesNotMatch(mainJs, /handlePortraitFocus|handlePortraitBlur|addEventListener\("focus"/);
   assert.doesNotMatch(mainJs, /querySelector\("\.home-hero__character"\)/);
   assert.doesNotMatch(mainJs, /outerOrbit|innerOrbit|orbitElements/);
 });
@@ -175,12 +176,15 @@ test("I-42: mobile homepage controls expose at least 44px targets", () => {
   const custom = read("_sass/custom.scss");
   const navigation = read("_sass/layout/_navigation.scss");
   const sidebar = read("_sass/layout/_sidebar.scss");
+  const cv = read("assets/css/cv-style.css");
 
   assert.match(custom, /\.home-hero__actions \.btn \{[\s\S]*?min-height:\s*2\.75rem/);
   assert.match(navigation, /\.greedy-nav \{[\s\S]*?button \{[\s\S]*?height:\s*2\.75rem/);
   assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?width:\s*2\.75rem[\s\S]*?height:\s*2\.75rem/);
   assert.match(navigation, /#theme-toggle[\s\S]*?width:\s*2\.75rem[\s\S]*?height:\s*2\.75rem/);
   assert.match(sidebar, /\.author__urls-wrapper[\s\S]*?button \{[\s\S]*?min-height:\s*2\.75rem/);
+  assert.match(cv, /\.cv-header__links a \{[\s\S]*?min-height:\s*2\.75rem/);
+  assert.match(cv, /\.cv-publication-item__links a,[\s\S]*?min-height:\s*2\.75rem/);
 });
 
 test("I-43: bilingual CVs omit unsupported experience and wrap the full publications section", () => {
@@ -209,6 +213,7 @@ test("I-43: dark theme uses graphite surfaces and a restrained static ambient tr
   assert.match(dark, /--global-footer-bg-color\s*:\s*#22252a/);
   assert.match(dark, /--global-thead-color\s*:\s*#25292f/);
   assert.doesNotMatch(dark, /#0f172a|#111c31/);
+  assert.match(read("assets/js/_main.js"), /isDark \? "#17191d" : "#fbfaf7"/);
   assert.match(custom, /radial-gradient\(circle at 86% 4%, rgba\(246, 173, 99, 0\.04\)/);
   assert.match(custom, /html\[data-theme="dark"\] body \{[\s\S]*?background-repeat:\s*no-repeat/);
   assert.doesNotMatch(custom, /rgba\(196, 181, 253/);

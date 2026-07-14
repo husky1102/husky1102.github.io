@@ -40,11 +40,21 @@
       : getWidth(nav) - getWidth(btn) - 30;
   };
 
-  var setHiddenLinksOpen = function (isOpen) {
-    hiddenLinks.classList.toggle("hidden", !isOpen);
-    hiddenLinks.setAttribute("aria-hidden", isOpen ? "false" : "true");
-    btn.classList.toggle("close", isOpen);
-    btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  var setHiddenLinksOpen = function (isOpen, shouldReturnFocus) {
+    var hasHiddenLinks = hiddenLinks.children.length > 0;
+    var shouldOpen = Boolean(isOpen && hasHiddenLinks);
+
+    hiddenLinks.classList.toggle("hidden", !shouldOpen);
+    hiddenLinks.setAttribute("aria-hidden", shouldOpen ? "false" : "true");
+    hiddenLinks.toggleAttribute("inert", !shouldOpen);
+    btn.classList.toggle("close", shouldOpen);
+    btn.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+    btn.setAttribute("aria-label", shouldOpen ? "关闭导航菜单" : "打开导航菜单");
+    btn.setAttribute("title", shouldOpen ? "关闭导航菜单" : "打开导航菜单");
+
+    if (!shouldOpen && shouldReturnFocus) {
+      btn.focus();
+    }
   };
 
   var updatePageChromeOffsets = function () {
@@ -60,6 +70,7 @@
   };
 
   var updateNav = function () {
+    setHiddenLinksOpen(false, false);
     var availableSpace = getAvailableSpace();
 
     // The visible list is overflowing the nav.
@@ -110,7 +121,20 @@
   }
 
   btn.addEventListener("click", function () {
-    setHiddenLinksOpen(hiddenLinks.classList.contains("hidden"));
+    setHiddenLinksOpen(hiddenLinks.classList.contains("hidden"), false);
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && btn.getAttribute("aria-expanded") === "true") {
+      event.preventDefault();
+      setHiddenLinksOpen(false, true);
+    }
+  });
+
+  document.addEventListener("pointerdown", function (event) {
+    if (btn.getAttribute("aria-expanded") === "true" && !nav.contains(event.target)) {
+      setHiddenLinksOpen(false, false);
+    }
   });
 
   updateNav();

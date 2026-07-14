@@ -39,7 +39,7 @@
 .cv-header__links a {
   display: inline-flex;
   align-items: center;
-  min-height: 2.25rem;
+  min-height: 2.75rem;
   padding: 0.35rem 0.7rem;
   border: 1px solid var(--global-border-color);
   border-radius: 6px;
@@ -243,7 +243,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  min-height: 1.8rem;
+  min-height: 2.75rem;
   padding: 0.2rem 0.58rem;
   border: 1px solid color-mix(in srgb, var(--global-link-color) 42%, var(--global-border-color));
   border-radius: 999px;

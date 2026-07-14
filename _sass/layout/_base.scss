@@ -209,8 +209,8 @@ figure {
   img {
     width: 100%;
     border-radius: $border-radius;
-    -webkit-transition: $global-transition;
-    transition: $global-transition;
+    -webkit-transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+            transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
   }
 
   > a {
@@ -256,8 +256,8 @@ figcaption {
     color: inherit;
     text-decoration: none;
     border-bottom: 1px solid var(--global-border-color );
-    -webkit-transition: $global-transition;
-    transition: $global-transition;
+    -webkit-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+            transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
 
     &:hover {
       color: #000;
@@ -315,34 +315,6 @@ nav {
   li ol {
     margin-top: 0;
   }
-}
-
-/* ==========================================================================
-   ANIMATIONS
-   ========================================================================== */
-
-   @-webkit-keyframes intro {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-  
-  @keyframes intro {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-/* Global animation transition */
-b, i, strong, em, blockquote, p, q, span, figure, img, h1, h2, header, input, a, tr, td, form button, input[type="submit"], .btn, .highlight, .archive__item-teaser {
-  -webkit-transition: $global-transition;
-  transition: $global-transition;
 }
 
 /* ==========================================================================

@@ -1,5 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const zlib = require("node:zlib");
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
@@ -9,6 +10,8 @@ const publicFont = path.join(root, "assets", "fonts", "LXGWWenKaiGBScreen-subset
 const fontLicense = path.join(root, "assets", "fonts", "LXGWWenKai-OFL.txt");
 const sourceAvatar = path.join(root, "scripts", "assets", "images", "avatar-gpt063-source.png");
 const avatar = path.join(root, "images", "avatar-gpt063.webp");
+const mainScript = path.join(root, "assets", "js", "main.min.js");
+const homeMotionScript = path.join(root, "assets", "js", "home-motion.min.js");
 
 test("the full Chinese font stays source-only and the public subset stays within budget", () => {
   assert.ok(fs.existsSync(sourceFont), "Keep the full font under scripts/assets/fonts for reproducible subsetting.");
@@ -27,6 +30,18 @@ test("the LXGW font license ships with the source and generated site", () => {
     fs.existsSync(path.join(root, "_site", "assets", "fonts", "LXGWWenKai-OFL.txt")),
     "The generated site must publish the LXGW license beside the font."
   );
+});
+
+test("shared and homepage JavaScript stay within separate delivery budgets", () => {
+  assert.ok(fs.existsSync(mainScript), "Generate the shared JavaScript bundle before testing.");
+  assert.ok(fs.existsSync(homeMotionScript), "Generate the homepage motion bundle before testing.");
+
+  const mainBytes = fs.readFileSync(mainScript);
+  const homeMotionBytes = fs.readFileSync(homeMotionScript);
+  assert.ok(mainBytes.length <= 128 * 1024, "The shared JavaScript bundle must stay at or below 128 KiB.");
+  assert.ok(homeMotionBytes.length <= 128 * 1024, "The homepage motion bundle must stay at or below 128 KiB.");
+  assert.ok(zlib.gzipSync(mainBytes).length <= 48 * 1024, "The shared bundle must stay at or below 48 KiB gzip.");
+  assert.ok(zlib.gzipSync(homeMotionBytes).length <= 52 * 1024, "The homepage motion bundle must stay at or below 52 KiB gzip.");
 });
 
 test("the configured sidebar avatar is a compact WebP asset", () => {

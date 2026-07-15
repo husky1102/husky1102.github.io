@@ -36,8 +36,10 @@
     "uglify-js": "^3.17.4"
   },
   "scripts": {
-    "uglify": "uglifyjs node_modules/jquery/dist/jquery.min.js node_modules/fitvids/dist/fitvids.min.js node_modules/magnific-popup/dist/jquery.magnific-popup.min.js node_modules/jquery-smooth-scroll/jquery.smooth-scroll.min.js node_modules/gsap/dist/gsap.min.js node_modules/gsap/dist/ScrollTrigger.min.js assets/js/plugins/jquery.greedy-navigation.js assets/js/_main.js -c -m -o assets/js/main.min.js",
-    "watch:js": "onchange \"assets/js/**/*.js\" -e \"assets/js/main.min.js\" -- npm run build:js",
+    "uglify:main": "uglifyjs node_modules/jquery/dist/jquery.min.js node_modules/fitvids/dist/fitvids.min.js node_modules/magnific-popup/dist/jquery.magnific-popup.min.js node_modules/jquery-smooth-scroll/jquery.smooth-scroll.min.js assets/js/plugins/jquery.greedy-navigation.js assets/js/_main.js -c -m -o assets/js/main.min.js",
+    "uglify:home-motion": "uglifyjs node_modules/gsap/dist/gsap.min.js node_modules/gsap/dist/ScrollTrigger.min.js assets/js/_home-motion.js -c -m -o assets/js/home-motion.min.js",
+    "uglify": "npm run uglify:main && npm run uglify:home-motion",
+    "watch:js": "onchange \"assets/js/**/*.js\" -e \"assets/js/main.min.js\" -e \"assets/js/home-motion.min.js\" -- npm run build:js",
     "build:js": "npm run uglify",
     "build:font": "python3 scripts/subset_site_font.py",
     "check:font": "python3 scripts/subset_site_font.py --check-generated",

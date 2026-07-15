@@ -120,7 +120,7 @@ test("I-44: homepage profile labels name education stages and current city direc
 
 test("I-45: homepage portrait responds to pointing without entering keyboard order", () => {
   const custom = read("_sass/custom.scss");
-  const mainJs = read("assets/js/_main.js");
+  const homeMotion = read("assets/js/_home-motion.js");
 
   assert.match(custom, /\.home-hero__stage:hover \.home-hero__character[\s\S]*?translate3d\(0, -6\.5%, 0\) scale\(1\.12\)/);
   assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__character/);
@@ -132,14 +132,14 @@ test("I-45: homepage portrait responds to pointing without entering keyboard ord
   assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__stage-note[\s\S]*?opacity:\s*0/);
   assert.doesNotMatch(custom, /\.home-hero__stage:focus-visible/);
   assert.match(custom, /@media \(hover: none\), \(pointer: coarse\)[\s\S]*?\.home-hero__stage:hover:not\(\.is-popped\) \.home-hero__character[\s\S]*?transform:\s*none/);
-  assert.match(mainJs, /var portrait = homeHero\.querySelector\("\.home-hero__portrait"\)/);
-  assert.match(mainJs, /event\.pointerType === "mouse" \|\| event\.pointerType === "pen"/);
-  assert.match(mainJs, /stage\.classList\.add\("is-popped"\)/);
-  assert.match(mainJs, /stage\.addEventListener\("pointerenter", handlePortraitPointerEnter\)/);
-  assert.match(mainJs, /stage\.removeEventListener\("pointerenter", handlePortraitPointerEnter\)/);
-  assert.doesNotMatch(mainJs, /handlePortraitFocus|handlePortraitBlur|addEventListener\("focus"/);
-  assert.doesNotMatch(mainJs, /querySelector\("\.home-hero__character"\)/);
-  assert.doesNotMatch(mainJs, /outerOrbit|innerOrbit|orbitElements/);
+  assert.match(homeMotion, /var portrait = homeHero\.querySelector\("\.home-hero__portrait"\)/);
+  assert.match(homeMotion, /event\.pointerType === "mouse" \|\| event\.pointerType === "pen"/);
+  assert.match(homeMotion, /stage\.classList\.add\("is-popped"\)/);
+  assert.match(homeMotion, /stage\.addEventListener\("pointerenter", handlePortraitPointerEnter\)/);
+  assert.match(homeMotion, /stage\.removeEventListener\("pointerenter", handlePortraitPointerEnter\)/);
+  assert.doesNotMatch(homeMotion, /handlePortraitFocus|handlePortraitBlur|addEventListener\("focus"/);
+  assert.doesNotMatch(homeMotion, /querySelector\("\.home-hero__character"\)/);
+  assert.doesNotMatch(homeMotion, /outerOrbit|innerOrbit|orbitElements/);
 });
 
 test("I-46: manual theme switching reveals from the toggle with an accessible fallback", () => {
@@ -269,36 +269,44 @@ test("I-38: local sidebar avatar uses a deploy-safe relative image URL", () => {
 test("I-39: GSAP runs a visible-baseline, lifecycle-aware homepage motion system", () => {
   const pkg = JSON.parse(read("package.json"));
   const mainJs = read("assets/js/_main.js");
+  const homeMotion = read("assets/js/_home-motion.js");
+  const scripts = read("_includes/scripts.html");
+  const home = read("_pages/home.md");
 
   assert.match(pkg.dependencies.gsap, /^\^3\./);
-  assert.match(
-    pkg.scripts.uglify,
-    /node_modules\/gsap\/dist\/gsap\.min\.js\s+node_modules\/gsap\/dist\/ScrollTrigger\.min\.js[\s\S]*assets\/js\/_main\.js/
-  );
-  assert.match(mainJs, /gsapApi\.registerPlugin\(scrollTriggerApi\)/);
-  assert.match(mainJs, /gsapApi\.matchMedia\(\)/);
-  assert.match(mainJs, /\(prefers-reduced-motion: no-preference\)/);
-  assert.match(mainJs, /var initHomepageMotion = function \(\)/);
-  assert.match(mainJs, /gsapApi\.timeline\(\{[\s\S]*?defaults:/);
-  assert.match(mainJs, /\.home-hero__stage/);
-  assert.match(mainJs, /\.home-hero__portrait/);
-  assert.match(mainJs, /\.home-hero__portrait-ring/);
-  assert.match(mainJs, /\.home-hero__lead-en/);
-  assert.match(mainJs, /opacity:\s*0\.72/);
-  assert.match(mainJs, /opacity:\s*0\.78/);
-  assert.match(mainJs, /opacity:\s*0\.82/);
-  assert.doesNotMatch(mainJs, /autoAlpha:\s*0/);
-  assert.match(mainJs, /repeat:\s*-1/);
-  assert.match(mainJs, /IntersectionObserver/);
-  assert.match(mainJs, /document\.hidden/);
-  assert.match(mainJs, /visibilitychange/);
-  assert.match(mainJs, /stageObserver\.disconnect\(\)/);
-  assert.doesNotMatch(mainJs, /scrollTriggerApi\.batch|\.archive__item--card|\.home-info-card/);
-  assert.match(mainJs, /id:\s*"site-scroll-progress"/);
-  assert.match(mainJs, /scaleX:\s*1/);
-  assert.equal((mainJs.match(/scrollTrigger:/g) || []).length, 1);
-  assert.match(mainJs, /if \(!useGsapScrollProgress\)[\s\S]*updateScrollProgressFallback\(scrollTop, scrollHeight\)/);
+  assert.doesNotMatch(pkg.scripts["uglify:main"], /gsap|ScrollTrigger|_home-motion/);
+  assert.match(pkg.scripts["uglify:home-motion"], /gsap\.min\.js[\s\S]*ScrollTrigger\.min\.js[\s\S]*_home-motion\.js/);
+  assert.match(home, /home_motion:\s*true/);
+  assert.match(scripts, /main\.min\.js[\s\S]*if page\.home_motion[\s\S]*home-motion\.min\.js/);
+  assert.doesNotMatch(mainJs, /window\.gsap|window\.ScrollTrigger|home-hero|scrollTrigger:/);
+  assert.doesNotMatch(mainJs, /setInterval/);
+  assert.match(mainJs, /footerResizeTimer[\s\S]*window\.clearTimeout\(footerResizeTimer\)[\s\S]*window\.setTimeout\([\s\S]*120/);
+  assert.match(mainJs, /root\.getAttribute\("data-scroll-progress-engine"\) !== "gsap"[\s\S]*updateScrollProgressFallback\(scrollTop, scrollHeight\)/);
   assert.equal((mainJs.match(/scrollProgress\.style\.width =/g) || []).length, 1);
+  assert.match(homeMotion, /gsapApi\.registerPlugin\(scrollTriggerApi\)/);
+  assert.match(homeMotion, /gsapApi\.matchMedia\(\)/);
+  assert.match(homeMotion, /\(prefers-reduced-motion: no-preference\)/);
+  assert.match(homeMotion, /data-home-motion", "static"/);
+  assert.match(homeMotion, /data-home-motion", "active"/);
+  assert.match(homeMotion, /var initHomepageMotion = function \(\)/);
+  assert.match(homeMotion, /gsapApi\.timeline\(\{[\s\S]*?defaults:/);
+  assert.match(homeMotion, /\.home-hero__stage/);
+  assert.match(homeMotion, /\.home-hero__portrait/);
+  assert.match(homeMotion, /\.home-hero__portrait-ring/);
+  assert.match(homeMotion, /\.home-hero__lead-en/);
+  assert.match(homeMotion, /opacity:\s*0\.72/);
+  assert.match(homeMotion, /opacity:\s*0\.78/);
+  assert.match(homeMotion, /opacity:\s*0\.82/);
+  assert.doesNotMatch(homeMotion, /autoAlpha:\s*0/);
+  assert.match(homeMotion, /repeat:\s*-1/);
+  assert.match(homeMotion, /IntersectionObserver/);
+  assert.match(homeMotion, /document\.hidden/);
+  assert.match(homeMotion, /visibilitychange/);
+  assert.match(homeMotion, /stageObserver\.disconnect\(\)/);
+  assert.doesNotMatch(homeMotion, /scrollTriggerApi\.batch|\.archive__item--card|\.home-info-card/);
+  assert.match(homeMotion, /id:\s*"site-scroll-progress"/);
+  assert.match(homeMotion, /scaleX:\s*1/);
+  assert.equal((homeMotion.match(/scrollTrigger:/g) || []).length, 1);
 });
 
 test("I-41: dark ambient rendering is static and has no continuous card loops", () => {
@@ -315,10 +323,13 @@ test("I-41: dark ambient rendering is static and has no continuous card loops", 
 
 test("I-41: JavaScript performs no ambient pointer-driven rendering", () => {
   const mainJs = read("assets/js/_main.js");
+  const homeMotion = read("assets/js/_home-motion.js");
 
-  assert.doesNotMatch(mainJs, /initDarkAmbientMotion|ambientMedia|--dark-ambient-/);
-  assert.doesNotMatch(mainJs, /quickSetter|quickTo/);
-  assert.doesNotMatch(mainJs, /pointermove|mousemove/);
+  for (const source of [mainJs, homeMotion]) {
+    assert.doesNotMatch(source, /initDarkAmbientMotion|ambientMedia|--dark-ambient-/);
+    assert.doesNotMatch(source, /quickSetter|quickTo/);
+    assert.doesNotMatch(source, /pointermove|mousemove/);
+  }
 });
 
 test("I-40: blog route uses one direct destination and the footer stays concise", () => {

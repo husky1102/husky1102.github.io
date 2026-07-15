@@ -53,6 +53,22 @@ test("Node builds use the committed lockfile and the supported runtime", () => {
   assert.doesNotMatch(gitignore, /^package-lock\.json$/m);
 });
 
+test("JavaScript builds keep shared and homepage motion bundles reproducible", () => {
+  const packageJson = JSON.parse(read("package.json"));
+  const mainBuild = packageJson.scripts["uglify:main"];
+  const homeMotionBuild = packageJson.scripts["uglify:home-motion"];
+
+  assert.match(mainBuild, /assets\/js\/_main\.js[\s\S]*assets\/js\/main\.min\.js/);
+  assert.doesNotMatch(mainBuild, /gsap|ScrollTrigger|_home-motion/);
+  assert.match(
+    homeMotionBuild,
+    /node_modules\/gsap\/dist\/gsap\.min\.js\s+node_modules\/gsap\/dist\/ScrollTrigger\.min\.js\s+assets\/js\/_home-motion\.js[\s\S]*assets\/js\/home-motion\.min\.js/
+  );
+  assert.equal(packageJson.scripts.uglify, "npm run uglify:main && npm run uglify:home-motion");
+  assert.equal(packageJson.scripts["build:js"], "npm run uglify");
+  assert.match(packageJson.scripts["watch:js"], /-e \"assets\/js\/main\.min\.js\" -e \"assets\/js\/home-motion\.min\.js\"/);
+});
+
 test("npm metadata identifies this repository as a private site project", () => {
   const packageJson = JSON.parse(read("package.json"));
   const packageLock = JSON.parse(read("package-lock.json"));
@@ -117,7 +133,9 @@ test("builds regenerate font subsets before verification and publication", () =>
     assert.ok(jekyllIndex > fontCheckIndex, "Jekyll must publish the freshly generated font.");
 
     const buildIndex = workflow.indexOf("run: npm run build:js");
-    const diffIndex = workflow.indexOf("run: git diff --exit-code -- assets/js/main.min.js");
+    const diffIndex = workflow.indexOf(
+      "run: git diff --exit-code -- assets/js/main.min.js assets/js/home-motion.min.js"
+    );
     assert.notEqual(buildIndex, -1, "Missing JavaScript build step.");
     assert.ok(diffIndex > buildIndex, "Generated JavaScript must be checked after rebuilding it.");
   }

@@ -172,6 +172,7 @@ exclude:
   - .sass-cache
   - .agents
   - .cowork
+  - assets/js/_home-motion.js
   - assets/js/_main.js
   - assets/js/plugins
   - assets/js/vendor

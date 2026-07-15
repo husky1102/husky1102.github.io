@@ -30,7 +30,7 @@ jobs:
         run: npm run build:js
 
       - name: Verify generated JavaScript
-        run: git diff --exit-code -- assets/js/main.min.js
+        run: git diff --exit-code -- assets/js/main.min.js assets/js/home-motion.min.js
 
       - name: Set up Python
         uses: actions/setup-python@v5

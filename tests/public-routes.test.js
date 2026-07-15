@@ -111,6 +111,17 @@ test("primary pages expose non-empty description and Open Graph description meta
   }
 });
 
+test("homepage motion assets load only on the homepage", () => {
+  assertBuiltSite();
+
+  const home = readGenerated("index.html");
+  const about = readGenerated("about/index.html");
+  assert.match(home, /assets\/js\/main\.min\.js[\s\S]*assets\/js\/home-motion\.min\.js/);
+  assert.doesNotMatch(about, /assets\/js\/home-motion\.min\.js/);
+  assert.ok(existsInSite("assets/js/home-motion.min.js"));
+  assert.ok(!existsInSite("assets/js/_home-motion.js"));
+});
+
 test("HTML sitemap lists only titled, user-facing content pages", () => {
   assertBuiltSite();
 

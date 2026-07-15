@@ -4,6 +4,7 @@ title: "Husky1102"
 permalink: /
 author_profile: false
 hide_title: true
+home_motion: true
 ---
 
 {% include base_path %}

@@ -1,8 +1,9 @@
 ---
 layout: cv-layout
 title: "CV"
+description: "Husky's education, research interests, and public profile links."
 permalink: /cv/
-author_profile: true
+author_profile: false
 redirect_from:
   - /resume
 ---
@@ -13,12 +14,14 @@ redirect_from:
   <header class="cv-header">
     <div class="cv-header__text">
       <h1 id="cv-title">Husky</h1>
-      <p class="cv-header__summary">M.S. student in Artificial Intelligence at Xi'an Jiaotong University, with interests in Embodied AI, Agent Memory, and anything interesting enough.</p>
+      <p class="cv-header__summary">M.S. student in Artificial Intelligence at Xi'an Jiaotong University, focusing on Embodied AI, Agent Memory, and Continual Learning.</p>
     </div>
     <nav class="cv-header__links" aria-label="CV links">
+      <a href="{{ base_path }}/about/">About</a>
       <a href="{{ base_path }}/cv_zh/">中文简历</a>
-      <a href="https://www.husky1102.top/">Blog</a>
       <a href="https://github.com/husky1102">GitHub</a>
+      <a href="https://kaggle.com/husky1102">Kaggle</a>
+      <a href="https://www.husky1102.top/">Blog</a>
     </nav>
   </header>
 
@@ -42,10 +45,10 @@ redirect_from:
 
   <section class="cv-section" aria-labelledby="interests">
     <h2 id="interests">Research Interests</h2>
-    <ul class="cv-tag-list">
-      <li>Embodied AI</li>
-      <li>Agent Memory</li>
-      <li>Anything Interesting</li>
+    <ul class="cv-interest-list">
+      <li><h3>Embodied AI</h3><p>How agents perceive, act, and reason in environments.</p></li>
+      <li><h3>Agent Memory</h3><p>How agents retain, retrieve, and use context across interactions.</p></li>
+      <li><h3>Continual Learning</h3><p>How agents learn from new experience while preserving useful capabilities.</p></li>
     </ul>
   </section>
 

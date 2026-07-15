@@ -75,8 +75,14 @@
 }
 
 .page__footer-copyright {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1rem;
+  color: var(--global-text-color-light);
   font-family: $global-font-family;
   font-size: $type-size-7;
+  text-align: center;
 }
 
 .page__footer-follow {
@@ -111,14 +117,14 @@
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    min-height: 2.35rem;
+    min-height: 2.75rem;
     padding: 0.35rem 0.6rem;
     border-radius: 999px;
     font-weight: bold;
 
     &:hover {
       background: color-mix(in srgb, var(--global-link-color) 10%, transparent);
-      transform: scale(1.08);
+      transform: translateY(-1px);
     }
   }
 

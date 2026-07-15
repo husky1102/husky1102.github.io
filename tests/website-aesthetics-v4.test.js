@@ -63,12 +63,13 @@ test("I-35: archive cards stay quiet while homepage research uses open tracks", 
   assert.match(custom, /\.home-research-track \{[\s\S]*?border-top:\s*1px solid var\(--global-border-color\)/);
 });
 
-test("I-42: homepage keeps unTitled while reserving identity for the main stage", () => {
+test("I-42: site navigation names Husky while the homepage keeps the full identity", () => {
   const config = read("_config.yml");
   const home = read("_pages/home.md");
   const archive = read("_layouts/archive.html");
 
-  assert.match(config, /title\s*:\s*"unTitled"/);
+  assert.match(config, /title\s*:\s*"Husky"/);
+  assert.match(config, /description\s*:\s*&description "西安交通大学人工智能硕士生，关注具身智能、智能体记忆与持续学习。"/);
   assert.match(home, /title:\s*"Husky1102"/);
   assert.match(home, /hide_title:\s*true/);
   assert.match(home, /author_profile:\s*false/);
@@ -180,7 +181,6 @@ test("I-42: mobile homepage controls expose at least 44px targets", () => {
 
   assert.match(custom, /\.home-hero__actions \.btn \{[\s\S]*?min-height:\s*2\.75rem/);
   assert.match(navigation, /\.greedy-nav \{[\s\S]*?button \{[\s\S]*?height:\s*2\.75rem/);
-  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?width:\s*2\.75rem[\s\S]*?height:\s*2\.75rem/);
   assert.match(navigation, /#theme-toggle[\s\S]*?width:\s*2\.75rem[\s\S]*?height:\s*2\.75rem/);
   assert.match(sidebar, /\.author__urls-wrapper[\s\S]*?button \{[\s\S]*?min-height:\s*2\.75rem/);
   assert.match(cv, /\.cv-header__links a \{[\s\S]*?min-height:\s*2\.75rem/);
@@ -309,7 +309,7 @@ test("I-41: dark ambient rendering is static and has no continuous card loops", 
     /html\[data-theme="dark"\] body \{[\s\S]*?radial-gradient\(circle at 50% 8%, rgba\(103, 232, 249, 0\.055\)/
   );
   assert.doesNotMatch(custom, /--dark-ambient-|background-attachment/);
-  assert.doesNotMatch(custom, /darkAmbientCardBreath|\.archive__item--card::before|\.about-entry-card::before/);
+  assert.doesNotMatch(custom, /darkAmbientCardBreath|\.archive__item--card::before/);
   assert.doesNotMatch(custom, /animation:[^;]*infinite/);
 });
 
@@ -321,32 +321,39 @@ test("I-41: JavaScript performs no ambient pointer-driven rendering", () => {
   assert.doesNotMatch(mainJs, /pointermove|mousemove/);
 });
 
-test("I-40: blog iframe and footer links use the hardened public-site defaults", () => {
+test("I-40: blog route uses one direct destination and the footer stays concise", () => {
   const blogEmbed = read("_pages/blog_embed.md");
   const footer = read("_includes/footer.html");
   const contributing = read("CONTRIBUTING.md");
 
-  assert.match(blogEmbed, /class="blog-embed-iframe"[^>]*referrerpolicy="no-referrer"/);
-  assert.match(blogEmbed, /class="blog-embed-iframe"[^>]*sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads"/);
-  assert.match(blogEmbed, /var markLoaded = function \(\)/);
-  assert.doesNotMatch(blogEmbed, /iframe\.srcdoc/);
-  assert.doesNotMatch(blogEmbed, /fetch\(sourceUrl/);
-  assert.doesNotMatch(blogEmbed, /allow-same-origin/);
-  assert.match(blogEmbed, /new MutationObserver\(syncBlogTheme\)/);
-  assert.match(blogEmbed, /data-theme-bridge="pending"/);
-  assert.match(blogEmbed, /site\.blog_embed_url \| default: page\.embed_url/);
-  assert.match(blogEmbed, /url\.searchParams\.set\("theme", getTheme\(\)\)/);
-  assert.match(blogEmbed, /iframe\.contentWindow\.postMessage\(\{/);
-  assert.match(blogEmbed, /type: themeBridgeTypes\.set/);
-  assert.match(blogEmbed, /event\.source !== iframe\.contentWindow/);
-  assert.match(blogEmbed, /iframe\.dataset\.themeBridge = "connected"/);
-  assert.match(blogEmbed, /themeToggleButton\.click\(\)/);
-  assert.doesNotMatch(blogEmbed, /filter:\s*invert/);
+  assert.match(blogEmbed, /class="blog-entry__destination" href="https:\/\/www\.husky1102\.top\/" target="_blank" rel="noopener noreferrer"/);
+  assert.match(blogEmbed, /前往阅读/);
+  assert.doesNotMatch(blogEmbed, /<iframe|blog-embed-iframe|postMessage|MutationObserver|themeBridge|<script>/);
   assert.match(footer, /href="https:\/\/github\.com\/\{\{ site\.author\.github \}\}"/);
-  assert.match(footer, /href="https:\/\/bitbucket\.org\/\{\{ site\.author\.bitbucket \}\}"/);
-  assert.match(footer, /href="https:\/\/jekyllrb\.com"/);
-  assert.doesNotMatch(footer, /href="http:\/\/(github\.com|bitbucket\.org|jekyllrb\.com)/);
+  assert.match(footer, /订阅更新/);
+  assert.match(footer, /href="\{\{ base_path \}\}\/terms\/"/);
+  assert.doesNotMatch(footer, /Jekyll|AcademicPages|Minimal Mistakes|Bitbucket|Powered by|技术支持/);
   assert.match(contributing, /Ruby dependencies are locked in `Gemfile\.lock`/);
   assert.match(contributing, /lockfile is maintained with Bundler 2\.4\.22/);
   assert.match(contributing, /bundle _2\.4\.22_ update/);
+});
+
+test("I-47: About and CV present verified identity without duplicate sidebars", () => {
+  const about = read("_pages/about.md");
+  const cv = read("_pages/cv.md");
+  const cvZh = read("_pages/cv_zh.md");
+  const cvLayout = read("_layouts/cv-layout.html");
+
+  assert.match(about, /author_profile:\s*false/);
+  assert.match(about, /西安交通大学[\s\S]*湖南大学[\s\S]*具身智能[\s\S]*智能体记忆[\s\S]*持续学习/);
+  assert.match(about, /https:\/\/kaggle\.com\/husky1102/);
+  assert.match(about, /关于本站[\s\S]*Jekyll[\s\S]*AcademicPages[\s\S]*Minimal Mistakes/);
+  assert.doesNotMatch(about, /这是一个个人主页|其实也没什么好看的|这个人很懒/);
+  assert.match(read("_sass/custom.scss"), /\.page__content \.about-profile__lead \{[\s\S]*?font-size:\s*clamp\(1\.3rem/);
+  assert.match(read("_sass/custom.scss"), /\.about-profile p:not\(\.about-profile__lead\),[\s\S]*?font-family:\s*"LXGW WenKai Screen"/);
+  assert.match(cv, /author_profile:\s*false/);
+  assert.match(cvZh, /author_profile:\s*false/);
+  assert.match(cv, /Embodied AI[\s\S]*Agent Memory[\s\S]*Continual Learning/);
+  assert.match(cvZh, /具身智能[\s\S]*智能体记忆[\s\S]*持续学习/);
+  assert.doesNotMatch(cvLayout, /include sidebar/);
 });

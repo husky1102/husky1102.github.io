@@ -1,23 +1,12 @@
 /* CV page layout */
 .cv-layout .cv-main {
-  max-width: 1280px;
+  max-width: 980px;
 }
 
 .cv-page {
   width: 100%;
+  max-width: 56rem;
+  margin-right: auto;
+  margin-left: auto;
   margin-bottom: 2rem;
-}
-
-@media screen and (min-width: 64em) {
-  .cv-page {
-    float: right;
-    width: calc(100% - 230px);
-    padding-left: 2rem;
-  }
-}
-
-@media screen and (min-width: 80em) {
-  .cv-page {
-    width: calc(100% - 260px);
-  }
 }

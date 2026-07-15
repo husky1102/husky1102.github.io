@@ -246,36 +246,6 @@
       }
     }
 
-    .masthead__menu-item--action {
-      a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.75rem;
-        height: 2.75rem;
-        margin: 0 0.35rem;
-        padding: 0;
-        border-radius: 6px;
-        line-height: 1;
-        text-decoration: none;
-
-        &:hover {
-          color: var(--global-masthead-link-color-hover);
-        }
-
-        &:focus {
-          outline: none;
-        }
-      }
-
-      i {
-        display: block;
-        width: 1em;
-        line-height: 1;
-        text-align: center;
-      }
-    }
-
     #theme-toggle {
       button {
         /* This is a real <button> for accessibility, but it must NOT inherit the

@@ -136,13 +136,33 @@ test("HTML sitemap lists only titled, user-facing content pages", () => {
   );
 });
 
-test("generated non-home sidebar links disclosure has an accessible control relationship", () => {
+test("primary identity pages avoid duplicate author sidebars", () => {
   assertBuiltSite();
 
   const about = readGenerated("about/index.html");
-  assert.match(
-    about,
-    /<button id="author-links-toggle" type="button"[^>]*aria-controls="author-links"[^>]*aria-expanded="false"[^>]*aria-label="显示个人资料与链接"/
-  );
-  assert.match(about, /<ul id="author-links" class="author__urls social-icons">/);
+  const cv = readGenerated("cv/index.html");
+  const cvZh = readGenerated("cv_zh/index.html");
+
+  for (const page of [about, cv, cvZh]) {
+    assert.doesNotMatch(page, /class="author__profile"/);
+    assert.doesNotMatch(page, /id="author-links-toggle"/);
+  }
+});
+
+test("generated identity and blog pages expose the intended public content", () => {
+  assertBuiltSite();
+
+  const home = readGenerated("index.html");
+  const about = readGenerated("about/index.html");
+  const cv = readGenerated("cv/index.html");
+  const cvZh = readGenerated("cv_zh/index.html");
+  const blog = readGenerated("blog_embed/index.html");
+
+  assert.match(home, /<meta property="og:site_name" content="Husky">/);
+  assert.match(about, /西安交通大学[\s\S]*湖南大学[\s\S]*持续学习/);
+  assert.match(cv, /Embodied AI[\s\S]*Agent Memory[\s\S]*Continual Learning/);
+  assert.match(cvZh, /具身智能[\s\S]*智能体记忆[\s\S]*持续学习/);
+  assert.match(blog, /href="https:\/\/www\.husky1102\.top\/" target="_blank" rel="noopener noreferrer"/);
+  assert.doesNotMatch(blog, /<iframe|postMessage|themeBridge/);
+  assert.doesNotMatch(blog, /Jekyll[\s\S]*AcademicPages[\s\S]*Minimal Mistakes/);
 });

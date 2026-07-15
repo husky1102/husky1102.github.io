@@ -6,13 +6,16 @@ const assert = require("node:assert/strict");
 const root = path.resolve(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 
-test("CV timeline items expose linked hover affordances", () => {
+test("CV timeline stays visually static when entries are not interactive", () => {
   const css = read("assets/css/cv-style.css");
 
-  assert.match(css, /\.cv-section--timeline \.cv-item::after[\s\S]*transition:/);
-  assert.match(css, /\.cv-section--timeline \.cv-item:hover::after[\s\S]*scale\(1\.28\)/);
-  assert.match(css, /\.cv-section--timeline \.cv-item:hover::after[\s\S]*box-shadow:[\s\S]*var\(--global-link-color\)/);
-  assert.match(css, /\.cv-section--timeline \.cv-item:hover \.cv-item__main[\s\S]*translateX\(3px\)/);
+  assert.match(css, /\.cv-section--timeline \.cv-item::after[\s\S]*box-shadow:/);
+  assert.doesNotMatch(css, /\.cv-section--timeline \.cv-item:(?:hover|focus-within)/);
+  assert.doesNotMatch(css, /\.cv-item:hover|\.cv-item:focus-within/);
+  assert.match(css, /\.cv-document \{[\s\S]*?font-family:\s*"LXGW WenKai Screen"/);
+  assert.match(css, /\.cv-header__links a \{[\s\S]*?font-family:\s*"Maple Mono NF CN"/);
+  assert.match(css, /\.cv-interest-list li \{[\s\S]*?border-bottom:/);
+  assert.match(css, /\.cv-interest-list p \{[\s\S]*?line-height:\s*1\.65/);
 });
 
 test("Greedy navigation overflow menu uses rounded glass motion", () => {
@@ -76,18 +79,17 @@ test("Theme toggle stays visible and independent from greedy overflow menu", () 
   assert.match(mainJs, /切换到浅色模式/);
 });
 
-test("Masthead action icons use an accessible square focus target", () => {
+test("Masthead keeps the theme action accessible without page-specific duplicates", () => {
   const navigation = read("_sass/layout/_navigation.scss");
+  const masthead = read("_includes/masthead.html");
   const blogEmbed = read("_pages/blog_embed.md");
 
-  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?display:\s*inline-flex/);
-  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?width:\s*2\.75rem/);
-  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?height:\s*2\.75rem/);
-  assert.match(navigation, /\.masthead__menu-item--action[\s\S]*?&:focus[\s\S]*?outline:\s*none/);
   assert.match(navigation, /a,\s*\n\s*\.theme-toggle__btn\s*\{[\s\S]*?&:before/);
   assert.match(navigation, /&:hover,\s*\n\s*&:focus-visible\s*\{[\s\S]*?color:\s*var\(--global-masthead-link-color-hover\)/);
   assert.match(navigation, /&:hover:before,\s*\n\s*&:focus-visible:before\s*\{[\s\S]*?scaleX\(1\)/);
-  assert.match(blogEmbed, /embed_url:\s*"https:\/\/www\.husky1102\.top\/"/);
+  assert.doesNotMatch(navigation, /masthead__menu-item--action/);
+  assert.doesNotMatch(masthead, /page\.embed_url|masthead__menu-item--action/);
+  assert.doesNotMatch(blogEmbed, /embed_url|layout:\s*embed/);
 });
 
 test("jQuery stage 1 vanillaizes local navigation and chrome while keeping plugin calls", () => {

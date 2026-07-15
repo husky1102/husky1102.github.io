@@ -1,8 +1,9 @@
 ---
 layout: cv-layout
 title: "简历"
+description: "Husky 的教育经历、研究兴趣与公开个人资料入口。"
 permalink: /cv_zh/
-author_profile: true
+author_profile: false
 redirect_from:
   - /resume_zh
 ---
@@ -13,12 +14,14 @@ redirect_from:
   <header class="cv-header">
     <div class="cv-header__text">
       <h1 id="cv-title">克苏鲁微糖</h1>
-      <p class="cv-header__summary">西安交通大学人工智能硕士在读，关注具身智能、智能体记忆，以及任何足够有趣的东西。</p>
+      <p class="cv-header__summary">西安交通大学人工智能硕士在读，关注具身智能、智能体记忆与持续学习。</p>
     </div>
     <nav class="cv-header__links" aria-label="简历链接">
+      <a href="{{ base_path }}/about/">关于我</a>
       <a href="{{ base_path }}/cv/">English CV</a>
-      <a href="https://www.husky1102.top/">个人博客</a>
       <a href="https://github.com/husky1102">GitHub</a>
+      <a href="https://kaggle.com/husky1102">Kaggle</a>
+      <a href="https://www.husky1102.top/">个人博客</a>
     </nav>
   </header>
 
@@ -42,10 +45,10 @@ redirect_from:
 
   <section class="cv-section" aria-labelledby="interests">
     <h2 id="interests">研究兴趣</h2>
-    <ul class="cv-tag-list">
-      <li>具身智能</li>
-      <li>智能体记忆</li>
-      <li>任何有趣的东西</li>
+    <ul class="cv-interest-list">
+      <li><h3>具身智能</h3><p>关注智能体如何在环境中感知、行动与推理。</p></li>
+      <li><h3>智能体记忆</h3><p>关注智能体如何在长期交互中保留、检索和使用上下文。</p></li>
+      <li><h3>持续学习</h3><p>关注智能体如何从新经验中学习，同时保留已有的有效能力。</p></li>
     </ul>
   </section>
 

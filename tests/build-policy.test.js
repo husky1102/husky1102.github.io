@@ -53,6 +53,23 @@ test("Node builds use the committed lockfile and the supported runtime", () => {
   assert.doesNotMatch(gitignore, /^package-lock\.json$/m);
 });
 
+test("npm test runs the Node and Python suites through one canonical entrypoint", () => {
+  const pages = read(".github/workflows/pages.yml");
+  const siteCheck = read(".github/workflows/site-check.yml");
+  const packageJson = JSON.parse(read("package.json"));
+
+  assert.equal(packageJson.scripts["test:node"], "node --test tests/*.test.js");
+  assert.equal(
+    packageJson.scripts["test:python"],
+    "python3 -m unittest discover -s tests -p 'test_*.py' -v"
+  );
+  assert.equal(packageJson.scripts.test, "npm run test:node && npm run test:python");
+
+  for (const workflow of [pages, siteCheck]) {
+    assert.match(workflow, /run: npm test/);
+  }
+});
+
 test("JavaScript builds keep shared and homepage motion bundles reproducible", () => {
   const packageJson = JSON.parse(read("package.json"));
   const mainBuild = packageJson.scripts["uglify:main"];

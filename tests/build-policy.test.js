@@ -70,6 +70,22 @@ test("npm test runs the Node and Python suites through one canonical entrypoint"
   }
 });
 
+test("Dependabot checks every maintained dependency ecosystem each week", () => {
+  const dependabot = read(".github/dependabot.yml");
+
+  assert.match(dependabot, /^version: 2$/m);
+  for (const ecosystem of ["npm", "bundler", "github-actions"]) {
+    const start = dependabot.indexOf(`  - package-ecosystem: "${ecosystem}"`);
+    assert.notEqual(start, -1, `Missing ${ecosystem} Dependabot updates.`);
+    const next = dependabot.indexOf("\n  - package-ecosystem:", start + 1);
+    const block = dependabot.slice(start, next === -1 ? undefined : next);
+
+    assert.match(block, /\n    directory: "\/"\n/);
+    assert.match(block, /\n    schedule:\n      interval: "weekly"\n/);
+    assert.match(block, /\n      timezone: "Asia\/Shanghai"\n/);
+  }
+});
+
 test("JavaScript builds keep shared and homepage motion bundles reproducible", () => {
   const packageJson = JSON.parse(read("package.json"));
   const mainBuild = packageJson.scripts["uglify:main"];

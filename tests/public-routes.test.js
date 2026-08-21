@@ -171,7 +171,11 @@ test("generated identity and blog pages expose the intended public content", () 
 
   assert.match(home, /<meta property="og:site_name" content="Husky">/);
   assert.match(about, /西安交通大学[\s\S]*湖南大学[\s\S]*持续学习/);
+  assert.match(cv, /<html lang="en" class="no-js">/);
+  assert.match(cv, /<meta property="og:locale" content="en-US">/);
   assert.match(cv, /Embodied AI[\s\S]*Agent Memory[\s\S]*Continual Learning/);
+  assert.match(cvZh, /<html lang="zh" class="no-js">/);
+  assert.match(cvZh, /<meta property="og:locale" content="zh-CN">/);
   assert.match(cvZh, /具身智能[\s\S]*智能体记忆[\s\S]*持续学习/);
   assert.match(blog, /href="https:\/\/www\.husky1102\.top\/" target="_blank" rel="noopener noreferrer"/);
   assert.doesNotMatch(blog, /<iframe|postMessage|themeBridge/);

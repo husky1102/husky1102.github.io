@@ -179,6 +179,7 @@ exclude:
   - CHANGELOG
   - Capfile
   - CONTRIBUTING.md
+  - DESIGN.md
   - config
   - Dockerfile
   - Gemfile
@@ -191,6 +192,7 @@ exclude:
   - node_modules
   - package.json*
   - package-lock.json
+  - PRODUCT.md
   - requirements-assets.txt
   - Rakefile
   - README

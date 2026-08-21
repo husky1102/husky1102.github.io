@@ -205,7 +205,12 @@ test("I-48: mobile cold loads keep the portrait centered and surface actions soo
 test("I-43: bilingual CVs omit unsupported experience and wrap the full publications section", () => {
   const cv = read("_pages/cv.md");
   const cvZh = read("_pages/cv_zh.md");
+  const cvLayout = read("_layouts/cv-layout.html");
+  const seo = read("_includes/seo.html");
 
+  assert.match(cv, /lang:\s*en[\s\S]*locale:\s*en-US/);
+  assert.match(cvLayout, /page\.lang \| default: document_locale/);
+  assert.match(seo, /page\.locale \| default: site\.locale/);
   assert.doesNotMatch(cv, /Work Experience|No work experience yet|cv-item--empty/);
   assert.doesNotMatch(cvZh, /工作经历|暂无工作经历|cv-item--empty/);
   assert.match(

@@ -3,6 +3,8 @@ layout: cv-layout
 title: "CV"
 description: "Husky's education, research interests, and public profile links."
 permalink: /cv/
+lang: en
+locale: en-US
 author_profile: false
 redirect_from:
   - /resume

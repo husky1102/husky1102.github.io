@@ -38,6 +38,9 @@ test("publish boundary excludes source-only maintenance artifacts", () => {
     ".agents",
     ".cowork",
     "CONTRIBUTING.md",
+    "DESIGN",
+    "DESIGN.md",
+    "PRODUCT.md",
     "talkmap.ipynb",
     "talkmap_out.ipynb",
     "talkmap.py",
@@ -49,6 +52,10 @@ test("publish boundary excludes source-only maintenance artifacts", () => {
 
   const leakedPaths = forbiddenPaths.filter(existsInSite);
   assert.deepEqual(leakedPaths, [], `Unexpected public artifacts: ${leakedPaths.join(", ")}`);
+
+  const sitemap = fs.readFileSync(path.join(site, "sitemap.xml"), "utf8");
+  assert.doesNotMatch(sitemap, /\/DESIGN\//);
+  assert.doesNotMatch(sitemap, /PRODUCT\.md/);
 });
 
 test("publish boundary excludes notebooks and lockfile-style generated metadata", () => {

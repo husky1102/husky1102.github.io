@@ -187,6 +187,21 @@ test("I-42: mobile homepage controls expose at least 44px targets", () => {
   assert.match(cv, /\.cv-publication-item__links a,[\s\S]*?min-height:\s*2\.75rem/);
 });
 
+test("I-48: mobile cold loads keep the portrait centered and surface actions sooner", () => {
+  const custom = read("_sass/custom.scss");
+  const homeMotion = read("assets/js/_home-motion.js");
+  const portraitRule = custom.match(/\.home-hero__portrait \{[\s\S]*?\n\}/)[0];
+
+  assert.match(portraitRule, /right:\s*0/);
+  assert.match(portraitRule, /left:\s*0/);
+  assert.match(portraitRule, /margin-inline:\s*auto/);
+  assert.doesNotMatch(portraitRule, /translateX\(-50%\)/);
+  assert.doesNotMatch(homeMotion, /xPercent:\s*-50/);
+  assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__stage \{[\s\S]*?min-height:\s*clamp\(13\.5rem, 68vw, 17rem\)/);
+  assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__actions \{[\s\S]*?order:\s*1/);
+  assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__lead-en \{[\s\S]*?order:\s*2/);
+});
+
 test("I-43: bilingual CVs omit unsupported experience and wrap the full publications section", () => {
   const cv = read("_pages/cv.md");
   const cvZh = read("_pages/cv_zh.md");

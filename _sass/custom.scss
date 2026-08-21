@@ -325,12 +325,13 @@ html[data-theme="dark"] blockquote {
 .home-hero__portrait {
   position: absolute;
   bottom: 0;
-  left: 50%;
+  right: 0;
+  left: 0;
   z-index: 1;
   width: min(94%, 25rem);
+  margin-inline: auto;
   aspect-ratio: 1;
   filter: drop-shadow(0 14px 18px rgba(15, 23, 42, 0.14));
-  transform: translateX(-50%);
   transform-origin: 50% 82%;
   transition: filter 0.58s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
@@ -834,8 +835,53 @@ html[data-theme="dark"] .home-hero__stage.is-popped .home-hero__portrait {
 }
 
 @media (max-width: 30em) {
+  .home-hero {
+    gap: 0.85rem;
+    padding-top: 0.25rem;
+  }
+
+  .home-hero__stage {
+    min-height: clamp(13.5rem, 68vw, 17rem);
+  }
+
+  .home-hero__portrait {
+    width: min(86%, 17rem);
+  }
+
+  .home-hero__copy {
+    display: flex;
+    flex-direction: column;
+  }
+
   .home-hero__stage-note {
     display: none;
+  }
+
+  .home-hero__eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .home-hero h1 {
+    margin-bottom: 0.72rem;
+    font-size: clamp(2.45rem, 13vw, 3.15rem);
+  }
+
+  .home-hero__lead {
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.62;
+  }
+
+  .home-hero__actions {
+    order: 1;
+    margin-top: 0.9rem;
+  }
+
+  .home-hero__lead-en {
+    order: 2;
+    margin-top: 0.9rem;
+    font-size: 0.84rem;
+    line-height: 1.5;
   }
 }
 

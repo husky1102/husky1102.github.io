@@ -115,9 +115,8 @@
         if (portrait) {
           homepageTimeline.fromTo(
             portrait,
-            { xPercent: -50, yPercent: 9, scale: 0.955, rotation: -0.6, opacity: 0.82 },
+            { yPercent: 9, scale: 0.955, rotation: -0.6, opacity: 0.82 },
             {
-              xPercent: -50,
               yPercent: 3,
               scale: 1,
               rotation: 0,
@@ -151,7 +150,6 @@
 
         if (portrait) {
           ambientTweens.push(gsapApi.to(portrait, {
-            xPercent: -50,
             yPercent: 0.65,
             rotation: 0.28,
             duration: 3.4,

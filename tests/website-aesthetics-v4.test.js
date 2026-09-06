@@ -122,7 +122,7 @@ test("I-45: homepage portrait responds to pointing without entering keyboard ord
   const custom = read("_sass/custom.scss");
   const homeMotion = read("assets/js/_home-motion.js");
 
-  assert.match(custom, /\.home-hero__stage:hover \.home-hero__character[\s\S]*?translate3d\(0, -6\.5%, 0\) scale\(1\.12\)/);
+  assert.match(custom, /\.home-hero__stage:hover \.home-hero__character[\s\S]*?translate3d\(0, -3\.5%, 0\) scale\(1\.07\) rotate\(-0\.35deg\)/);
   assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__character/);
   assert.match(custom, /\.home-hero__stage:hover \.home-hero__portrait-ring[\s\S]*?transform:\s*scale\(0\.95\)/);
   assert.match(custom, /\.home-hero__portrait-ring::before[\s\S]*?conic-gradient[\s\S]*?opacity:\s*0/);

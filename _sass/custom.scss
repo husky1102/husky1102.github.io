@@ -270,7 +270,7 @@ html[data-theme="dark"] blockquote {
   gap: clamp(1.5rem, 5vw, 4.5rem);
   align-items: center;
   min-width: 0;
-  margin-bottom: clamp(3.5rem, 8vw, 6.5rem);
+  margin-bottom: clamp(3rem, 6vw, 4.75rem);
   padding: clamp(0.75rem, 3vw, 2rem) 0 clamp(2.25rem, 5vw, 4rem);
   border-bottom: 1px solid var(--global-border-color);
 }
@@ -457,7 +457,7 @@ html[data-theme="dark"] blockquote {
 
 .home-hero__stage:hover .home-hero__character,
 .home-hero__stage.is-popped .home-hero__character {
-  transform: translate3d(0, -6.5%, 0) scale(1.12);
+  transform: translate3d(0, -3.5%, 0) scale(1.07) rotate(-0.35deg);
 }
 
 .home-hero__stage:hover .home-hero__portrait,
@@ -536,7 +536,7 @@ html[data-theme="dark"] blockquote {
 
 .home-hero h1 {
   margin: 0 0 1rem;
-  font-size: clamp(2.65rem, calc(1.6rem + 7vw), 5.4rem);
+  font-size: clamp(2.55rem, calc(1.6rem + 6.4vw), 5.05rem);
   letter-spacing: -0.03em;
   line-height: 1.04;
   text-wrap: balance;
@@ -621,13 +621,13 @@ html[data-theme="dark"] blockquote {
 
 .home-section {
   min-width: 0;
-  margin: 0 0 clamp(3.5rem, 7vw, 6rem);
+  margin: 0 0 clamp(3rem, 6vw, 5rem);
 }
 
 .home-section__header {
   display: grid;
   gap: 0.5rem;
-  margin-bottom: clamp(1.5rem, 4vw, 2.75rem);
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
 }
 
 .home-section__header h2,
@@ -648,9 +648,22 @@ html[data-theme="dark"] blockquote {
 }
 
 .home-research-list {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0 1.5rem;
+}
+
+.home-research-list::before {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--global-link-color), var(--global-border-color) 72%, transparent);
+  opacity: 0.38;
+  pointer-events: none;
 }
 
 .home-research-track {
@@ -658,15 +671,22 @@ html[data-theme="dark"] blockquote {
   display: grid;
   gap: 0.55rem;
   min-width: 0;
-  padding: 1.15rem 0 1.55rem 1rem;
+  padding: 1.05rem 0 1.35rem 1.15rem;
   border-top: 1px solid var(--global-border-color);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
+}
+
+.home-research-track:hover,
+.home-research-track:focus-within {
+  transform: translateX(0.35rem);
+  border-color: color-mix(in srgb, var(--global-link-color) 42%, var(--global-border-color));
 }
 
 .home-research-track__signal {
   position: absolute;
   top: 1.35rem;
   left: 0;
-  width: 0.24rem;
+  width: 0.3rem;
   height: 1.15rem;
   border-radius: 999px;
   background: var(--global-link-color);

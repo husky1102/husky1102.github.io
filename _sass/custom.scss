@@ -894,7 +894,13 @@ html[data-theme="dark"] .home-hero__stage.is-popped .home-hero__portrait {
 
   .home-hero__actions {
     order: 1;
+    gap: 0.55rem;
     margin-top: 0.9rem;
+  }
+
+  .home-hero__actions .btn {
+    flex: 1 1 auto;
+    min-width: 9.25rem;
   }
 
   .home-hero__lead-en {
@@ -937,6 +943,20 @@ html[data-theme="dark"] .home-hero__stage.is-popped .home-hero__portrait {
 
   .home-section--split {
     grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  }
+}
+
+@media (max-width: 47.99em) {
+  .home-research-list {
+    gap: 0;
+  }
+
+  .home-research-list::before {
+    left: 0;
+  }
+
+  .home-research-track {
+    padding-right: 0.25rem;
   }
 }
 

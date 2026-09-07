@@ -23,6 +23,7 @@
     var requestedTheme = null;
     var activeThemeTransition = null;
     var themeToggleBounds = null;
+    var receivingBlogTheme = false;
     var storeTheme = function (theme) {
       try { localStorage.setItem("theme", theme); } catch (error) { /* Session-only preference. */ }
     };
@@ -55,8 +56,10 @@
 
       var themeColorMeta = document.querySelector('meta[name="theme-color"]');
       if (themeColorMeta) {
-        themeColorMeta.setAttribute("content", isDark ? "#17191d" : "#fbfaf7");
+        themeColorMeta.setAttribute("content", document.body.classList.contains("blog-layout")
+          ? (isDark ? "#181a1d" : "#fafaf3") : (isDark ? "#17191d" : "#fbfaf7"));
       }
+      if (!receivingBlogTheme) window.dispatchEvent(new CustomEvent("husky:theme-change", { detail: { theme: isDark ? "dark" : "light" } }));
     };
 
     setTheme();
@@ -88,7 +91,7 @@
       var currentTheme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
       var newTheme = requestedTheme;
       if (!newTheme || newTheme === currentTheme) { requestedTheme = null; return; }
-      var canAnimateTheme = themeToggleButton && !themeMotionMedia.matches &&
+      var canAnimateTheme = !document.body.classList.contains("blog-layout") && themeToggleButton && !themeMotionMedia.matches &&
         typeof document.startViewTransition === "function";
       var finishThemeSwitch = function () {
         root.classList.remove("is-theme-transitioning");
@@ -148,25 +151,18 @@
       if (event.matches && activeThemeTransition) { activeThemeTransition.skipTransition(); }
     });
 
-    // The iframe remains usable without JavaScript. Cross-origin load events
-    // cannot prove successful rendering, so the original-site link stays visible.
-    var blogFrame = document.getElementById("blog-frame");
-    if (blogFrame) {
-      var blogStatus = document.querySelector(".blog-reader__status");
-      blogStatus.hidden = false;
-      var blogLoadTimeout = window.setTimeout(function () {
-        blogStatus.textContent = "加载较慢，可使用上方入口在新标签页阅读。";
-      }, 12000);
-      blogFrame.addEventListener("load", function () {
-        window.clearTimeout(blogLoadTimeout);
-        blogStatus.hidden = true;
-      });
-      blogFrame.addEventListener("error", function () {
-        window.clearTimeout(blogLoadTimeout);
-        blogStatus.hidden = false;
-        blogStatus.textContent = "博客暂时无法载入，请使用上方入口继续阅读。";
-      });
-    }
+    if (window.huskyBlogEmbed) window.huskyBlogEmbed.start({
+      current: function () { return root.getAttribute("data-theme") === "dark" ? "dark" : "light"; },
+      receive: function (theme) {
+        if (theme !== "dark" && theme !== "light") return;
+        requestedTheme = null;
+        if (activeThemeTransition) activeThemeTransition.skipTransition();
+        receivingBlogTheme = true;
+        storeTheme(theme);
+        setThemeWithoutMotion(theme);
+        receivingBlogTheme = false;
+      }
+    });
 
     var scrollProgress = document.querySelector(".scroll-progress span");
     var backToTop = document.querySelector(".back-to-top");

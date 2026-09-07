@@ -305,7 +305,7 @@ test("Blog embeds the original site and keeps an external fallback", () => {
   const contributing = read("CONTRIBUTING.md");
 
   assert.match(read("_includes/masthead.html"), /href="https:\/\/www\.husky1102\.top\/" target="_blank" rel="noopener noreferrer"/);
-  assert.match(blogEmbed, /<iframe[^>]+title="Husky 的个人博客"/);
+  assert.match(blogEmbed, /<iframe[^>]+title="unTitled 博客"/);
   assert.doesNotMatch(blogEmbed, /postMessage|MutationObserver|themeBridge|<script>/);
   assert.match(footer, /href="https:\/\/github\.com\/\{\{ site\.author\.github \}\}"/);
   assert.match(footer, /订阅更新/);

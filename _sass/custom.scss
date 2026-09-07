@@ -1031,7 +1031,7 @@ html[data-theme="dark"] .back-to-top:focus-visible {
 }
 
 /* Match the digital garden's sidebar palette in the blog navigation.
-   Theme selection remains independent until the garden supports a bridge. */
+   The garden and its fallback navigation share these reading surfaces. */
 .blog-layout {
   --global-bg-color: #fafaf3;
   --blog-navigation-bg: #f0f2ec;
@@ -1333,3 +1333,10 @@ html[data-theme="dark"] .error-404__code {
   }
   .about-focus-list h3 { margin: 0; }
 }
+
+/* Only a validated, initialized reader can take over the full viewport. */
+.blog-layout.blog-embed-ready .masthead { display: none; }
+.blog-layout.blog-embed-ready { --masthead-height: 0px; }
+.blog-layout .blog-reader__window iframe { border: 0; }
+html:has(.blog-layout) { background: #fafaf3; }
+html[data-theme="dark"]:has(.blog-layout) { background: #181a1d; }

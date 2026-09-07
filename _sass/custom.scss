@@ -1030,7 +1030,53 @@ html[data-theme="dark"] .back-to-top:focus-visible {
   padding-top: 0.25rem;
 }
 
-.blog-layout { height: 100dvh; min-height: 0; overflow: hidden; }
+/* Match the digital garden's light/dark palette only inside its host page.
+   Theme selection remains independent until the garden supports a bridge. */
+.blog-layout {
+  --global-bg-color: #fafaf3;
+  --global-footer-bg-color: #eef6f0;
+  --global-border-color: #bbddcd;
+  --global-link-color: #2a7c79;
+  --global-link-color-hover: #1f6663;
+  --global-masthead-link-color: #37291a;
+  --global-masthead-link-color-hover: #2a7c79;
+  --global-text-color: #37291a;
+  --global-text-color-light: #586e66;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+html[data-theme="dark"] .blog-layout {
+  --global-bg-color: #181a1d;
+  --global-footer-bg-color: #27352f;
+  --global-border-color: #35453f;
+  --global-link-color: #8bc4bd;
+  --global-link-color-hover: #b2ded8;
+  --global-masthead-link-color: #eee8dc;
+  --global-masthead-link-color-hover: #8bc4bd;
+  --global-text-color: #eee8dc;
+  --global-text-color-light: #b8c3b8;
+}
+.blog-layout .masthead {
+  background: var(--global-bg-color);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  &::after { background: color-mix(in srgb, var(--global-border-color) 55%, transparent); }
+}
+.blog-layout .masthead .greedy-nav {
+  .hidden-links {
+    background: var(--global-bg-color);
+    border-color: var(--global-border-color);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+    &::before { border-bottom-color: var(--global-border-color); }
+    &::after { border-bottom-color: var(--global-bg-color); }
+  }
+  button:hover, button:focus-visible { box-shadow: none; }
+  #theme-toggle button { color: var(--global-text-color-light); }
+  #theme-toggle button:hover, #theme-toggle button:focus-visible { color: var(--global-link-color); }
+}
 .blog-layout .masthead__inner-wrap { padding-block: 0.25rem; }
 .blog-layout .page__footer, .blog-layout .back-to-top, .blog-layout .scroll-progress { display: none; }
 .blog-layout #main.blog-reader {

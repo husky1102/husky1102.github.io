@@ -8,10 +8,7 @@ blog_embed: true
 ---
 
 <main id="main" class="blog-reader" aria-labelledby="blog-reader-title">
-  <header class="blog-reader__toolbar">
-    <div><h1 id="blog-reader-title">个人博客</h1><span>学习、研究与生活的记录</span></div>
-    <a href="https://www.husky1102.top/" target="_blank" rel="noopener noreferrer">在新标签页打开 <span aria-hidden="true">↗</span></a>
-  </header>
+  <h1 id="blog-reader-title" class="visually-hidden">个人博客</h1>
   <div class="blog-reader__window">
     <p class="blog-reader__status" role="status" hidden>正在打开博客…</p>
     <iframe id="blog-frame" src="https://www.husky1102.top/" title="Husky 的个人博客" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>

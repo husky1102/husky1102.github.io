@@ -3,9 +3,21 @@
 <div class="masthead">
   <div class="masthead__inner-wrap">
     <div class="masthead__menu">
-      <nav id="site-nav" class="greedy-nav">
+      <nav id="site-nav" class="greedy-nav{% if page.blog_embed %} blog-reader__nav{% endif %}"{% if page.blog_embed %} aria-label="博客阅读导航"{% endif %}>
+        {% unless page.blog_embed %}
         <button type="button" class="greedy-nav__toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="site-nav-hidden-links"><div class="navicon"></div></button>
+        {% endunless %}
         <ul class="visible-links">
+          {% if page.blog_embed %}
+          <li class="blog-reader__return">
+            <a href="{{ base_path }}/"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 5-7 7 7 7M3 12h18"/></svg><span>返回主页</span></a>
+          </li>
+          <li class="blog-reader__open">
+            <a class="blog-reader__external" href="https://www.husky1102.top/" target="_blank" rel="noopener noreferrer" aria-label="在新标签页打开博客" title="在新标签页打开博客">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6m0-6L10 14M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>
+            </a>
+          </li>
+          {% else %}
           <li class="masthead__menu-item masthead__menu-item--lg persist"><a href="{{ base_path }}/">{{ site.title }}</a></li>
           {% for link in site.data.navigation.main %}
             {% if link.url contains 'http' %}
@@ -14,16 +26,10 @@
               {% assign domain = base_path %}
             {% endif %}
             <li class="masthead__menu-item{% if page.url == link.url %} persist masthead__menu-item--current{% endif %}">
-              {% if page.blog_embed and page.url == link.url %}<span class="masthead__blog-links">{% endif %}
               <a href="{{ domain }}{{ link.url }}"{% if page.url == link.url %} aria-current="page"{% endif %}>{{ link.title }}</a>
-              {% if page.blog_embed and page.url == link.url %}
-                <a class="blog-reader__external" href="https://www.husky1102.top/" target="_blank" rel="noopener noreferrer" aria-label="在新标签页打开博客" title="在新标签页打开博客">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6m0-6L10 14M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg>
-                </a>
-              </span>
-              {% endif %}
             </li>
           {% endfor %}
+          {% endif %}
           <li id="theme-toggle" class="masthead__menu-item persist tail">
             <button type="button" class="theme-toggle__btn" aria-label="切换到深色模式" title="切换到深色模式" aria-pressed="false">
               <svg id="theme-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
@@ -36,7 +42,7 @@
             </button>
           </li>
         </ul>
-        <ul id="site-nav-hidden-links" class="hidden-links hidden" aria-hidden="true" inert></ul>
+        {% unless page.blog_embed %}<ul id="site-nav-hidden-links" class="hidden-links hidden" aria-hidden="true" inert></ul>{% endunless %}
       </nav>
     </div>
   </div>

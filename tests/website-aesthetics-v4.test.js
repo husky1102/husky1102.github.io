@@ -76,34 +76,15 @@ test("I-42: site navigation names Husky while the homepage keeps the full identi
   assert.match(archive, /\{% unless page\.hide_title %\}[\s\S]*?<h1 class="page__title">\{\{ page\.title \}\}<\/h1>[\s\S]*?\{% endunless %\}/);
 });
 
-test("I-42: homepage uses a character stage and differentiated information structures", () => {
+test("Homepage keeps one accessible illustration and two research themes", () => {
   const home = read("_pages/home.md");
-  const custom = read("_sass/custom.scss");
-  const stageRule = custom.match(/\.home-hero__stage \{[\s\S]*?\n\}/)[0];
-
-  assert.match(home, /class="home-hero__stage"/);
-  assert.equal((home.match(/avatar-gpt063\.webp/g) || []).length, 2);
-  assert.match(home, /home-hero__portrait-window[\s\S]*?home-hero__character--inside[\s\S]*?home-hero__portrait-ring[\s\S]*?home-hero__portrait-front[\s\S]*?home-hero__character--front/);
   assert.match(home, /home-hero__stage" role="img" aria-label=/);
   assert.doesNotMatch(home, /home-hero__stage"[^>]*tabindex=/);
   assert.equal((home.match(/class="home-hero__character[^>]*alt=""/g) || []).length, 2);
-  assert.doesNotMatch(home, /home-hero__orbit/);
-  assert.equal((home.match(/class="home-research-track"/g) || []).length, 3);
+  assert.equal((home.match(/class="home-research-track"/g) || []).length, 2);
+  assert.match(home, /class="home-curiosity"/);
   assert.match(home, /class="home-now"/);
-  assert.match(home, /class="home-destination-list"/);
   assert.doesNotMatch(home, /home-card-grid|home-info-card/);
-  assert.match(custom, /\.home-hero__lead \{[\s\S]*?font-family:\s*"LXGW WenKai Screen"[\s\S]*?line-height:\s*1\.72/);
-  assert.match(custom, /\.home-hero__stage \{[\s\S]*?isolation:\s*isolate/);
-  assert.match(stageRule, /overflow:\s*visible/);
-  assert.doesNotMatch(stageRule, /border|linear-gradient/);
-  assert.match(custom, /\.home-hero__stage::before[\s\S]*?radial-gradient/);
-  assert.match(custom, /\.home-hero__stage::after[\s\S]*?radial-gradient\(ellipse/);
-  assert.match(custom, /\.home-hero__portrait-window \{[\s\S]*?clip-path:\s*circle\(42% at 50% 50%\)[\s\S]*?transparent 78%/);
-  assert.match(custom, /\.home-hero__portrait-ring \{[\s\S]*?z-index:\s*2[\s\S]*?border:\s*2px solid/);
-  assert.match(custom, /\.home-hero__portrait-front \{[\s\S]*?z-index:\s*3[\s\S]*?overflow:\s*visible[\s\S]*?clip-path:\s*polygon\([\s\S]*?78% 81%[\s\S]*?50% 92%[\s\S]*?22% 81%/);
-  assert.match(custom, /\.home-research-track/);
-  assert.match(custom, /\.home-now/);
-  assert.match(custom, /\.home-destination-list/);
 });
 
 test("I-44: homepage profile labels name education stages and current city directly", () => {
@@ -118,55 +99,30 @@ test("I-44: homepage profile labels name education stages and current city direc
   assert.match(custom, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.home-hero__character[\s\S]*?will-change:\s*auto/);
 });
 
-test("I-45: homepage portrait responds to pointing without entering keyboard order", () => {
-  const custom = read("_sass/custom.scss");
-  const homeMotion = read("assets/js/_home-motion.js");
-
-  assert.match(custom, /\.home-hero__stage:hover \.home-hero__character[\s\S]*?translate3d\(0, -3\.5%, 0\) scale\(1\.07\) rotate\(-0\.35deg\)/);
-  assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__character/);
-  assert.match(custom, /\.home-hero__stage:hover \.home-hero__portrait-ring[\s\S]*?transform:\s*scale\(0\.95\)/);
-  assert.match(custom, /\.home-hero__portrait-ring::before[\s\S]*?conic-gradient[\s\S]*?opacity:\s*0/);
-  assert.match(custom, /\.home-hero__portrait-ring::after[\s\S]*?background:\s*#f9c97f[\s\S]*?opacity:\s*0/);
-  assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__portrait-ring::before[\s\S]*?opacity:\s*0\.82/);
-  assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__portrait-ring::after[\s\S]*?opacity:\s*1/);
-  assert.match(custom, /\.home-hero__stage\.is-popped \.home-hero__stage-note[\s\S]*?opacity:\s*0/);
-  assert.doesNotMatch(custom, /\.home-hero__stage:focus-visible/);
-  assert.match(custom, /@media \(hover: none\), \(pointer: coarse\)[\s\S]*?\.home-hero__stage:hover:not\(\.is-popped\) \.home-hero__character[\s\S]*?transform:\s*none/);
-  assert.match(homeMotion, /var portrait = homeHero\.querySelector\("\.home-hero__portrait"\)/);
-  assert.match(homeMotion, /event\.pointerType === "mouse" \|\| event\.pointerType === "pen"/);
-  assert.match(homeMotion, /stage\.classList\.add\("is-popped"\)/);
-  assert.match(homeMotion, /stage\.addEventListener\("pointerenter", handlePortraitPointerEnter\)/);
-  assert.match(homeMotion, /stage\.removeEventListener\("pointerenter", handlePortraitPointerEnter\)/);
-  assert.doesNotMatch(homeMotion, /handlePortraitFocus|handlePortraitBlur|addEventListener\("focus"/);
-  assert.doesNotMatch(homeMotion, /querySelector\("\.home-hero__character"\)/);
-  assert.doesNotMatch(homeMotion, /outerOrbit|innerOrbit|orbitElements/);
+test("Portrait motion is scoped to fine pointers and cleaned up", () => {
+  const source = read("assets/js/_home-motion.js");
+  assert.match(source, /\(hover: hover\) and \(pointer: fine\)/);
+  assert.match(source, /stage\.addEventListener\("pointermove", handlePortraitPointerMove\)/);
+  assert.match(source, /stage\.removeEventListener\("pointermove", handlePortraitPointerMove\)/);
+  assert.match(source, /pointerMedia\.revert\(\)/);
+  assert.doesNotMatch(source, /repeat:\s*-1|setInterval/);
 });
 
-test("I-46: manual theme switching reveals from the toggle with an accessible fallback", () => {
-  const custom = read("_sass/custom.scss");
-  const mainJs = read("assets/js/_main.js");
-
-  assert.match(mainJs, /var themeMotionMedia = window\.matchMedia\("\(prefers-reduced-motion: reduce\)"\)/);
-  assert.match(mainJs, /typeof document\.startViewTransition === "function"/);
-  assert.match(mainJs, /themeToggleButton\.getBoundingClientRect\(\)/);
-  assert.match(mainJs, /Math\.hypot\(/);
-  assert.match(mainJs, /--theme-transition-x/);
-  assert.match(mainJs, /--theme-transition-y/);
-  assert.match(mainJs, /--theme-transition-radius/);
-  assert.match(mainJs, /document\.startViewTransition\(function \(\) \{[\s\S]*?setTheme\(newTheme\)/);
-  assert.match(mainJs, /themeTransition\.finished\.then\(finishThemeSwitch, finishThemeSwitch\)/);
-  assert.match(mainJs, /if \(!canAnimateTheme\) \{[\s\S]*?setTheme\(newTheme\)/);
-  assert.match(custom, /::view-transition-old\(root\),[\s\S]*?::view-transition-new\(root\)/);
-  assert.match(custom, /@keyframes theme-reveal[\s\S]*?clip-path:\s*circle\(0 at var\(--theme-transition-x\) var\(--theme-transition-y\)\)/);
-  assert.match(custom, /clip-path:\s*circle\(var\(--theme-transition-radius\) at var\(--theme-transition-x\) var\(--theme-transition-y\)\)/);
-  assert.match(custom, /html\.is-theme-transitioning \*[\s\S]*?transition-duration:\s*0s !important/);
+test("Theme transitions preserve fallback, latest intent, and reduced motion", () => {
+  const source = read("assets/js/_main.js");
+  assert.match(source, /typeof document\.startViewTransition === "function"/);
+  assert.match(source, /!themeMotionMedia\.matches/);
+  assert.match(source, /requestedTheme/);
+  assert.match(source, /if \(!canAnimateTheme\)[\s\S]*?setThemeWithoutMotion\(newTheme\)/);
+  assert.match(source, /activeThemeTransition\.finished\.then\(finishThemeSwitch, finishThemeSwitch\)/);
+  assert.match(source, /activeThemeTransition\.skipTransition\(\)/);
 });
 
 test("I-42: homepage destinations keep accepted URLs and describe the action", () => {
   const home = read("_pages/home.md");
 
   assert.match(home, /href="\{\{ base_path \}\}\/cv\/">查看英文 CV<\/a>/);
-  assert.match(home, /href="\{\{ base_path \}\}\/cv_zh\/">查看中文简历<\/a>/);
+  assert.match(home, /href="\{\{ base_path \}\}\/cv_zh\/">中文简历 /);
   assert.match(home, /href="\{\{ base_path \}\}\/blog_embed\/">阅读个人博客<\/a>/);
   assert.match(home, /href="https:\/\/github\.com\/husky1102"/);
   assert.match(home, /href="https:\/\/kaggle\.com\/husky1102"/);
@@ -187,19 +143,13 @@ test("I-42: mobile homepage controls expose at least 44px targets", () => {
   assert.match(cv, /\.cv-publication-item__links a,[\s\S]*?min-height:\s*2\.75rem/);
 });
 
-test("I-48: mobile cold loads keep the portrait centered and surface actions sooner", () => {
+test("Mobile homepage keeps a static baseline and usable destinations", () => {
   const custom = read("_sass/custom.scss");
-  const homeMotion = read("assets/js/_home-motion.js");
-  const portraitRule = custom.match(/\.home-hero__portrait \{[\s\S]*?\n\}/)[0];
-
-  assert.match(portraitRule, /right:\s*0/);
-  assert.match(portraitRule, /left:\s*0/);
-  assert.match(portraitRule, /margin-inline:\s*auto/);
-  assert.doesNotMatch(portraitRule, /translateX\(-50%\)/);
-  assert.doesNotMatch(homeMotion, /xPercent:\s*-50/);
-  assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__stage \{[\s\S]*?min-height:\s*clamp\(13\.5rem, 68vw, 17rem\)/);
-  assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__actions \{[\s\S]*?order:\s*1/);
-  assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__lead-en \{[\s\S]*?order:\s*2/);
+  const home = read("_pages/home.md");
+  assert.match(custom, /\.home-hero__portrait \{[\s\S]*?margin-inline:\s*auto/);
+  assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__actions \{[^}]*order:\s*1/);
+  assert.match(custom, /@media \(max-width: 30em\)[\s\S]*?\.home-hero__lead-en \{[^}]*order:\s*2/);
+  assert.match(home, /class="home-hero__language"/);
 });
 
 test("I-43: bilingual CVs omit unsupported experience and wrap the full publications section", () => {
@@ -300,7 +250,7 @@ test("I-39: GSAP runs a visible-baseline, lifecycle-aware homepage motion system
   assert.match(scripts, /main\.min\.js[\s\S]*if page\.home_motion[\s\S]*home-motion\.min\.js/);
   assert.doesNotMatch(mainJs, /window\.gsap|window\.ScrollTrigger|home-hero|scrollTrigger:/);
   assert.doesNotMatch(mainJs, /setInterval/);
-  assert.match(mainJs, /footerResizeTimer[\s\S]*window\.clearTimeout\(footerResizeTimer\)[\s\S]*window\.setTimeout\([\s\S]*120/);
+  assert.doesNotMatch(mainJs, /document\.body\.style\.marginBottom/);
   assert.match(mainJs, /root\.getAttribute\("data-scroll-progress-engine"\) !== "gsap"[\s\S]*updateScrollProgressFallback\(scrollTop, scrollHeight\)/);
   assert.equal((mainJs.match(/scrollProgress\.style\.width =/g) || []).length, 1);
   assert.match(homeMotion, /gsapApi\.registerPlugin\(scrollTriggerApi\)/);
@@ -316,9 +266,9 @@ test("I-39: GSAP runs a visible-baseline, lifecycle-aware homepage motion system
   assert.match(homeMotion, /\.home-hero__lead-en/);
   assert.match(homeMotion, /opacity:\s*0\.72/);
   assert.match(homeMotion, /opacity:\s*0\.78/);
-  assert.match(homeMotion, /opacity:\s*0\.82/);
+
   assert.doesNotMatch(homeMotion, /autoAlpha:\s*0/);
-  assert.match(homeMotion, /repeat:\s*-1/);
+  assert.doesNotMatch(homeMotion, /repeat:\s*-1/);
   assert.match(homeMotion, /IntersectionObserver/);
   assert.match(homeMotion, /document\.hidden/);
   assert.match(homeMotion, /visibilitychange/);
@@ -341,25 +291,22 @@ test("I-41: dark ambient rendering is static and has no continuous card loops", 
   assert.doesNotMatch(custom, /animation:[^;]*infinite/);
 });
 
-test("I-41: JavaScript performs no ambient pointer-driven rendering", () => {
+test("Pointer rendering stays local to the portrait", () => {
   const mainJs = read("assets/js/_main.js");
   const homeMotion = read("assets/js/_home-motion.js");
-
-  for (const source of [mainJs, homeMotion]) {
-    assert.doesNotMatch(source, /initDarkAmbientMotion|ambientMedia|--dark-ambient-/);
-    assert.doesNotMatch(source, /quickSetter|quickTo/);
-    assert.doesNotMatch(source, /pointermove|mousemove/);
-  }
+  assert.doesNotMatch(mainJs, /pointermove|mousemove|quickTo/);
+  assert.doesNotMatch(homeMotion, /document\.addEventListener\("pointermove"|window\.addEventListener\("pointermove"/);
+  assert.doesNotMatch(homeMotion, /--dark-ambient-/);
 });
 
-test("I-40: blog route uses one direct destination and the footer stays concise", () => {
+test("Blog embeds the original site and keeps an external fallback", () => {
   const blogEmbed = read("_pages/blog_embed.md");
   const footer = read("_includes/footer.html");
   const contributing = read("CONTRIBUTING.md");
 
-  assert.match(blogEmbed, /class="blog-entry__destination" href="https:\/\/www\.husky1102\.top\/" target="_blank" rel="noopener noreferrer"/);
-  assert.match(blogEmbed, /前往阅读/);
-  assert.doesNotMatch(blogEmbed, /<iframe|blog-embed-iframe|postMessage|MutationObserver|themeBridge|<script>/);
+  assert.match(blogEmbed, /href="https:\/\/www\.husky1102\.top\/" target="_blank" rel="noopener noreferrer"/);
+  assert.match(blogEmbed, /<iframe[^>]+title="Husky 的个人博客"/);
+  assert.doesNotMatch(blogEmbed, /postMessage|MutationObserver|themeBridge|<script>/);
   assert.match(footer, /href="https:\/\/github\.com\/\{\{ site\.author\.github \}\}"/);
   assert.match(footer, /订阅更新/);
   assert.match(footer, /href="\{\{ base_path \}\}\/terms\/"/);

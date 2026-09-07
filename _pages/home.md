@@ -13,24 +13,24 @@ home_motion: true
   <div class="home-hero__stage" role="img" aria-label="克苏鲁微糖 Husky 与机器人伙伴的角色插画">
     <div class="home-hero__portrait">
       <div class="home-hero__portrait-window">
-        <img class="home-hero__character home-hero__character--inside" src="{{ '/images/avatar-gpt063.webp' | relative_url }}" alt="" fetchpriority="high" decoding="async">
+        <img class="home-hero__character home-hero__character--inside" src="{{ '/images/avatar-gpt063.webp' | relative_url }}" srcset="{{ '/images/avatar-gpt063.webp' | relative_url }} 640w, {{ '/images/avatar-gpt063-1024.webp' | relative_url }} 1024w" sizes="(max-width: 480px) 216px, (max-width: 767px) 432px, (max-width: 1024px) 38vw, 486px" width="1024" height="1024" alt="" fetchpriority="high" decoding="async">
       </div>
       <span class="home-hero__portrait-ring" aria-hidden="true"></span>
       <div class="home-hero__portrait-front" aria-hidden="true">
-        <img class="home-hero__character home-hero__character--front" src="{{ '/images/avatar-gpt063.webp' | relative_url }}" alt="" decoding="async">
+        <img class="home-hero__character home-hero__character--front" src="{{ '/images/avatar-gpt063.webp' | relative_url }}" srcset="{{ '/images/avatar-gpt063.webp' | relative_url }} 640w, {{ '/images/avatar-gpt063-1024.webp' | relative_url }} 1024w" sizes="(max-width: 480px) 216px, (max-width: 767px) 432px, (max-width: 1024px) 38vw, 486px" width="1024" height="1024" alt="" decoding="async">
       </div>
     </div>
     <p class="home-hero__stage-note"><span>在西安学习与研究</span><strong>Always curious.</strong></p>
   </div>
   <div class="home-hero__copy">
     <p class="home-hero__eyebrow">人工智能硕士生 · 西安交通大学</p>
-    <h1><span>克苏鲁微糖</span><span class="home-hero__name-latin">Husky</span></h1>
-    <p class="home-hero__lead">研究具身智能和智能体记忆，也为所有足够有趣的问题保留位置。正在西安交通大学攻读人工智能硕士学位。</p>
-    <p class="home-hero__lead-en" lang="en">M.S. student in Artificial Intelligence. Interested in Embodied AI, agent memory, and ideas worth learning.</p>
+    <h1><span class="home-hero__name-cn">克苏鲁微糖</span><span class="home-hero__name-latin">Husky</span></h1>
+    <p class="home-hero__lead">研究具身智能与智能体记忆，<br class="home-hero__line-break">也为足够有趣的问题保留位置。</p>
+    <p class="home-hero__lead-en" lang="en">Exploring embodied intelligence, agent memory,<br class="home-hero__line-break"> and ideas worth learning.</p>
     <div class="home-hero__actions">
       <a class="btn home-hero__action--primary" href="{{ base_path }}/cv/">查看英文 CV</a>
-      <a class="btn btn--inverse" href="{{ base_path }}/cv_zh/">查看中文简历</a>
       <a class="btn btn--inverse" href="{{ base_path }}/blog_embed/">阅读个人博客</a>
+      <a class="home-hero__language" href="{{ base_path }}/cv_zh/">中文简历 <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 </section>
@@ -51,12 +51,8 @@ home_motion: true
       <h3>Agent Memory</h3>
       <p>探索智能体如何保留、检索并使用真正有帮助的上下文。</p>
     </article>
-    <article class="home-research-track">
-      <span class="home-research-track__signal" aria-hidden="true"></span>
-      <h3>Anything Interesting</h3>
-      <p>为值得学习的新问题留一张开放的工作台，不让兴趣被标签限制。</p>
-    </article>
   </div>
+  <p class="home-curiosity"><span aria-hidden="true">＋</span> 以及，所有值得好奇的事。<span lang="en">Stay open. Keep learning.</span></p>
 </section>
 
 <section class="home-section home-section--split">

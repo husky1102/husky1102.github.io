@@ -8,6 +8,8 @@
   margin-top: 2em;
   padding-left: 1em;
   padding-right: 1em;
+  width: 100%;
+  padding-bottom: clamp(3rem, 6vw, 5rem);
   @include breakpoint($x-large) {
     max-width: $x-large;
   }
@@ -31,6 +33,14 @@
   }
 }
 
+.page.page--standalone {
+  float: none;
+  width: 100%;
+  max-width: 44rem;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
 .page__title {
   margin-top: 0;
   line-height: 1;
@@ -52,12 +62,12 @@
     border-bottom: 1px solid var(--global-border-color);
   }
 
-  p, li, dl {
+  :where(p, li, dl) {
     font-size: 1em;
   }
 
   /* paragraph indents */
-  p {
+  :where(p) {
     margin: 0 0 $indent-var;
 
     /* sibling indentation*/

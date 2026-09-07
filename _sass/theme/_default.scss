@@ -20,13 +20,14 @@ $warning-color              : #f89406;
 $border-radius              : 4px;
 $box-shadow                 : 0 1px 1px rgba(0, 0, 0, 0.125);
 $masthead-height            : 70px;
-$navicon-width              : 28px;
-$navicon-height             : 4px;
+$navicon-width              : 22px;
+$navicon-height             : 2px;
 $sidebar-link-max-width     : 250px;
 $sidebar-screen-min-width   : 1024px;
 
 /* Default light theme for the site */
 :root {
+    color-scheme: light;
     --global-base-color                 : #{$gray};
     --global-bg-color                   : #fbfaf7;
     --global-footer-bg-color            : #f2efe9;

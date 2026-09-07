@@ -18,15 +18,23 @@
     var browserPref = prefersDarkMedia.matches ? "dark" : "light";
     var themeToggle = document.getElementById("theme-toggle");
     var themeToggleButton = themeToggle ? themeToggle.querySelector("button") : null;
-    var themeIcon = document.getElementById("theme-icon");
     var themeMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
     var themeSwitchInProgress = false;
+    var requestedTheme = null;
+    var activeThemeTransition = null;
+    var themeToggleBounds = null;
+    var storeTheme = function (theme) {
+      try { localStorage.setItem("theme", theme); } catch (error) { /* Session-only preference. */ }
+    };
+    var readStoredTheme = function () {
+      try { return localStorage.getItem("theme"); } catch (error) { return null; }
+    };
 
     // Set the theme on page load or when explicitly called.
     var setTheme = function (theme) {
       var useTheme =
         theme ||
-        localStorage.getItem("theme") ||
+        readStoredTheme() ||
         root.getAttribute("data-theme") ||
         browserPref;
 
@@ -35,11 +43,6 @@
       root.toggleAttribute("data-theme", isDark);
       if (isDark) {
         root.setAttribute("data-theme", "dark");
-      }
-
-      if (themeIcon) {
-        themeIcon.classList.toggle("fa-sun", !isDark);
-        themeIcon.classList.toggle("fa-moon", isDark);
       }
 
       // Keep the toggle's state, label, and the browser UI color in sync.
@@ -68,7 +71,7 @@
 
     // If user hasn't chosen a theme, follow OS changes.
     var handlePreferenceChange = function (event) {
-      if (!localStorage.getItem("theme")) {
+      if (!readStoredTheme()) {
         setThemeWithoutMotion(event.matches ? "dark" : "light");
       }
     };
@@ -78,61 +81,91 @@
       prefersDarkMedia.addListener(handlePreferenceChange);
     }
 
-    // Toggle the theme manually.
-    var toggleTheme = function () {
-      if (themeSwitchInProgress) {
-        return;
-      }
-
-      var currentTheme = root.getAttribute("data-theme");
-      var newTheme = currentTheme === "dark" ? "light" : "dark";
-      var canAnimateTheme =
-        themeToggleButton &&
-        !themeMotionMedia.matches &&
+    // Queue the latest intent while a reveal finishes; rapid clicks never leave
+    // the icon, stored preference and page in different states.
+    var runThemeSwitch = function () {
+      if (themeSwitchInProgress) { return; }
+      var currentTheme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      var newTheme = requestedTheme;
+      if (!newTheme || newTheme === currentTheme) { requestedTheme = null; return; }
+      var canAnimateTheme = themeToggleButton && !themeMotionMedia.matches &&
         typeof document.startViewTransition === "function";
       var finishThemeSwitch = function () {
         root.classList.remove("is-theme-transitioning");
-        if (themeToggle) {
-          themeToggle.classList.remove("is-switching");
-        }
+        themeToggle.classList.remove("is-switching");
+        activeThemeTransition = null;
         themeSwitchInProgress = false;
+        runThemeSwitch();
       };
-
-      themeSwitchInProgress = true;
-
-      if (themeToggle) {
-        themeToggle.classList.add("is-switching");
-      }
-
-      if (!canAnimateTheme) {
-        localStorage.setItem("theme", newTheme);
+      var applyTheme = function () {
+        storeTheme(newTheme);
         setTheme(newTheme);
-        window.setTimeout(finishThemeSwitch, 320);
+      };
+      themeSwitchInProgress = true;
+      if (!canAnimateTheme) {
+        setThemeWithoutMotion(newTheme);
+        storeTheme(newTheme);
+        finishThemeSwitch();
         return;
       }
-
-      var themeToggleBounds = themeToggleButton.getBoundingClientRect();
-      var themeTransitionX = themeToggleBounds.left + themeToggleBounds.width / 2;
-      var themeTransitionY = themeToggleBounds.top + themeToggleBounds.height / 2;
-      var farthestX = Math.max(themeTransitionX, window.innerWidth - themeTransitionX);
-      var farthestY = Math.max(themeTransitionY, window.innerHeight - themeTransitionY);
-      var themeTransitionRadius = Math.hypot(farthestX, farthestY);
-
-      root.style.setProperty("--theme-transition-x", themeTransitionX + "px");
-      root.style.setProperty("--theme-transition-y", themeTransitionY + "px");
-      root.style.setProperty("--theme-transition-radius", themeTransitionRadius + "px");
+      var bounds = themeToggleButton.getBoundingClientRect();
+      themeToggleBounds = bounds;
+      var x = bounds.left + bounds.width / 2;
+      var y = bounds.top + bounds.height / 2;
+      var radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y)) + 64;
+      root.style.setProperty("--theme-transition-x", x + "px");
+      root.style.setProperty("--theme-transition-y", y + "px");
+      root.style.setProperty("--theme-transition-radius", radius + "px");
       root.classList.add("is-theme-transitioning");
-
-      var themeTransition = document.startViewTransition(function () {
-        localStorage.setItem("theme", newTheme);
-        setTheme(newTheme);
-      });
-
-      themeTransition.finished.then(finishThemeSwitch, finishThemeSwitch);
+      themeToggle.classList.add("is-switching");
+      try {
+        activeThemeTransition = document.startViewTransition(applyTheme);
+        activeThemeTransition.finished.then(finishThemeSwitch, finishThemeSwitch);
+      } catch (error) {
+        applyTheme();
+        finishThemeSwitch();
+      }
     };
+    var requestThemeSwitch = function () {
+      var current = requestedTheme || (root.getAttribute("data-theme") === "dark" ? "dark" : "light");
+      requestedTheme = current === "dark" ? "light" : "dark";
+      runThemeSwitch();
+    };
+    if (themeToggleButton) {
+      themeToggleButton.addEventListener("click", requestThemeSwitch);
+      // During a View Transition, snapshot participants are not hit-testable:
+      // native clicks land on <html>. Preserve only the toggle's captured hitbox.
+      document.addEventListener("click", function (event) {
+        var bounds = themeToggleBounds;
+        if (themeSwitchInProgress && event.target === root && bounds &&
+            event.clientX >= bounds.left && event.clientX <= bounds.right &&
+            event.clientY >= bounds.top && event.clientY <= bounds.bottom) {
+          requestThemeSwitch();
+        }
+      });
+    }
+    themeMotionMedia.addEventListener("change", function (event) {
+      if (event.matches && activeThemeTransition) { activeThemeTransition.skipTransition(); }
+    });
 
-    if (themeToggle) {
-      themeToggle.addEventListener("click", toggleTheme);
+    // The iframe remains usable without JavaScript. Cross-origin load events
+    // cannot prove successful rendering, so the original-site link stays visible.
+    var blogFrame = document.getElementById("blog-frame");
+    if (blogFrame) {
+      var blogStatus = document.querySelector(".blog-reader__status");
+      blogStatus.hidden = false;
+      var blogLoadTimeout = window.setTimeout(function () {
+        blogStatus.textContent = "加载较慢，可使用上方入口在新标签页阅读。";
+      }, 12000);
+      blogFrame.addEventListener("load", function () {
+        window.clearTimeout(blogLoadTimeout);
+        blogStatus.hidden = true;
+      });
+      blogFrame.addEventListener("error", function () {
+        window.clearTimeout(blogLoadTimeout);
+        blogStatus.hidden = false;
+        blogStatus.textContent = "博客暂时无法载入，请使用上方入口继续阅读。";
+      });
     }
 
     var scrollProgress = document.querySelector(".scroll-progress span");
@@ -270,36 +303,6 @@
 
     // These should be the same as the settings in _variables.scss.
     var scssLarge = 925; // pixels
-
-    // Sticky footer.
-    var pageFooter = document.querySelector(".page__footer");
-    var bumpIt = function () {
-      if (!pageFooter) {
-        return;
-      }
-
-      var footerStyles = window.getComputedStyle(pageFooter);
-      var footerHeight =
-        pageFooter.getBoundingClientRect().height +
-        parseFloat(footerStyles.marginTop || 0) +
-        parseFloat(footerStyles.marginBottom || 0);
-      document.body.style.marginBottom = footerHeight + "px";
-    };
-    var footerResizeTimer = null;
-    var requestFooterUpdate = function () {
-      if (footerResizeTimer) {
-        window.clearTimeout(footerResizeTimer);
-      }
-
-      footerResizeTimer = window.setTimeout(function () {
-        footerResizeTimer = null;
-        bumpIt();
-      }, 120);
-    };
-
-    bumpIt();
-    window.addEventListener("load", bumpIt, { once: true });
-    window.addEventListener("resize", requestFooterUpdate);
 
     // FitVids init.
     fitvids();

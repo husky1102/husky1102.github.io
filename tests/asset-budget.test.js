@@ -55,6 +55,10 @@ test("the configured sidebar avatar is a compact WebP asset", () => {
   const signature = fs.readFileSync(avatar).subarray(0, 12);
   assert.equal(signature.subarray(0, 4).toString("ascii"), "RIFF");
   assert.equal(signature.subarray(8, 12).toString("ascii"), "WEBP");
+
+  const heroAvatar = path.join(root, "images", "avatar-gpt063-1024.webp");
+  assert.ok(fs.statSync(heroAvatar).size <= 192 * 1024, "The high-density homepage portrait must stay at or below 192 KiB.");
+  assert.equal(fs.readFileSync(heroAvatar).subarray(8, 12).toString("ascii"), "WEBP");
 });
 
 test("the generated site does not publish source-only optimization assets", () => {

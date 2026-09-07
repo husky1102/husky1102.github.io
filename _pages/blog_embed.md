@@ -1,26 +1,19 @@
 ---
-layout: single
+layout: default
 title: "个人博客"
-description: "前往 Husky 的独立博客，继续阅读学习与思考记录。"
+description: "在这里阅读 Husky 的学习记录、研究笔记与日常思考。"
 permalink: /blog_embed/
 author_profile: false
+blog_embed: true
 ---
 
-{% include base_path %}
-
-<section class="blog-entry" aria-labelledby="blog-entry-title">
-  <div class="blog-entry__intro">
-    <h2 id="blog-entry-title">继续阅读我的独立博客</h2>
-    <p>学习记录与日常思考发布在独立域名。选择下方入口后，博客会在新标签页打开。</p>
+<main id="main" class="blog-reader" aria-labelledby="blog-reader-title">
+  <header class="blog-reader__toolbar">
+    <div><h1 id="blog-reader-title">个人博客</h1><span>学习、研究与生活的记录</span></div>
+    <a href="https://www.husky1102.top/" target="_blank" rel="noopener noreferrer">在新标签页打开 <span aria-hidden="true">↗</span></a>
+  </header>
+  <div class="blog-reader__window">
+    <p class="blog-reader__status" role="status" hidden>正在打开博客…</p>
+    <iframe id="blog-frame" src="https://www.husky1102.top/" title="Husky 的个人博客" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>
   </div>
-
-  <a class="blog-entry__destination" href="https://www.husky1102.top/" target="_blank" rel="noopener noreferrer">
-    <span><small>独立博客</small><strong>husky1102.top</strong></span>
-    <span>前往阅读 <span aria-hidden="true">↗</span></span>
-  </a>
-
-  <nav class="blog-entry__secondary" aria-label="其他入口">
-    <a href="{{ base_path }}/about/">先了解关于我</a>
-    <a href="https://github.com/husky1102">查看 GitHub</a>
-  </nav>
-</section>
+</main>

@@ -178,6 +178,7 @@ test("generated identity and blog pages expose the intended public content", () 
   assert.match(cvZh, /<meta property="og:locale" content="zh-CN">/);
   assert.match(cvZh, /具身智能[\s\S]*智能体记忆[\s\S]*持续学习/);
   assert.match(blog, /href="https:\/\/www\.husky1102\.top\/" target="_blank" rel="noopener noreferrer"/);
-  assert.doesNotMatch(blog, /<iframe|postMessage|themeBridge/);
+  assert.match(blog, /<iframe[^>]+id="blog-frame"[^>]+src="https:\/\/www\.husky1102\.top\/"[^>]+title="Husky 的个人博客"/);
+  assert.equal((blog.match(/<main\b/g) || []).length, 1);
   assert.doesNotMatch(blog, /Jekyll[\s\S]*AcademicPages[\s\S]*Minimal Mistakes/);
 });

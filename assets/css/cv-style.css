@@ -112,7 +112,11 @@
 }
 
 .cv-section--timeline .cv-item:first-of-type::before {
-  top: 1.35rem;
+  top: 0.5rem;
+}
+
+.cv-section--timeline .cv-item:first-of-type::after {
+  top: 0.5rem;
 }
 
 .cv-section--timeline .cv-item:last-of-type::before {

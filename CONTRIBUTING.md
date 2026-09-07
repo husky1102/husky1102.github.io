@@ -61,6 +61,8 @@ cwebp -q 82 -alpha_q 100 -m 6 -resize 640 640 \
 
 导出后确认 WebP 保留透明通道，并通过资源预算测试。
 
+首页另提供 1024px 的高密度角色资源，与侧栏共用源图。需要重新导出时安装 `Pillow==12.2.0`，运行 `python3 scripts/export_hero_portrait.py`；公开资源限制为 192 KiB。首页两层图片必须保持相同的 `srcset` 和 `sizes`。
+
 ## Pull Request 检查清单
 
 - 说明访客会看到或感受到的变化，以及为什么需要它。

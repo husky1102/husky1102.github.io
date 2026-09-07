@@ -190,37 +190,19 @@
     min-width: 2.75rem;
     right: 0;
     padding: 0 0.55rem;
-    border: 1px solid color-mix(in srgb, var(--global-link-color) 24%, var(--global-border-color));
+    border: 1px solid var(--global-border-color);
     border-radius: 6px;
-    outline: none;
-    background:
-      linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 10%, transparent), transparent 70%),
-      color-mix(in srgb, var(--global-bg-color) 82%, transparent);
-    -webkit-backdrop-filter: blur(10px) saturate(1.15);
-            backdrop-filter: blur(10px) saturate(1.15);
+    background: var(--global-bg-color);
     color: var(--global-masthead-link-color);
-    box-shadow: 0 8px 18px rgba(#000, 0.10);
+    box-shadow: none;
     cursor: pointer;
     z-index: 100;
-    transition:
-      background-color 0.24s ease,
-      border-color 0.24s ease,
-      box-shadow 0.24s ease,
-      color 0.24s ease,
-      transform 0.24s ease;
-
-    &:hover,
-    &:focus-visible {
-      border-color: var(--global-link-color);
-      background:
-        linear-gradient(135deg, color-mix(in srgb, var(--global-link-color) 16%, transparent), transparent 70%),
-        color-mix(in srgb, var(--global-bg-color) 92%, transparent);
-      color: var(--global-masthead-link-color-hover);
-      box-shadow:
-        0 10px 24px rgba(#000, 0.13),
-        0 0 0 3px color-mix(in srgb, var(--global-link-color) 10%, transparent);
-      transform: translateY(-1px);
+    transition: color 200ms ease, background-color 200ms ease;
+    &:hover, &:focus-visible {
+      color: var(--global-link-color);
+      background: var(--global-footer-bg-color);
     }
+    &:focus-visible { outline: 2px solid var(--global-link-color); outline-offset: 3px; }
   }
 
   .visible-links {
@@ -251,7 +233,7 @@
         /* This is a real <button> for accessibility, but it must NOT inherit the
            absolutely-positioned overflow-toggle styles from `.greedy-nav button`.
            Reset it back to a plain inline nav icon. */
-        position: static;
+        position: relative;
         width: 2.75rem;
         min-width: 0;
         height: 2.75rem;
@@ -271,6 +253,8 @@
         line-height: 1;
         cursor: pointer;
 
+        &::before { display: none; }
+
         &:hover {
           border: 0;
           background: none;
@@ -279,11 +263,11 @@
           color: var(--global-masthead-link-color-hover);
         }
 
-        &:focus {
-          outline: none;
-        }
+
 
         &:focus-visible {
+          outline: 2px solid var(--global-link-color);
+          outline-offset: 2px;
           background: none;
           box-shadow: none;
           transform: none;
@@ -646,4 +630,14 @@ html[data-theme="dark"] .toc {
       0 14px 34px rgba(2, 6, 23, 0.46),
       0 0 22px rgba(103, 232, 249, 0.09);
   }
+}
+
+.greedy-nav a[aria-current="page"] {
+  color: var(--global-link-color);
+  &::before { transform: translateX(-50%) scaleX(1); }
+}
+@media (max-width: 30em) {
+  .masthead__menu-item--lg { padding-right: 0.25rem; }
+  .greedy-nav .visible-links a { margin-inline: 0.65rem; }
+  .greedy-nav .visible-links .masthead__menu-item--current a { font-size: 0.85rem; }
 }

@@ -64,6 +64,7 @@
     var mastheadHeight = masthead ? masthead.offsetHeight : 0;
 
     document.body.style.paddingTop = mastheadHeight + "px";
+    document.documentElement.style.setProperty("--masthead-height", mastheadHeight + "px");
     if (sidebar) {
       sidebar.style.paddingTop = isVisible(authorButton) ? "" : mastheadHeight + "px";
     }
@@ -138,4 +139,5 @@
   });
 
   updateNav();
+  if (document.fonts) { document.fonts.ready.then(updateNav); }
 }());

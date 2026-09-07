@@ -13,7 +13,7 @@ layout: compress
     {% include head/custom.html %}
   </head>
 
-  <body>
+  <body{% if page.blog_embed %} class="blog-layout"{% endif %}>
 
     {% include browser-upgrade.html %}
     <a class="screen-reader-shortcut" href="#main">跳到主要内容</a>

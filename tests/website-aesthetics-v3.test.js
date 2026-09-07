@@ -18,12 +18,12 @@ test("CV timeline stays visually static when entries are not interactive", () =>
   assert.match(css, /\.cv-interest-list p \{[\s\S]*?line-height:\s*1\.65/);
 });
 
-test("Greedy navigation overflow menu uses rounded glass motion", () => {
+test("Greedy navigation overflow menu retains a visible disclosure", () => {
   const navigation = read("_sass/layout/_navigation.scss");
   const utilities = read("_sass/include/_utilities.scss");
 
   assert.match(navigation, /\.greedy-nav[\s\S]*button[\s\S]*border-radius:\s*6px/);
-  assert.match(navigation, /\.greedy-nav[\s\S]*button[\s\S]*backdrop-filter:\s*blur/);
+
   assert.match(navigation, /\.hidden-links[\s\S]*opacity[\s\S]*transform[\s\S]*transition:/);
   assert.match(navigation, /\.hidden-links[\s\S]*&:not\(\.hidden\)/);
   assert.match(navigation, /\.hidden-links[\s\S]*visibility:\s*hidden[\s\S]*&:not\(\.hidden\)[\s\S]*visibility:\s*visible/);
@@ -71,11 +71,11 @@ test("Theme toggle stays visible and independent from greedy overflow menu", () 
   const mainJs = read("assets/js/_main.js");
 
   assert.match(masthead, /class="greedy-nav__toggle"/);
-  assert.match(masthead, /id="theme-toggle"[\s\S]*fa-sun/);
+  assert.match(masthead, /id="theme-toggle"[\s\S]*id="theme-icon"[\s\S]*theme-toggle__rays/);
   assert.match(masthead, /aria-label="切换到深色模式"/);
   assert.match(greedyNav, /querySelector\("#site-nav > \.greedy-nav__toggle"\)/);
   assert.doesNotMatch(greedyNav, /querySelector\("#site-nav button"\)/);
-  assert.match(mainJs, /fa-moon/);
+  assert.match(masthead, /theme-moon-mask/);
   assert.match(mainJs, /切换到浅色模式/);
 });
 

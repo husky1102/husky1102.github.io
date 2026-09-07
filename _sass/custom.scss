@@ -122,7 +122,7 @@ html:not([data-theme="dark"])::view-transition-old(root) {
 }
 .theme-toggle__rays { opacity: 1; }
 html[data-theme="dark"] .theme-toggle__disc { transform: scale(1.6); }
-html[data-theme="dark"] .theme-toggle__cutout { transform: translate(-10px, 7px); }
+html[data-theme="dark"] .theme-toggle__cutout { transform: translate(-10px, 0); }
 html[data-theme="dark"] .theme-toggle__rays { opacity: 0; transform: rotate(45deg) scale(0.65); }
 #theme-toggle button:hover #theme-icon { color: var(--global-link-color); }
 
@@ -1030,34 +1030,37 @@ html[data-theme="dark"] .back-to-top:focus-visible {
   padding-top: 0.25rem;
 }
 
-/* Match the digital garden's light/dark palette only inside its host page.
+/* Match the digital garden's sidebar palette in the blog navigation.
    Theme selection remains independent until the garden supports a bridge. */
 .blog-layout {
   --global-bg-color: #fafaf3;
+  --blog-navigation-bg: #f0f2ec;
   --global-footer-bg-color: #eef6f0;
-  --global-border-color: #bbddcd;
-  --global-link-color: #2a7c79;
+  --global-border-color: #a7c9b7;
+  --global-link-color: #1f6663;
   --global-link-color-hover: #1f6663;
-  --global-masthead-link-color: #37291a;
-  --global-masthead-link-color-hover: #2a7c79;
+  --global-masthead-link-color: #31463f;
+  --global-masthead-link-color-hover: #1f6663;
   --global-text-color: #37291a;
-  --global-text-color-light: #586e66;
+  --global-text-color-light: #405a51;
   height: 100dvh;
   min-height: 0;
   overflow: hidden;
 }
 html[data-theme="dark"] .blog-layout {
   --global-bg-color: #181a1d;
-  --global-footer-bg-color: #27352f;
-  --global-border-color: #35453f;
+  --blog-navigation-bg: #1e2321;
+  --global-footer-bg-color: #2f4037;
+  --global-border-color: #3d5148;
   --global-link-color: #8bc4bd;
   --global-link-color-hover: #b2ded8;
-  --global-masthead-link-color: #eee8dc;
+  --global-masthead-link-color: #e7ecdf;
   --global-masthead-link-color-hover: #8bc4bd;
   --global-text-color: #eee8dc;
-  --global-text-color-light: #b8c3b8;
+  --global-text-color-light: #aebdaf;
 }
 .blog-layout .masthead {
+  --global-bg-color: var(--blog-navigation-bg);
   background: var(--global-bg-color);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;

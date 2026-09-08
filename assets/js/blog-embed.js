@@ -48,7 +48,8 @@
         if (data.type === 'husky:embed:navigating') { fallback(true); return; }
         if (data.theme !== 'light' && data.theme !== 'dark') return;
         if (data.type === 'husky:embed:ready') {
-          if (!data.capabilities || data.capabilities.returnHome !== true || data.capabilities.themeControl !== true) return;
+          if (!data.capabilities || typeof data.capabilities !== 'object' || Array.isArray(data.capabilities) ||
+              data.capabilities.returnHome !== true || data.capabilities.themeControl !== true) return;
           // Initialization always gives the containing page authority on first load.
           if (data.theme !== theme.current()) { send('husky:embed:init'); return; }
           var url = articleUrl(data.url);

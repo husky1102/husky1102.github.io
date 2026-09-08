@@ -26,7 +26,7 @@ test('listener precedes embed opt-in and initial messages use the exact origin',
 });
 test('only validated capabilities and matching theme can hide the fallback',()=>{
   const b=boot();
-  for(const data of [null,[],{...ready,version:2},{...ready,theme:'system'},{...ready,capabilities:{returnHome:true}}]) b.message(data);
+  for(const data of [null,[],{...ready,version:2},{...ready,theme:'system'},{...ready,capabilities:{returnHome:true}},{...ready,capabilities:Object.assign([],{returnHome:true,themeControl:true})}]) b.message(data);
   b.message(ready,'https://www.husky1102.top.evil.test'); b.message(ready,'https://www.husky1102.top',{});
   assert.equal(b.classes.size,0);
   b.message({...ready,theme:'light'}); assert.equal(b.classes.size,0); assert.equal(b.sent.at(-1).data.type,'husky:embed:init');

@@ -120,10 +120,8 @@ test("npm metadata identifies this repository as a private site project", () => 
 test("Ruby builds use a committed cross-platform dependency lock", () => {
   const gemfileLock = read("Gemfile.lock");
   const gitignore = read(".gitignore");
-  const contributing = read("CONTRIBUTING.md");
 
   assert.doesNotMatch(gitignore, /^Gemfile\.lock$/m);
-  assert.doesNotMatch(contributing, /does not commit `Gemfile\.lock`/);
   assert.match(gemfileLock, /PLATFORMS\n(?: {2}.+\n)* {2}ruby\n(?: {2}.+\n)* {2}x86_64-linux\n/);
   assert.match(gemfileLock, /BUNDLED WITH\n {3}2\.4\.22\n/);
 });

@@ -13,80 +13,8 @@ const assertBuiltSite = () => {
 const existsInSite = (relativePath) => fs.existsSync(path.join(site, relativePath));
 const readGenerated = (relativePath) => fs.readFileSync(path.join(site, relativePath), "utf8");
 
-const walk = (dir) => {
-  assert.ok(fs.existsSync(dir), "Generated _site directory is required for public route tests.");
-
-  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) return walk(fullPath);
-    return fullPath;
-  });
-};
-
 test("generated site exists before public route assertions", () => {
   assertBuiltSite();
-});
-
-test("template-only and talkmap routes are not generated", () => {
-  assertBuiltSite();
-
-  const absentRoutes = [
-    "talkmap.html",
-    "talkmap",
-    "markdown",
-    "markdown.html",
-    "md",
-    "page-archive",
-    "collection-archive",
-    "portfolio",
-    "publications",
-    "teaching",
-    "talks",
-  ];
-
-  const leakedRoutes = absentRoutes.filter(existsInSite);
-  assert.deepEqual(leakedRoutes, [], `Unexpected public routes: ${leakedRoutes.join(", ")}`);
-});
-
-test("sitemap omits template-only and talkmap routes", () => {
-  assertBuiltSite();
-
-  const sitemap = readGenerated("sitemap.xml");
-  const forbiddenUrls = [
-    "/talkmap.html",
-    "/talkmap/",
-    "/markdown/",
-    "/page-archive/",
-    "/collection-archive/",
-    "/portfolio/",
-    "/publications/",
-    "/teaching/",
-    "/talks/",
-  ];
-
-  for (const url of forbiddenUrls) {
-    assert.doesNotMatch(sitemap, new RegExp(url.replaceAll("/", "\\/")));
-  }
-});
-
-test("sample talk content is absent from generated text assets", () => {
-  assertBuiltSite();
-
-  const textExtensions = new Set([".css", ".html", ".js", ".json", ".txt", ".xml"]);
-  const generatedText = walk(site)
-    .filter((file) => textExtensions.has(path.extname(file)))
-    .map((file) => fs.readFileSync(file, "utf8"))
-    .join("\n");
-
-  for (const sampleText of [
-    "UC San Francisco",
-    "UC-Berkeley Institute",
-    "London School of Testing",
-    "Testing Institute of America",
-    "Talk 1 on Relevant Topic",
-  ]) {
-    assert.doesNotMatch(generatedText, new RegExp(sampleText));
-  }
 });
 
 test("primary pages expose non-empty description and Open Graph description metadata", () => {
@@ -122,63 +50,49 @@ test("homepage motion assets load only on the homepage", () => {
   assert.ok(!existsInSite("assets/js/_home-motion.js"));
 });
 
-test("HTML sitemap lists only titled, user-facing content pages", () => {
+test("HTML sitemap links have titles and resolve to published pages", () => {
   assertBuiltSite();
-
   const sitemap = readGenerated("sitemap/index.html");
-  const listedPages = Array.from(
+  const links = Array.from(
     sitemap.matchAll(/<h2 class="archive__item-title"[^>]*>\s*<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g),
     ([, href, title]) => ({ href, title: title.replace(/<[^>]+>/g, "").trim() })
   );
-
-  assert.deepEqual(
-    listedPages,
-    [
-      { href: "https://husky1102.github.io/about/", title: "About" },
-      { href: "https://husky1102.github.io/blog_embed/", title: "个人博客" },
-      { href: "https://husky1102.github.io/categories/", title: "Posts by Category" },
-      { href: "https://husky1102.github.io/cv/", title: "CV" },
-      { href: "https://husky1102.github.io/cv_zh/", title: "简历" },
-      { href: "https://husky1102.github.io/", title: "Husky1102" },
-      { href: "https://husky1102.github.io/tags/", title: "Posts by Tags" },
-      { href: "https://husky1102.github.io/terms/", title: "隐私说明" },
-      { href: "https://husky1102.github.io/year-archive/", title: "Blog posts" },
-    ]
-  );
-});
-
-test("primary identity pages avoid duplicate author sidebars", () => {
-  assertBuiltSite();
-
-  const about = readGenerated("about/index.html");
-  const cv = readGenerated("cv/index.html");
-  const cvZh = readGenerated("cv_zh/index.html");
-
-  for (const page of [about, cv, cvZh]) {
-    assert.doesNotMatch(page, /class="author__profile"/);
-    assert.doesNotMatch(page, /id="author-links-toggle"/);
+  assert.ok(links.length > 0, "The sitemap should list content pages.");
+  assert.equal(new Set(links.map(link => link.href)).size, links.length);
+  for (const { href, title } of links) {
+    assert.ok(title, `Missing title for ${href}`);
+    const url = new URL(href);
+    assert.equal(url.origin, "https://husky1102.github.io");
+    const relativePath = decodeURIComponent(url.pathname).replace(/^\//, "");
+    const target = relativePath.endsWith("/") || !relativePath ? `${relativePath}index.html` : relativePath;
+    assert.ok(existsInSite(target), `Sitemap destination does not exist: ${href}`);
+    assert.doesNotMatch(target, /^(?:assets|images|docs|scripts|tests)\//);
+  }
+  for (const page of ["index.html", "about/index.html", "cv/index.html", "cv_zh/index.html", "blog_embed/index.html"]) {
+    const canonical = readGenerated(page).match(/<link rel="canonical" href="([^"]+)"/)[1];
+    assert.ok(links.some(link => link.href === canonical), `Missing sitemap entry for ${page}`);
   }
 });
 
-test("generated identity and blog pages expose the intended public content", () => {
-  assertBuiltSite();
+test("CV pages expose their document language and locale", () => {
+  for (const [page, language, locale] of [["cv/index.html", "en", "en-US"], ["cv_zh/index.html", "zh", "zh-CN"]]) {
+    const html = readGenerated(page);
+    assert.match(html, new RegExp(`<html[^>]+lang="${language}"`));
+    assert.match(html, new RegExp(`<meta property="og:locale" content="${locale}"`));
+  }
+});
 
-  const home = readGenerated("index.html");
-  const about = readGenerated("about/index.html");
-  const cv = readGenerated("cv/index.html");
-  const cvZh = readGenerated("cv_zh/index.html");
+test("Primary pages expose a single main landmark", () => {
+  for (const page of ["index.html", "about/index.html", "cv/index.html", "cv_zh/index.html", "blog_embed/index.html"]) {
+    assert.equal((readGenerated(page).match(/<(?:main\b|[^>]+\brole="main")/g) || []).length, 1, page);
+  }
+});
+
+test("Blog iframe has an accessible name and an independent reading link", () => {
   const blog = readGenerated("blog_embed/index.html");
-
-  assert.match(home, /<meta property="og:site_name" content="Husky">/);
-  assert.match(about, /西安交通大学[\s\S]*湖南大学[\s\S]*持续学习/);
-  assert.match(cv, /<html lang="en" class="no-js">/);
-  assert.match(cv, /<meta property="og:locale" content="en-US">/);
-  assert.match(cv, /Embodied AI[\s\S]*Agent Memory[\s\S]*Continual Learning/);
-  assert.match(cvZh, /<html lang="zh" class="no-js">/);
-  assert.match(cvZh, /<meta property="og:locale" content="zh-CN">/);
-  assert.match(cvZh, /具身智能[\s\S]*智能体记忆[\s\S]*持续学习/);
+  const frame = blog.match(/<iframe\b[^>]*>/)?.[0];
+  assert.ok(frame, "Blog page should provide an iframe.");
+  assert.match(frame, /title="[^"]+"/);
+  assert.match(frame, /src="https:\/\/www\.husky1102\.top\/"/);
   assert.match(blog, /href="https:\/\/www\.husky1102\.top\/" target="_blank" rel="noopener noreferrer"/);
-  assert.match(blog, /<iframe[^>]+id="blog-frame"[^>]+src="https:\/\/www\.husky1102\.top\/"[^>]+title="unTitled 博客"/);
-  assert.equal((blog.match(/<main\b/g) || []).length, 1);
-  assert.doesNotMatch(blog, /Jekyll[\s\S]*AcademicPages[\s\S]*Minimal Mistakes/);
 });

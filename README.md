@@ -33,12 +33,14 @@ bundle exec jekyll serve
 
 ## 验证
 
-`npm test` 是统一测试入口：它会先重新生成并核对字体子集，然后运行 Node 测试和 Python 单元测试。
+路由与发布范围测试读取生成后的 `_site/`。先构建，再运行 `npm test`；测试入口会重新生成并核对字体子集，然后运行 Node 测试和 Python 单元测试。
 
 ```bash
-npm test
+npm run build:js
+npm run build:font
 bundle exec jekyll clean
 bundle exec jekyll build --safe --trace
+npm test
 ```
 
 修改 JavaScript 后还应确认提交的压缩产物与源文件一致：
@@ -54,7 +56,8 @@ git diff --exit-code -- assets/js/main.min.js assets/js/home-motion.min.js
 - `_layouts/`、`_includes/`、`_sass/`：Jekyll 布局、组件与样式
 - `assets/`、`images/`：公开发布的前端资源
 - `scripts/`：字体与图片的源资产及生成脚本，不随站点发布
-- `tests/`：构建策略、公开路由、资源预算和页面约束测试
+- `tests/`：构建、公开路由、资源大小、可访问性与交互检查
+- `docs/`：博客嵌入等功能的维护说明
 - `.github/workflows/`：站点检查与 GitHub Pages 发布流程
 
 ## 生成资产

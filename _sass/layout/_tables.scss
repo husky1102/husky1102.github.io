@@ -2,11 +2,7 @@
    TABLES
    ========================================================================== */
 
-/* Rebuilt for v4 (I-31): display:block + overflow-x lets wide tables scroll
-   instead of breaking the mobile layout (Kramdown emits a bare <table>, so the
-   table itself has to be the scroll container). Vertical grid lines are dropped
-   in favour of horizontal rules, a brand-tinted header, zebra rows and a soft
-   rounded frame, so tables match the rest of the card system in both themes. */
+/* Kramdown emits bare tables, so each table handles its own horizontal overflow. */
 
 table {
   display: block;

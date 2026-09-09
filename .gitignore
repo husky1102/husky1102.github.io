@@ -16,8 +16,14 @@ vendor/
 # OS / editor noise
 .DS_Store
 
-# Local AI agent workspace
+# Local agent and design-tool state
+.agents/
+.codex/
 .cowork/
+.impeccable/
+.claude/
+skills-lock.json
 
-# Local Claude Code settings (e.g. personal permission rules)
-.claude/settings.local.json
+# Python bytecode
+__pycache__/
+*.py[cod]

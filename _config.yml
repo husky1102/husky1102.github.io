@@ -87,7 +87,7 @@ publication_category:
     title: 'Conference Papers'
 
 # Site Settings
-teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
+teaser                   :  # Optional fallback teaser image filename under /images/
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
 future                   : false
@@ -171,7 +171,14 @@ exclude:
   - .jekyll-assets-cache
   - .sass-cache
   - .agents
+  - .codex
   - .cowork
+  - .claude
+  - .impeccable
+  - .devcontainer
+  - .fonttools-local
+  - .DS_Store
+  - "**/__pycache__/**"
   - assets/js/_home-motion.js
   - assets/js/_main.js
   - assets/js/plugins
@@ -179,7 +186,6 @@ exclude:
   - CHANGELOG
   - Capfile
   - CONTRIBUTING.md
-  - DESIGN.md
   - config
   - Dockerfile
   - Gemfile
@@ -188,15 +194,13 @@ exclude:
   - LICENSE
   - local
   - log
-  - markdown_generator
   - node_modules
   - package.json*
   - package-lock.json
-  - PRODUCT.md
   - requirements-assets.txt
   - Rakefile
   - README
-  - review
+  - docs
   - scripts
   - skills-lock.json
   - "*-lock.json"
@@ -207,7 +211,6 @@ exclude:
   - tmp
   - tests
   - vendor
-  - examples
 keep_files:
   - .git
   - .svn

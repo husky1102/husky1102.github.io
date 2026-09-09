@@ -155,10 +155,6 @@ h6,
   font-family: "Maple Mono NF CN", "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* I-32: keep the mono identity, but give the heading scale a real ladder.
-   The stock theme set h1 ~25px, h2 ~20px, h3 = body, h4-h6 BELOW body (12px),
-   all at the same weight as body, so hierarchy read flat. Add weight + tight
-   tracking + a wider content scale so headings carry their own voice. */
 h1,
 h2,
 h3,
@@ -782,7 +778,6 @@ html[data-theme="dark"] .home-hero__portrait-ring::before { border-color: rgba(1
   padding: 1rem;
   border: 1px solid var(--global-border-color);
   border-radius: 8px;
-  /* I-35 quiet tier: flat bordered surface at rest; elevates only on hover. */
   background: color-mix(in srgb, var(--global-footer-bg-color) 50%, var(--global-bg-color));
   box-shadow: none;
   transform: translateY(0);

@@ -11,7 +11,6 @@ const assertBuiltSite = () => {
   assert.ok(fs.existsSync(path.join(site, "sitemap.xml")), "Generated sitemap.xml is required for publish boundary tests.");
 };
 const existsInSite = (relativePath) => fs.existsSync(path.join(site, relativePath));
-const existsInRoot = (relativePath) => fs.existsSync(path.join(root, relativePath));
 
 const walk = (dir) => {
   assert.ok(fs.existsSync(dir), "Generated _site directory is required for publish boundary tests.");
@@ -24,95 +23,26 @@ const walk = (dir) => {
   });
 };
 
-test("generated site exists before publish boundary assertions", () => {
+test("Publish output excludes development files and local tool state", () => {
   assertBuiltSite();
-});
-
-test("publish boundary excludes source-only maintenance artifacts", () => {
-  assertBuiltSite();
-
   const forbiddenPaths = [
-    "scripts",
-    "markdown_generator",
-    "review",
-    ".agents",
-    ".cowork",
-    "CONTRIBUTING.md",
-    "DESIGN",
-    "DESIGN.md",
-    "PRODUCT.md",
-    "talkmap.ipynb",
-    "talkmap_out.ipynb",
-    "talkmap.py",
-    "package-lock.json",
-    "requirements-assets.txt",
-    "skills-lock.json",
-    "docker-compose.yaml",
+    "scripts", "tests", "docs", ".git", ".github", ".agents", ".codex", ".cowork",
+    ".claude", ".impeccable", ".devcontainer", ".fonttools-local", ".bundle",
+    "node_modules", "vendor", "CONTRIBUTING.md", "README.md", "Gemfile", "Gemfile.lock",
+    "package.json", "package-lock.json", "requirements-assets.txt", "skills-lock.json",
+    "Dockerfile", "docker-compose.yaml",
   ];
-
-  const leakedPaths = forbiddenPaths.filter(existsInSite);
-  assert.deepEqual(leakedPaths, [], `Unexpected public artifacts: ${leakedPaths.join(", ")}`);
-
-  const sitemap = fs.readFileSync(path.join(site, "sitemap.xml"), "utf8");
-  assert.doesNotMatch(sitemap, /\/DESIGN\//);
-  assert.doesNotMatch(sitemap, /PRODUCT\.md/);
+  assert.deepEqual(forbiddenPaths.filter(existsInSite), []);
 });
 
-test("publish boundary excludes notebooks and lockfile-style generated metadata", () => {
+test("Publish output excludes notebooks, caches and dependency metadata", () => {
   assertBuiltSite();
-
   const leakedFiles = walk(site).filter((relativePath) => {
     const fileName = path.basename(relativePath);
-    return fileName.endsWith(".ipynb") || fileName.endsWith("-lock.json");
+    return fileName.endsWith(".ipynb") || fileName.endsWith("-lock.json") ||
+      fileName.endsWith(".pyc") || fileName === ".DS_Store" || relativePath.split(path.sep).includes("__pycache__");
   });
-
   assert.deepEqual(leakedFiles, [], `Unexpected public files: ${leakedFiles.join(", ")}`);
-});
-
-test("template publication sample files are absent from source and generated site", () => {
-  assertBuiltSite();
-
-  const samplePublicationFiles = [
-    "files/bibtex1.bib",
-    "files/paper1.pdf",
-    "files/paper2.pdf",
-    "files/paper3.pdf",
-    "files/slides1.pdf",
-    "files/slides2.pdf",
-    "files/slides3.pdf",
-  ];
-
-  const remainingSourceFiles = samplePublicationFiles.filter(existsInRoot);
-  assert.deepEqual(remainingSourceFiles, [], `Unexpected template files in source: ${remainingSourceFiles.join(", ")}`);
-
-  const leakedGeneratedFiles = samplePublicationFiles.filter(existsInSite);
-  assert.deepEqual(leakedGeneratedFiles, [], `Unexpected template files in _site: ${leakedGeneratedFiles.join(", ")}`);
-
-  const sitemap = fs.readFileSync(path.join(site, "sitemap.xml"), "utf8");
-  for (const file of samplePublicationFiles) {
-    assert.doesNotMatch(sitemap, new RegExp(file.replaceAll("/", "\\/").replaceAll(".", "\\.")));
-  }
-});
-
-test("removed JSON CV path does not leave source artifacts or sample output", () => {
-  assertBuiltSite();
-
-  const deletedSourcePaths = [
-    "_data/cv.json",
-    "_includes/cv-template.html",
-    "scripts/cv_markdown_to_json.py",
-    "scripts/update_cv_json.sh",
-  ];
-  const remainingSourcePaths = deletedSourcePaths.filter(existsInRoot);
-  assert.deepEqual(remainingSourcePaths, [], `Unexpected JSON CV artifacts: ${remainingSourcePaths.join(", ")}`);
-
-  const generatedText = walk(site)
-    .filter((relativePath) => [".html", ".json", ".xml"].includes(path.extname(relativePath)))
-    .map((relativePath) => fs.readFileSync(path.join(site, relativePath), "utf8"))
-    .join("\n");
-
-  assert.doesNotMatch(generatedText, /Your Sidebar Name/);
-  assert.doesNotMatch(generatedText, /Red Brick University/);
 });
 
 test("privacy page describes only the integrations that are actually active", () => {

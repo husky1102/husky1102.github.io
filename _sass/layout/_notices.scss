@@ -9,12 +9,7 @@
  *  Text for the notice
  *  </div>
  *
- *  Rebuilt for v4 (I-30): theme-aware + brand-aligned. The old version baked a
- *  fixed light background with mix(#fff, color, 90%) and used the code-text
- *  color for body text, which made notices unreadable in dark mode (~1.4:1) and
- *  gave links sub-AA contrast even in light mode. Now the body text uses the
- *  theme text color, the surface is a light wash of the accent over the theme
- *  background, and each semantic accent has a light- and dark-mode value.
+ *  Notice surfaces and semantic accents adapt to the active theme.
  */
 
 /* Semantic accents, tuned to pass AA on the notice surface in each theme. */

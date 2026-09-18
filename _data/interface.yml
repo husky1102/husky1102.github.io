@@ -1,0 +1,24 @@
+zh:
+  navigation: 主导航
+  open_menu: 打开导航菜单
+  close_menu: 关闭导航菜单
+  dark_mode: 切换到深色模式
+  light_mode: 切换到浅色模式
+  skip_content: 跳到主要内容
+  back_to_top: 返回顶部
+  subscribe: 订阅更新
+  privacy: 隐私说明
+  language: 简历语言
+  updated: 内容更新
+en:
+  navigation: Main navigation
+  open_menu: Open navigation menu
+  close_menu: Close navigation menu
+  dark_mode: Switch to dark mode
+  light_mode: Switch to light mode
+  skip_content: Skip to main content
+  back_to_top: Back to top
+  subscribe: Subscribe
+  privacy: Privacy
+  language: CV language
+  updated: Content updated

@@ -20,7 +20,6 @@ redirect_from:
     </div>
     <nav class="cv-header__links" aria-label="CV links">
       <a href="{{ base_path }}/about/">About</a>
-      <a href="{{ base_path }}/cv_zh/">中文简历</a>
       <a href="https://github.com/husky1102">GitHub</a>
       <a href="https://kaggle.com/husky1102">Kaggle</a>
       <a href="https://www.husky1102.top/">Blog</a>

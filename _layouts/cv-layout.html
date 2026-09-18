@@ -5,6 +5,7 @@ layout: compress
 {% include base_path %}
 {% assign document_locale = page.locale | default: site.locale | default: "en" %}
 {% assign document_language = page.lang | default: document_locale | slice: 0,2 %}
+{% assign ui = site.data.interface[document_language] | default: site.data.interface.zh %}
 
 <!doctype html>
 <html lang="{{ document_language }}" class="no-js"{% if site.site_theme == "dark" %} data-theme="dark"{% endif %}>
@@ -17,12 +18,13 @@ layout: compress
 
   <body class="cv-layout">
     {% include browser-upgrade.html %}
-    <a class="screen-reader-shortcut" href="#main">跳到主要内容</a>
+    <a class="screen-reader-shortcut" href="#main">{{ ui.skip_content }}</a>
     {% include masthead.html %}
     <div class="scroll-progress" aria-hidden="true"><span></span></div>
 
     <main id="main" class="cv-main" aria-label="{{ page.title | default: "CV" }}">
       <div class="cv-page">
+        {% include cv-language-switch.html %}
         {{ content }}
       </div>
     </main>
@@ -34,7 +36,7 @@ layout: compress
       </footer>
     </div>
 
-    <button class="back-to-top" type="button" aria-label="Back to top">
+    <button class="back-to-top" type="button" aria-label="{{ ui.back_to_top }}">
       <i class="fas fa-arrow-up" aria-hidden="true"></i>
     </button>
 

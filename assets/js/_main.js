@@ -47,7 +47,9 @@
       }
 
       // Keep the toggle's state, label, and the browser UI color in sync.
-      var nextThemeLabel = isDark ? "切换到浅色模式" : "切换到深色模式";
+      var nextThemeLabel = isDark
+        ? (themeToggleButton && themeToggleButton.getAttribute("data-light-label")) || "切换到浅色模式"
+        : (themeToggleButton && themeToggleButton.getAttribute("data-dark-label")) || "切换到深色模式";
       if (themeToggleButton) {
         themeToggleButton.setAttribute("aria-pressed", isDark ? "true" : "false");
         themeToggleButton.setAttribute("aria-label", nextThemeLabel);

@@ -12,7 +12,7 @@ test("Greedy navigation keeps closed links out of the keyboard path", () => {
 
   assert.match(masthead, /id="site-nav-hidden-links"[^>]*aria-hidden="true"[^>]*inert/);
   assert.match(greedyNav, /hiddenLinks\.toggleAttribute\("inert", !shouldOpen\)/);
-  assert.match(greedyNav, /shouldOpen \? "[^"]+" : "[^"]+"/);
+  assert.match(greedyNav, /shouldOpen \? closeLabel : openLabel/);
   assert.match(greedyNav, /event\.key === "Escape"[\s\S]*setHiddenLinksOpen\(false, true\)/);
   assert.match(greedyNav, /document\.addEventListener\("pointerdown"[\s\S]*!nav\.contains\(event\.target\)/);
   assert.match(greedyNav, /if \(!shouldOpen && shouldReturnFocus\)[\s\S]*btn\.focus\(\)/);

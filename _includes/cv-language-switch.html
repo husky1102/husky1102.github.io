@@ -1,0 +1,4 @@
+<nav class="cv-language-switch" aria-label="{{ ui.language }}">
+  <a href="{{ '/cv_zh/' | relative_url }}" lang="zh-CN" hreflang="zh-CN"{% unless document_language == 'en' %} aria-current="page"{% endunless %}>中文</a>
+  <a href="{{ '/cv/' | relative_url }}" lang="en" hreflang="en"{% if document_language == 'en' %} aria-current="page"{% endif %}>English</a>
+</nav>

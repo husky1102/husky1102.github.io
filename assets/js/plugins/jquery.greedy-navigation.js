@@ -9,13 +9,17 @@
   var nav = document.getElementById("site-nav");
   var btn = document.querySelector("#site-nav > .greedy-nav__toggle");
   var visibleLinks = nav ? nav.querySelector(".visible-links") : null;
-  var persistTail = visibleLinks ? visibleLinks.querySelector(".persist.tail") : null;
   var hiddenLinks = nav ? nav.querySelector(".hidden-links") : null;
   var breaks = [];
 
   if (!nav || !btn || !visibleLinks || !hiddenLinks) {
     return;
   }
+
+  // Restore links by their initial position, including around the current page.
+  var originalLinks = Array.prototype.slice.call(visibleLinks.children);
+  var openLabel = btn.getAttribute("data-open-label") || "打开导航菜单";
+  var closeLabel = btn.getAttribute("data-close-label") || "关闭导航菜单";
 
   var getWidth = function (element) {
     return element ? element.getBoundingClientRect().width : 0;
@@ -49,8 +53,8 @@
     hiddenLinks.toggleAttribute("inert", !shouldOpen);
     btn.classList.toggle("close", shouldOpen);
     btn.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
-    btn.setAttribute("aria-label", shouldOpen ? "关闭导航菜单" : "打开导航菜单");
-    btn.setAttribute("title", shouldOpen ? "关闭导航菜单" : "打开导航菜单");
+    btn.setAttribute("aria-label", shouldOpen ? closeLabel : openLabel);
+    btn.setAttribute("title", shouldOpen ? closeLabel : openLabel);
 
     if (!shouldOpen && shouldReturnFocus) {
       btn.focus();
@@ -95,11 +99,11 @@
           break;
         }
 
-        if (persistTail && persistTail.children.length > 0) {
-          visibleLinks.insertBefore(firstHiddenLink, persistTail);
-        } else {
-          visibleLinks.appendChild(firstHiddenLink);
-        }
+        var originalIndex = originalLinks.indexOf(firstHiddenLink);
+        var nextVisible = originalLinks.slice(originalIndex + 1).filter(function (item) {
+          return item.parentNode === visibleLinks;
+        })[0];
+        visibleLinks.insertBefore(firstHiddenLink, nextVisible || null);
         breaks.pop();
       }
 

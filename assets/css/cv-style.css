@@ -1,3 +1,29 @@
+/* Language choices keep both CV URLs directly shareable. */
+.cv-language-switch {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  margin: 0 0 1.25rem;
+}
+.cv-language-switch a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--global-text-color-light);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.cv-language-switch a[aria-current="page"] {
+  color: var(--global-link-color);
+  border-color: var(--global-border-color);
+  background: var(--global-footer-bg-color);
+}
+.cv-language-switch a:hover { color: var(--global-link-color); }
+
 /* CV presentation */
 .cv-document {
   color: var(--global-text-color);
@@ -297,6 +323,7 @@
 
 @media print {
   .masthead,
+  .cv-language-switch,
   .page__footer,
   .cv-header__links {
     display: none;

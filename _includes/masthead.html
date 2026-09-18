@@ -3,9 +3,9 @@
 <div class="masthead">
   <div class="masthead__inner-wrap">
     <div class="masthead__menu">
-      <nav id="site-nav" class="greedy-nav{% if page.blog_embed %} blog-reader__nav{% endif %}"{% if page.blog_embed %} aria-label="博客阅读导航"{% endif %}>
+      <nav id="site-nav" class="greedy-nav{% if page.blog_embed %} blog-reader__nav{% endif %}" aria-label="{{ ui.navigation }}">
         {% unless page.blog_embed %}
-        <button type="button" class="greedy-nav__toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="site-nav-hidden-links"><div class="navicon"></div></button>
+        <button type="button" class="greedy-nav__toggle" aria-label="{{ ui.open_menu }}" data-open-label="{{ ui.open_menu }}" data-close-label="{{ ui.close_menu }}" aria-expanded="false" aria-controls="site-nav-hidden-links"><div class="navicon"></div></button>
         {% endunless %}
         <ul class="visible-links">
           {% if page.blog_embed %}
@@ -20,18 +20,22 @@
           {% else %}
           <li class="masthead__menu-item masthead__menu-item--lg persist"><a href="{{ base_path }}/">{{ site.title }}</a></li>
           {% for link in site.data.navigation.main %}
-            {% if link.url contains 'http' %}
-              {% assign domain = '' %}
-            {% else %}
-              {% assign domain = base_path %}
+            {% assign nav_url = link.url %}
+            {% assign nav_title = link.title %}
+            {% if document_language == 'en' %}
+              {% assign nav_url = link.url_en | default: link.url %}
+              {% assign nav_title = link.title_en | default: link.title %}
             {% endif %}
-            <li class="masthead__menu-item{% if page.url == link.url %} persist masthead__menu-item--current{% endif %}">
-              <a href="{{ domain }}{{ link.url }}"{% if page.url == link.url %} aria-current="page"{% endif %}>{{ link.title }}</a>
+            {% assign nav_current = false %}
+            {% if page.url == nav_url %}{% assign nav_current = true %}{% endif %}
+            {% if link.section == 'cv' and page.layout == 'cv-layout' %}{% assign nav_current = true %}{% endif %}
+            <li class="masthead__menu-item{% if nav_current %} persist masthead__menu-item--current{% endif %}">
+              <a href="{{ nav_url | relative_url }}"{% if nav_current %} aria-current="page"{% endif %}>{{ nav_title }}</a>
             </li>
           {% endfor %}
           {% endif %}
           <li id="theme-toggle" class="masthead__menu-item persist tail">
-            <button type="button" class="theme-toggle__btn" aria-label="切换到深色模式" title="切换到深色模式" aria-pressed="false">
+            <button type="button" class="theme-toggle__btn" aria-label="{{ ui.dark_mode }}" title="{{ ui.dark_mode }}" data-dark-label="{{ ui.dark_mode }}" data-light-label="{{ ui.light_mode }}" aria-pressed="false">
               <svg id="theme-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
                 <defs><mask id="theme-moon-mask"><rect width="24" height="24" fill="white"/><circle class="theme-toggle__cutout" cx="25" cy="12" r="5" fill="black"/></mask></defs>
                 <circle class="theme-toggle__disc" cx="12" cy="12" r="5" fill="currentColor" mask="url(#theme-moon-mask)"/>

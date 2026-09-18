@@ -32,6 +32,12 @@ npm test
 
 字体许可证随公开字体保留；`scripts/` 下的源资产不随站点发布。资源大小检查见 `tests/asset-budget.test.js`。
 
+## 鼠标指针
+
+九种透明原图保存在 `scripts/assets/cursors/`，运行 `bash scripts/export_cursors.sh`（需要 ImageMagick 7）生成 `assets/cursors/` 下的 PNG。常规指针最大 48px，文本指针最大 32px；保持原图比例和透明背景。样式和点击热点在 `_sass/_cursors.scss`，仅对支持悬停的精细指针设备启用，强制颜色模式使用系统指针。
+
+链接与按钮、正文与输入框、带说明的缩写、可拖动元素、禁用控件及 `aria-busy="true"` 区域会自动匹配相应指针。自定义交互可用 `data-cursor="default|pointer|text|grab|grabbing|wait|help|not-allowed|crosshair"` 指定其中一种状态；`grab` 在按下时切换为 `grabbing`。这些属性只影响指针外观，不会实现拖拽、禁用或加载逻辑。跨域博客 iframe 内的指针由博客原站控制。
+
 ## 博客接入
 
 当前消息协议、失败时的返回入口和部署核对方式见 [博客嵌入说明](docs/blog-embed.md)。

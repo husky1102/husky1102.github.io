@@ -1,0 +1,56 @@
+/* Native cursors: URL paths are relative to assets/css/main.css, including on
+   deployments with a baseurl. Hotspots follow the original artwork. */
+@media (hover: hover) and (pointer: fine) and (forced-colors: none) {
+  :root {
+    --cursor-default: #{'url("../cursors/default.png") 10 5, default'};
+    --cursor-pointer: #{'url("../cursors/pointer.png") 15 5, pointer'};
+    --cursor-text: #{'url("../cursors/text.png") 15 16, text'};
+    --cursor-grab: #{'url("../cursors/grab.png") 24 18, grab'};
+    --cursor-grabbing: #{'url("../cursors/grabbing.png") 23 18, grabbing'};
+    --cursor-wait: #{'url("../cursors/wait.png") 24 24, wait'};
+    --cursor-help: #{'url("../cursors/help.png") 11 9, help'};
+    --cursor-not-allowed: #{'url("../cursors/not-allowed.png") 24 24, not-allowed'};
+    --cursor-crosshair: #{'url("../cursors/crosshair.png") 24 24, crosshair'};
+  }
+
+  html { cursor: var(--cursor-default); }
+
+  :where(p, h1, h2, h3, h4, h5, h6, blockquote, pre, code, dt, dd, td, th,
+    li, figcaption, input:not([type]), input[type="text"], input[type="search"],
+    input[type="email"], input[type="url"], input[type="tel"], input[type="password"],
+    input[type="number"], textarea, [contenteditable="true"], [contenteditable=""]) {
+    cursor: var(--cursor-text);
+  }
+
+  :is(a[href], button, summary, select, label[for], [role="button"], [role="link"],
+    input[type="button"], input[type="submit"], input[type="reset"],
+    input[type="checkbox"], input[type="radio"], input[type="range"], input[type="file"]) {
+    cursor: var(--cursor-pointer);
+  }
+
+  abbr[title] { cursor: var(--cursor-help); }
+  [draggable="true"] { cursor: var(--cursor-grab); }
+  [draggable="true"]:active { cursor: var(--cursor-grabbing); }
+
+  /* Explicit hooks for widgets that support these interactions. */
+  @each $state in default, pointer, text, help, grab, grabbing, crosshair {
+    [data-cursor="#{$state}"], [data-cursor="#{$state}"] * {
+      cursor: var(--cursor-#{$state});
+    }
+  }
+  [data-cursor="grab"]:active, [data-cursor="grab"]:active * {
+    cursor: var(--cursor-grabbing);
+  }
+
+  :is(:disabled, [aria-disabled="true"], .btn--disabled, a.disabled,
+    [data-cursor="not-allowed"]),
+  :is(:disabled, [aria-disabled="true"], .btn--disabled, a.disabled,
+    [data-cursor="not-allowed"]) * {
+    cursor: var(--cursor-not-allowed);
+  }
+
+  :is([aria-busy="true"], .form--loading, [data-cursor="wait"]),
+  :is([aria-busy="true"], .form--loading, [data-cursor="wait"]) * {
+    cursor: var(--cursor-wait);
+  }
+}

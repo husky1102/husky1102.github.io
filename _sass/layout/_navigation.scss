@@ -94,7 +94,7 @@
       &.disabled {
         color: var(--global-text-color-light);
         pointer-events: none;
-        cursor: not-allowed;
+        cursor: var(--cursor-not-allowed, not-allowed);
       }
     }
 
@@ -148,7 +148,7 @@
     &.disabled {
       color: var(--global-text-color-light);
       pointer-events: none;
-      cursor: not-allowed;
+      cursor: var(--cursor-not-allowed, not-allowed);
     }
   }
 }
@@ -195,7 +195,7 @@
     background: var(--global-bg-color);
     color: var(--global-masthead-link-color);
     box-shadow: none;
-    cursor: pointer;
+    cursor: var(--cursor-pointer, pointer);
     z-index: 100;
     transition: color 200ms ease, background-color 200ms ease;
     &:hover, &:focus-visible {
@@ -251,7 +251,7 @@
         color: var(--global-masthead-link-color);
         font-size: inherit;
         line-height: 1;
-        cursor: pointer;
+        cursor: var(--cursor-pointer, pointer);
 
         &::before { display: none; }
 

@@ -306,7 +306,7 @@
     textarea,
     label {
       pointer-events: none;
-      cursor: not-allowed;
+      cursor: var(--cursor-not-allowed, not-allowed);
       filter: alpha(opacity=65);
       box-shadow: none;
       opacity: 0.65;

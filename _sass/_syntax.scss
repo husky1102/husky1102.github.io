@@ -55,7 +55,7 @@ div.highlighter-rouge, figure.highlight {
             backdrop-filter: blur(8px) saturate(1.12);
     color: var(--global-link-color);
     box-shadow: 0 8px 18px rgba(#000, 0.08);
-    cursor: pointer;
+    cursor: var(--cursor-pointer, pointer);
     opacity: 0;
     -webkit-transform: translateY(-2px);
         -ms-transform: translateY(-2px);

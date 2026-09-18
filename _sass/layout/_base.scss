@@ -90,7 +90,7 @@ p, pre, blockquote, ul, ol, dl, figure, table, fieldset {
 abbr[title],
 abbr[data-original-title] {
   text-decoration: none;
-  cursor: help;
+  cursor: var(--cursor-help, help);
   border-bottom: 1px dotted var(--global-text-color);
 }
 

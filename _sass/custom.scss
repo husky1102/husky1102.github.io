@@ -1186,7 +1186,7 @@ html[data-theme="dark"] .blog-layout {
           backdrop-filter: blur(12px) saturate(1.2);
   color: var(--global-link-color);
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.16);
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
   opacity: 0;
   pointer-events: none;
   transform: translateY(10px);

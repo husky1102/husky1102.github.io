@@ -364,7 +364,7 @@
   font-family: $sans-serif;
   z-index: 10;
   position: relative;
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
 
   li:last-child {
     a {
@@ -401,7 +401,7 @@
   background: var(--global-bg-color);
   z-index: -1;
   box-shadow: 0 0 10px rgba(#000, 0.25);
-  cursor: default;
+  cursor: var(--cursor-default, default);
 
   @include breakpoint($large) {
     display: block;

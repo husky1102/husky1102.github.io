@@ -14,10 +14,11 @@ redirect_from:
 
 <article class="cv-document">
   <header class="cv-header">
-    <div class="cv-header__text">
+    <div class="cv-header__title">
       <h1 id="cv-title">Husky</h1>
-      <p class="cv-header__summary">M.S. student in Artificial Intelligence at Xi'an Jiaotong University, focusing on Embodied AI, Agent Memory, and Continual Learning.</p>
+      {% include cv-language-switch.html %}
     </div>
+    <p class="cv-header__summary">M.S. student in Artificial Intelligence at Xi'an Jiaotong University, focusing on Embodied AI, Agent Memory, and Continual Learning.</p>
     <nav class="cv-header__links" aria-label="CV links">
       <a href="{{ base_path }}/about/">About</a>
       <a href="https://github.com/husky1102">GitHub</a>

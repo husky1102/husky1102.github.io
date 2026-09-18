@@ -1,4 +1,13 @@
-<nav class="cv-language-switch" aria-label="{{ ui.language }}">
-  <a href="{{ '/cv_zh/' | relative_url }}" lang="zh-CN" hreflang="zh-CN"{% unless document_language == 'en' %} aria-current="page"{% endunless %}>中文</a>
-  <a href="{{ '/cv/' | relative_url }}" lang="en" hreflang="en"{% if document_language == 'en' %} aria-current="page"{% endif %}>English</a>
+{% assign cv_language = page.lang | default: page.locale | default: site.locale | default: 'en' | slice: 0,2 %}
+{% assign cv_language_ui = site.data.interface[cv_language] | default: site.data.interface.zh %}
+<nav class="cv-language-switch" aria-label="{{ cv_language_ui.language }}">
+  {% if cv_language == 'en' %}
+    <a href="{{ '/cv_zh/' | relative_url }}" lang="zh-CN" hreflang="zh-CN" aria-label="切换到中文简历" title="切换到中文简历">
+      <i class="fas fa-language" aria-hidden="true"></i><span>中文</span>
+    </a>
+  {% else %}
+    <a href="{{ '/cv/' | relative_url }}" lang="en" hreflang="en" aria-label="Switch to English CV" title="Switch to English CV">
+      <i class="fas fa-language" aria-hidden="true"></i><span>English</span>
+    </a>
+  {% endif %}
 </nav>

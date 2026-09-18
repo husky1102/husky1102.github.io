@@ -12,10 +12,11 @@ redirect_from:
 
 <article class="cv-document cv-document--zh">
   <header class="cv-header">
-    <div class="cv-header__text">
+    <div class="cv-header__title">
       <h1 id="cv-title">克苏鲁微糖</h1>
-      <p class="cv-header__summary">西安交通大学人工智能硕士在读，关注具身智能、智能体记忆与持续学习。</p>
+      {% include cv-language-switch.html %}
     </div>
+    <p class="cv-header__summary">西安交通大学人工智能硕士在读，关注具身智能、智能体记忆与持续学习。</p>
     <nav class="cv-header__links" aria-label="简历链接">
       <a href="{{ base_path }}/about/">关于我</a>
       <a href="https://github.com/husky1102">GitHub</a>

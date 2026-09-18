@@ -11,8 +11,8 @@
   min-height: 2.75rem;
   min-width: 6.5rem;
   padding: 0.25rem 0.65rem;
-  border: 1px solid transparent;
-  border-radius: 6px;
+  border: 0;
+  background: transparent;
   color: var(--global-text-color-light);
   font-size: 0.85rem;
   text-decoration: none;
@@ -21,12 +21,14 @@
 .cv-language-switch a:hover,
 .cv-language-switch a:focus-visible {
   color: var(--global-link-color);
-  border-color: var(--global-border-color);
-  background: var(--global-footer-bg-color);
 }
 .cv-language-switch a:focus-visible {
-  outline: 2px solid var(--global-link-color);
-  outline-offset: 3px;
+  outline: none;
+}
+.cv-language-switch a:focus-visible span {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
 }
 
 /* CV presentation */

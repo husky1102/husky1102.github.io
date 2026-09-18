@@ -37,7 +37,7 @@ home_motion: true
 
 <section class="home-section">
   <header class="home-section__header">
-    <h2>Research Interests</h2>
+    <h2>研究方向 / Research Interests</h2>
     <p>关注智能体如何在世界中行动、记忆，并持续形成更好的判断。</p>
   </header>
   <div class="home-research-list">

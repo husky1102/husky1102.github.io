@@ -33,20 +33,6 @@ redirect_from:
   </div>
 </section>
 
-<section class="about-section" aria-labelledby="about-path-title">
-  <h2 id="about-path-title">学习路径</h2>
-  <dl class="about-path">
-    <div>
-      <dt>现在</dt>
-      <dd>西安交通大学，人工智能硕士在读</dd>
-    </div>
-    <div>
-      <dt>2025</dt>
-      <dd>湖南大学，机器人工程学士</dd>
-    </div>
-  </dl>
-</section>
-
 <nav class="about-section" aria-labelledby="about-links-title">
   <h2 id="about-links-title">继续了解</h2>
   <ul class="about-link-list">

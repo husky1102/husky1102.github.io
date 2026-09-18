@@ -35,6 +35,7 @@ test("primary pages expose non-empty description and Open Graph description meta
       /<meta property="og:description" name="description" content="[^"]+">/,
       `${page} should expose its resolved SEO description.`
     );
+    assert.match(html, /<meta property="og:image" content="https:\/\/husky1102\.github\.io\/images\/avatar-gpt063-1024\.webp">/);
     assert.match(html, /<link rel="canonical" href="https:\/\/husky1102\.github\.io\//);
   }
 });

@@ -10,9 +10,14 @@ redirect_from:
 {% include base_path %}
 
 <div class="about-profile">
-  <p class="about-profile__lead">我是克苏鲁微糖 / Husky，目前在西安交通大学攻读人工智能硕士学位。</p>
-  <p>我本科毕业于湖南大学机器人工程专业。现在主要关注智能体如何在环境中行动、如何保留和使用记忆，以及如何在持续学习中形成更好的判断。</p>
-  <p>这个站点用于整理我的学习路径、研究兴趣和长期记录。内容会随学习进展持续更新。</p>
+  <div class="about-profile__copy">
+    <p class="about-profile__lead">我是克苏鲁微糖 / Husky，目前在西安交通大学攻读人工智能硕士学位。</p>
+    <p>我本科毕业于湖南大学机器人工程专业。现在主要关注智能体如何在环境中行动、如何保留和使用记忆，以及如何在持续学习中形成更好的判断。</p>
+    <p>这个站点用于整理我的学习路径、研究兴趣和长期记录。内容会随学习进展持续更新。</p>
+  </div>
+  <div class="about-profile__art">
+    <img src="{{ '/images/character-reading-640.webp' | relative_url }}" srcset="{{ '/images/character-reading-320.webp' | relative_url }} 320w, {{ '/images/character-reading-640.webp' | relative_url }} 640w" sizes="(max-width: 767px) 208px, 320px" width="640" height="768" alt="Husky 角色手捧书本思考" decoding="async">
+  </div>
 </div>
 
 <section class="about-section" aria-labelledby="about-focus-title">

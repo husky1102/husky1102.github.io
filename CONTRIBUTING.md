@@ -27,7 +27,8 @@ npm test
     -o images/avatar-gpt063.webp
   ```
 
-- 首页版本：安装 `Pillow==12.2.0` 后，运行 `python3 scripts/export_hero_portrait.py`。
+- 旧版头像高清备份：安装 `Pillow==12.2.0` 后，运行 `python3 scripts/export_hero_portrait.py`。
+- 角色插画：`gpt091-source.png` 用于首页，`gpt092-source.png` 用于关于页，`gpt093-source.png` 用于 404 页，原图位于 `scripts/assets/images/`。安装 libwebp（本次导出使用 cwebp 1.6.0）后，运行 `bash scripts/export_character_images.sh` 生成透明 WebP。脚本保留原图比例与内容，只调整分辨率和压缩；首页双图层必须使用相同的 `srcset`、`sizes` 和裁切位置。
 
 字体许可证随公开字体保留；`scripts/` 下的源资产不随站点发布。资源大小检查见 `tests/asset-budget.test.js`。
 

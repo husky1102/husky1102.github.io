@@ -302,41 +302,17 @@ html[data-theme="dark"] blockquote {
   position: relative;
   right: 0;
   left: 0;
-  width: min(70vw, 19rem);
+  width: min(65vw, 17rem);
   margin-inline: auto;
-  aspect-ratio: 1;
-  transform-origin: 50% 65%;
-}
-.home-hero__clip-definition { position: absolute; pointer-events: none; }
-.home-hero__portrait-window { position: absolute; inset: 0; }
-.home-hero__portrait::before {
-  content: "";
-  position: absolute;
-  inset: 12%;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--global-link-color) 3%, var(--global-bg-color));
-  mask-image: linear-gradient(to bottom, transparent 45%, #000 90%);
-  pointer-events: none;
-}
-.home-hero__portrait-window {
-  z-index: 1;
-  /* Keep the open silhouette independent of the smaller backing. */
-  clip-path: url(#home-portrait-clip);
+  aspect-ratio: 4 / 5;
 }
 .home-hero__character {
-  position: absolute;
-  inset: 0;
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
+  height: auto;
   transform-origin: 50% 75%;
-  filter: none;
-  transition: filter 350ms ease;
-}
-.home-hero__stage.is-popped .home-hero__character {
-  filter: drop-shadow(0 4px 6px rgba(20, 55, 52, 0.055));
+  /* Soften only the source image's cropped lower edge. */
+  mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
 }
 .home-hero__stage-note {
   position: relative;
@@ -629,7 +605,7 @@ html[data-theme="dark"] blockquote {
 @media (max-width: 30em) {
   .home-hero { gap: 0.65rem; padding-top: 0; }
   .home-hero__stage { min-height: 0; }
-  .home-hero__portrait { width: min(66vw, 13.5rem); }
+  .home-hero__portrait { width: min(60vw, 12rem); }
   .home-hero__stage-note { display: none; }
   .home-hero__copy { display: flex; flex-direction: column; }
   .home-hero__eyebrow { font-size: 0.76rem; margin: 0.2rem 0 0.7rem; }
@@ -644,8 +620,8 @@ html[data-theme="dark"] blockquote {
 }
 @media (min-width: 48em) {
   .home-hero { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); grid-template-areas: "copy stage"; }
-  .home-hero__stage { min-height: 0; }
-  .home-hero__portrait { width: min(100%, 25rem); }
+  .home-hero__stage { min-height: 0; padding-top: 1.5rem; }
+  .home-hero__portrait { width: min(100%, 22rem); }
   .home-research-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
   .home-section--split { grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); }
 }

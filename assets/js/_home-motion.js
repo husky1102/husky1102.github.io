@@ -59,7 +59,6 @@
       motionMedia.add("(prefers-reduced-motion: no-preference)", function () {
         var stage = homeHero.querySelector(".home-hero__stage");
         var characters = homeHero.querySelectorAll(".home-hero__character");
-        var portraitRing = homeHero.querySelector(".home-hero__portrait-ring");
         var copyElements = homeHero.querySelectorAll(
           ".home-hero__eyebrow, .home-hero h1, .home-hero__lead, .home-hero__lead-en, .home-hero__actions"
         );
@@ -73,9 +72,6 @@
         homepageTimeline.fromTo(stage,
           { y: 16, opacity: 0.78 },
           { y: 0, opacity: 1, clearProps: "transform,opacity" }, 0);
-        homepageTimeline.fromTo(portraitRing,
-          { scale: 0.9, opacity: 0.3 },
-          { scale: 1, opacity: 1, clearProps: "transform,opacity" }, 0.08);
         homepageTimeline.fromTo(copyElements,
           { y: 14, opacity: 0.72 },
           { y: 0, opacity: 1, stagger: 0.055, clearProps: "transform,opacity" }, 0.12);

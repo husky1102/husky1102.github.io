@@ -312,25 +312,16 @@ html[data-theme="dark"] blockquote {
 .home-hero__portrait::before {
   content: "";
   position: absolute;
-  inset: -28% -10% 8%;
+  inset: 12%;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--global-link-color) 7%, var(--global-bg-color));
-  mask-image: linear-gradient(to bottom, transparent 35%, #000 85%);
+  background: color-mix(in srgb, var(--global-link-color) 3%, var(--global-bg-color));
+  mask-image: linear-gradient(to bottom, transparent 45%, #000 90%);
   pointer-events: none;
 }
 .home-hero__portrait-window {
   z-index: 1;
-  /* The lower semicircle shares the backing's 60% radius; the top stays open. */
+  /* Keep the open silhouette independent of the smaller backing. */
   clip-path: url(#home-portrait-clip);
-}
-.home-hero__portrait-ring {
-  position: absolute;
-  inset: -28% -10% 8%;
-  z-index: 2;
-  border: 1px solid color-mix(in srgb, var(--global-link-color) 18%, var(--global-border-color));
-  border-radius: 50%;
-  mask-image: linear-gradient(to bottom, transparent 65%, #000 95%);
-  pointer-events: none;
 }
 .home-hero__character {
   position: absolute;
@@ -341,11 +332,11 @@ html[data-theme="dark"] blockquote {
   object-fit: cover;
   object-position: center top;
   transform-origin: 50% 75%;
-  filter: drop-shadow(0 4px 6px rgba(20, 55, 52, 0.04));
+  filter: none;
   transition: filter 350ms ease;
 }
 .home-hero__stage.is-popped .home-hero__character {
-  filter: drop-shadow(0 12px 10px rgba(20, 55, 52, 0.14));
+  filter: drop-shadow(0 4px 6px rgba(20, 55, 52, 0.055));
 }
 .home-hero__stage-note {
   position: relative;

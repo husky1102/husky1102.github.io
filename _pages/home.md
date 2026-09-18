@@ -22,7 +22,6 @@ home_motion: true
       <div class="home-hero__portrait-window">
         <img class="home-hero__character home-hero__character--inside" src="{{ '/images/character-welcome-640.webp' | relative_url }}" srcset="{{ '/images/character-welcome-480.webp' | relative_url }} 480w, {{ '/images/character-welcome-640.webp' | relative_url }} 640w, {{ '/images/character-welcome-1024.webp' | relative_url }} 1024w" sizes="(max-width: 480px) 216px, (max-width: 767px) 304px, (max-width: 1024px) 38vw, 450px" width="1024" height="1280" alt="Husky 角色抱着机器人，微笑比耶" fetchpriority="high" decoding="async">
       </div>
-      <span class="home-hero__portrait-ring" aria-hidden="true"></span>
     </div>
     <p class="home-hero__stage-note"><span>在西安学习与研究</span><strong>Always curious.</strong></p>
   </div>

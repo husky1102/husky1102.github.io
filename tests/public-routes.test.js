@@ -50,6 +50,13 @@ test("homepage motion assets load only on the homepage", () => {
   assert.ok(!existsInSite("assets/js/_home-motion.js"));
 });
 
+test("unused academic icon font is not loaded by default", () => {
+  assertBuiltSite();
+  for (const page of ["index.html", "about/index.html", "cv/index.html", "cv_zh/index.html", "blog_embed/index.html"]) {
+    assert.doesNotMatch(readGenerated(page), /assets\/css\/academicons\.css/);
+  }
+});
+
 test("HTML sitemap links have titles and resolve to published pages", () => {
   assertBuiltSite();
   const sitemap = readGenerated("sitemap/index.html");

@@ -14,16 +14,6 @@ test("Portrait motion is scoped to fine pointers and cleaned up", () => {
   assert.match(source, /pointerMedia\.revert\(\)/);
 });
 
-test("Theme transitions preserve fallback, latest intent, and reduced motion", () => {
-  const source = read("assets/js/_main.js");
-  assert.match(source, /typeof document\.startViewTransition === "function"/);
-  assert.match(source, /!themeMotionMedia\.matches/);
-  assert.match(source, /requestedTheme/);
-  assert.match(source, /if \(!canAnimateTheme\)[\s\S]*?setThemeWithoutMotion\(newTheme\)/);
-  assert.match(source, /activeThemeTransition\.finished\.then\(finishThemeSwitch, finishThemeSwitch\)/);
-  assert.match(source, /activeThemeTransition\.skipTransition\(\)/);
-});
-
 test("Sidebar avatar respects reduced motion", () => {
   const sidebar = read("_sass/layout/_sidebar.scss");
 

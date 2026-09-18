@@ -19,10 +19,7 @@
     var themeToggle = document.getElementById("theme-toggle");
     var themeToggleButton = themeToggle ? themeToggle.querySelector("button") : null;
     var themeMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
-    var themeSwitchInProgress = false;
-    var requestedTheme = null;
-    var activeThemeTransition = null;
-    var themeToggleBounds = null;
+    var themeMotionTimer = null;
     var receivingBlogTheme = false;
     var storeTheme = function (theme) {
       try { localStorage.setItem("theme", theme); } catch (error) { /* Session-only preference. */ }
@@ -66,12 +63,19 @@
 
     setTheme();
 
+    var finishThemeSwitch = function () {
+      window.clearTimeout(themeMotionTimer);
+      themeMotionTimer = null;
+      root.classList.remove("is-theme-transitioning");
+    };
+
     var setThemeWithoutMotion = function (theme) {
+      finishThemeSwitch();
       root.classList.add("is-theme-syncing");
       setTheme(theme);
-      window.requestAnimationFrame(function () {
-        root.classList.remove("is-theme-syncing");
-      });
+      // Commit the non-animated state before restoring ordinary hover transitions.
+      void root.offsetWidth;
+      root.classList.remove("is-theme-syncing");
     };
 
     // If user hasn't chosen a theme, follow OS changes.
@@ -86,79 +90,37 @@
       prefersDarkMedia.addListener(handlePreferenceChange);
     }
 
-    // Queue the latest intent while a reveal finishes; rapid clicks never leave
-    // the icon, stored preference and page in different states.
-    var runThemeSwitch = function () {
-      if (themeSwitchInProgress) { return; }
+    var requestThemeSwitch = function () {
       var currentTheme = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
-      var newTheme = requestedTheme;
-      if (!newTheme || newTheme === currentTheme) { requestedTheme = null; return; }
-      var canAnimateTheme = !document.body.classList.contains("blog-layout") && themeToggleButton && !themeMotionMedia.matches &&
-        typeof document.startViewTransition === "function";
-      var finishThemeSwitch = function () {
-        root.classList.remove("is-theme-transitioning");
-        themeToggle.classList.remove("is-switching");
-        activeThemeTransition = null;
-        themeSwitchInProgress = false;
-        runThemeSwitch();
-      };
-      var applyTheme = function () {
-        storeTheme(newTheme);
-        setTheme(newTheme);
-      };
-      themeSwitchInProgress = true;
+      var newTheme = currentTheme === "dark" ? "light" : "dark";
+      var canAnimateTheme = !document.body.classList.contains("blog-layout") && !themeMotionMedia.matches &&
+        window.CSS && typeof window.CSS.registerProperty === "function";
+      storeTheme(newTheme);
       if (!canAnimateTheme) {
         setThemeWithoutMotion(newTheme);
-        storeTheme(newTheme);
-        finishThemeSwitch();
         return;
       }
-      var bounds = themeToggleButton.getBoundingClientRect();
-      themeToggleBounds = bounds;
-      var x = bounds.left + bounds.width / 2;
-      var y = bounds.top + bounds.height / 2;
-      var radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y)) + 64;
-      root.style.setProperty("--theme-transition-x", x + "px");
-      root.style.setProperty("--theme-transition-y", y + "px");
-      root.style.setProperty("--theme-transition-radius", radius + "px");
+      var interrupted = themeMotionTimer !== null;
+      var duration = newTheme === "dark" ? 650 : 800;
+      window.clearTimeout(themeMotionTimer);
+      root.style.setProperty("--theme-duration", duration + "ms");
+      root.style.setProperty("--theme-ink-delay", interrupted ? "0ms" : (newTheme === "dark" ? "180ms" : "240ms"));
       root.classList.add("is-theme-transitioning");
-      themeToggle.classList.add("is-switching");
-      try {
-        activeThemeTransition = document.startViewTransition(applyTheme);
-        activeThemeTransition.finished.then(finishThemeSwitch, finishThemeSwitch);
-      } catch (error) {
-        applyTheme();
-        finishThemeSwitch();
-      }
-    };
-    var requestThemeSwitch = function () {
-      var current = requestedTheme || (root.getAttribute("data-theme") === "dark" ? "dark" : "light");
-      requestedTheme = current === "dark" ? "light" : "dark";
-      runThemeSwitch();
+      // Native color transitions can reverse from their current rendered values.
+      setTheme(newTheme);
+      themeMotionTimer = window.setTimeout(finishThemeSwitch, duration);
     };
     if (themeToggleButton) {
       themeToggleButton.addEventListener("click", requestThemeSwitch);
-      // During a View Transition, snapshot participants are not hit-testable:
-      // native clicks land on <html>. Preserve only the toggle's captured hitbox.
-      document.addEventListener("click", function (event) {
-        var bounds = themeToggleBounds;
-        if (themeSwitchInProgress && event.target === root && bounds &&
-            event.clientX >= bounds.left && event.clientX <= bounds.right &&
-            event.clientY >= bounds.top && event.clientY <= bounds.bottom) {
-          requestThemeSwitch();
-        }
-      });
     }
     themeMotionMedia.addEventListener("change", function (event) {
-      if (event.matches && activeThemeTransition) { activeThemeTransition.skipTransition(); }
+      if (event.matches) { setThemeWithoutMotion(root.getAttribute("data-theme") === "dark" ? "dark" : "light"); }
     });
 
     if (window.huskyBlogEmbed) window.huskyBlogEmbed.start({
       current: function () { return root.getAttribute("data-theme") === "dark" ? "dark" : "light"; },
       receive: function (theme) {
         if (theme !== "dark" && theme !== "light") return;
-        requestedTheme = null;
-        if (activeThemeTransition) activeThemeTransition.skipTransition();
         receivingBlogTheme = true;
         storeTheme(theme);
         setThemeWithoutMotion(theme);

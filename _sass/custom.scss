@@ -307,25 +307,28 @@ html[data-theme="dark"] blockquote {
   aspect-ratio: 1;
   transform-origin: 50% 65%;
 }
-.home-hero__portrait-window,
-.home-hero__portrait-front { position: absolute; inset: 0; }
+.home-hero__portrait-window { position: absolute; inset: 0; }
+.home-hero__portrait::before {
+  content: "";
+  position: absolute;
+  inset: 8% -10%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--global-link-color) 7%, var(--global-bg-color));
+  mask-image: linear-gradient(to bottom, transparent 35%, #000 85%);
+  pointer-events: none;
+}
 .home-hero__portrait-window {
   z-index: 1;
-  clip-path: circle(42% at 50% 50%);
-  background: color-mix(in srgb, var(--global-link-color) 5%, var(--global-bg-color));
+  /* Open above and beside the artwork, with one continuous curved lower edge. */
+  clip-path: inset(-25% -10% 8% round 0 0 50% 50%);
 }
 .home-hero__portrait-ring {
   position: absolute;
-  inset: 8%;
+  inset: 8% -10%;
   z-index: 2;
-  border: 1px solid color-mix(in srgb, var(--global-link-color) 40%, var(--global-border-color));
+  border: 1px solid color-mix(in srgb, var(--global-link-color) 18%, var(--global-border-color));
   border-radius: 50%;
-  pointer-events: none;
-}
-/* The upper ellipse overlaps inside the circle before ending, avoiding a seam. */
-.home-hero__portrait-front {
-  z-index: 3;
-  clip-path: ellipse(50% 45% at 50% 20%);
+  mask-image: linear-gradient(to bottom, transparent 65%, #000 95%);
   pointer-events: none;
 }
 .home-hero__character {
@@ -336,10 +339,13 @@ html[data-theme="dark"] blockquote {
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  transform-origin: 50% 60%;
-  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: 50% 75%;
+  filter: drop-shadow(0 4px 6px rgba(20, 55, 52, 0.04));
+  transition: filter 350ms ease;
 }
-.home-hero__stage.is-popped .home-hero__character { transform: translateY(-1%) scale(1.025); }
+.home-hero__stage.is-popped .home-hero__character {
+  filter: drop-shadow(0 12px 10px rgba(20, 55, 52, 0.14));
+}
 .home-hero__stage-note {
   position: relative;
   z-index: 4;

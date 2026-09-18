@@ -12,6 +12,13 @@ home_motion: true
 <section class="home-hero">
   <div class="home-hero__stage">
     <div class="home-hero__portrait">
+      <svg class="home-hero__clip-definition" width="0" height="0" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="home-portrait-clip" clipPathUnits="objectBoundingBox">
+            <path d="M -0.1 -0.25 H 1.1 V 0.32 A 0.6 0.6 0 0 1 -0.1 0.32 Z" />
+          </clipPath>
+        </defs>
+      </svg>
       <div class="home-hero__portrait-window">
         <img class="home-hero__character home-hero__character--inside" src="{{ '/images/character-welcome-640.webp' | relative_url }}" srcset="{{ '/images/character-welcome-480.webp' | relative_url }} 480w, {{ '/images/character-welcome-640.webp' | relative_url }} 640w, {{ '/images/character-welcome-1024.webp' | relative_url }} 1024w" sizes="(max-width: 480px) 216px, (max-width: 767px) 304px, (max-width: 1024px) 38vw, 450px" width="1024" height="1280" alt="Husky 角色抱着机器人，微笑比耶" fetchpriority="high" decoding="async">
       </div>

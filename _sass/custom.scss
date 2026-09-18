@@ -307,11 +307,12 @@ html[data-theme="dark"] blockquote {
   aspect-ratio: 1;
   transform-origin: 50% 65%;
 }
+.home-hero__clip-definition { position: absolute; pointer-events: none; }
 .home-hero__portrait-window { position: absolute; inset: 0; }
 .home-hero__portrait::before {
   content: "";
   position: absolute;
-  inset: 8% -10%;
+  inset: -28% -10% 8%;
   border-radius: 50%;
   background: color-mix(in srgb, var(--global-link-color) 7%, var(--global-bg-color));
   mask-image: linear-gradient(to bottom, transparent 35%, #000 85%);
@@ -319,12 +320,12 @@ html[data-theme="dark"] blockquote {
 }
 .home-hero__portrait-window {
   z-index: 1;
-  /* Open above and beside the artwork, with one continuous curved lower edge. */
-  clip-path: inset(-25% -10% 8% round 0 0 50% 50%);
+  /* The lower semicircle shares the backing's 60% radius; the top stays open. */
+  clip-path: url(#home-portrait-clip);
 }
 .home-hero__portrait-ring {
   position: absolute;
-  inset: 8% -10%;
+  inset: -28% -10% 8%;
   z-index: 2;
   border: 1px solid color-mix(in srgb, var(--global-link-color) 18%, var(--global-border-color));
   border-radius: 50%;

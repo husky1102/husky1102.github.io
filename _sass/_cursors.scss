@@ -4,6 +4,7 @@
   $cursor-hotspots: (default: (10 5), pointer: (15 5), text: (15 16),
     grab: (24 18), grabbing: (23 18), wait: (24 24), help: (11 9),
     not-allowed: (24 24), crosshair: (24 24));
+  $svg-cursors: (default, pointer, text);
 
   @each $theme in light, dark {
     $selector: ":root";
@@ -14,12 +15,18 @@
     }
     #{$selector} {
       @each $name, $hotspot in $cursor-hotspots {
-        --cursor-#{$name}: #{'url("#{$directory}/#{$name}.png") #{$hotspot}, #{$name}'};
+        @if index($svg-cursors, $name) {
+          --cursor-#{$name}: #{'url("#{$directory}/#{$name}.svg") #{$hotspot}, #{$name}'};
+        } @else {
+          --cursor-#{$name}: #{'url("#{$directory}/#{$name}.png") #{$hotspot}, #{$name}'};
+        }
       }
       /* Keep CSS dimensions and hotspots unchanged on Retina displays. */
       @supports (cursor: image-set(url("../cursors/default.png") 1x) 10 5, default) {
         @each $name, $hotspot in $cursor-hotspots {
-          --cursor-#{$name}: #{'image-set(url("#{$directory}/#{$name}.png") 1x, url("#{$directory}/#{$name}@2x.png") 2x) #{$hotspot}, #{$name}'};
+          @if not index($svg-cursors, $name) {
+            --cursor-#{$name}: #{'image-set(url("#{$directory}/#{$name}.png") 1x, url("#{$directory}/#{$name}@2x.png") 2x) #{$hotspot}, #{$name}'};
+          }
         }
       }
     }

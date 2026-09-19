@@ -36,7 +36,9 @@ npm test
 
 ## 鼠标指针
 
-九种透明原图保存在 `scripts/assets/cursors/`，运行 `bash scripts/export_cursors.sh`（需要 ImageMagick 7）生成 `assets/cursors/` 下的浅色版 PNG 和 `assets/cursors/dark/` 下的深色版。导出时仅对 RGB 使用高光压缩曲线 `u - shoulder × u³`（浅色 0.06，深色 0.16），减少白边与闪光的亮度，同时保留较深的轮廓和原有透明度。缩放使用 Lanczos，并仅对 RGB 做轻度锐化以保留透明边缘。常规指针最大 48 CSS px，文本指针最大 32 CSS px；分别从原图导出 1x 和 `@2x` 资源，通过 `image-set()` 匹配屏幕密度，保持显示尺寸、比例和点击热点，旧浏览器回退到 1x PNG。样式和点击热点在 `_sass/_cursors.scss`，随主题自动切换，仅对支持悬停的精细指针设备启用，强制颜色模式使用系统指针。
+默认、文本和链接指针使用 `assets/cursors/` 下的 SVG 重绘稿，深色版位于 `assets/cursors/dark/`，直接编辑这些 SVG 即可维护。默认和链接指针为 48 × 48 CSS px，文本指针为 31 × 32 CSS px；SVG 自适应屏幕密度，点击热点沿用原位置。重绘前后的对比存档见 `docs/design/cursor-svg-study/`，该目录不随站点发布，其中的脚本仅重建对比稿，不写入正式资源。
+
+其余六种指针继续使用 PNG。九种旧版透明原图保存在 `scripts/assets/cursors/`，运行 `bash scripts/export_cursors.sh`（需要 ImageMagick 7）可重建所有旧版 PNG，不影响现用 SVG。导出时仅对 RGB 使用高光压缩曲线 `u - shoulder × u³`（浅色 0.06，深色 0.16），保留原有透明度；使用 Lanczos 缩放和轻度 RGB 锐化，分别从原图导出 1x 和 `@2x` 资源，通过 `image-set()` 匹配屏幕密度，旧浏览器回退到 1x PNG。样式和点击热点在 `_sass/_cursors.scss`，随主题自动切换，仅对支持悬停的精细指针设备启用，强制颜色模式使用系统指针。
 
 正文悬停保持箭头；仅在鼠标按住且产生真实文本选区时切换文本指针，松开、取消或窗口失焦后恢复，保留选区不会持续改变指针。输入框与可编辑内容保持文本指针。链接与按钮、带说明的缩写、可拖动元素、禁用控件及 `aria-busy="true"` 区域会自动匹配相应指针。自定义交互可用 `data-cursor="default|pointer|text|grab|grabbing|wait|help|not-allowed|crosshair"` 指定其中一种状态；`grab` 在按下时切换为 `grabbing`。这些属性只影响指针外观，不会实现拖拽、禁用或加载逻辑。跨域博客 iframe 内的指针由博客原站控制。
 

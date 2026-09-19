@@ -16,7 +16,8 @@
     #{$selector} {
       @each $name, $hotspot in $cursor-hotspots {
         @if index($svg-cursors, $name) {
-          --cursor-#{$name}: #{'url("#{$directory}/#{$name}.svg") #{$hotspot}, #{$name}'};
+          /* The SVG artwork uses the same palette in both themes. */
+          --cursor-#{$name}: #{'url("../cursors/#{$name}.svg") #{$hotspot}, #{$name}'};
         } @else {
           --cursor-#{$name}: #{'url("#{$directory}/#{$name}.png") #{$hotspot}, #{$name}'};
         }

@@ -1,38 +1,43 @@
 /* Native cursors: URL paths are relative to assets/css/main.css, including on
    deployments with a baseurl. Hotspots follow the original artwork. */
 @media (hover: hover) and (pointer: fine) and (forced-colors: none) {
-  :root {
-    --cursor-default: #{'url("../cursors/default.png") 10 5, default'};
-    --cursor-pointer: #{'url("../cursors/pointer.png") 15 5, pointer'};
-    --cursor-text: #{'url("../cursors/text.png") 15 16, text'};
-    --cursor-grab: #{'url("../cursors/grab.png") 24 18, grab'};
-    --cursor-grabbing: #{'url("../cursors/grabbing.png") 23 18, grabbing'};
-    --cursor-wait: #{'url("../cursors/wait.png") 24 24, wait'};
-    --cursor-help: #{'url("../cursors/help.png") 11 9, help'};
-    --cursor-not-allowed: #{'url("../cursors/not-allowed.png") 24 24, not-allowed'};
-    --cursor-crosshair: #{'url("../cursors/crosshair.png") 24 24, crosshair'};
-  }
+  $cursor-hotspots: (default: (10 5), pointer: (15 5), text: (15 16),
+    grab: (24 18), grabbing: (23 18), wait: (24 24), help: (11 9),
+    not-allowed: (24 24), crosshair: (24 24));
 
-  html[data-theme="dark"] {
-    --cursor-default: #{'url("../cursors/dark/default.png") 10 5, default'};
-    --cursor-pointer: #{'url("../cursors/dark/pointer.png") 15 5, pointer'};
-    --cursor-text: #{'url("../cursors/dark/text.png") 15 16, text'};
-    --cursor-grab: #{'url("../cursors/dark/grab.png") 24 18, grab'};
-    --cursor-grabbing: #{'url("../cursors/dark/grabbing.png") 23 18, grabbing'};
-    --cursor-wait: #{'url("../cursors/dark/wait.png") 24 24, wait'};
-    --cursor-help: #{'url("../cursors/dark/help.png") 11 9, help'};
-    --cursor-not-allowed: #{'url("../cursors/dark/not-allowed.png") 24 24, not-allowed'};
-    --cursor-crosshair: #{'url("../cursors/dark/crosshair.png") 24 24, crosshair'};
+  @each $theme in light, dark {
+    $selector: ":root";
+    $directory: "../cursors";
+    @if $theme == dark {
+      $selector: 'html[data-theme="dark"]';
+      $directory: "../cursors/dark";
+    }
+    #{$selector} {
+      @each $name, $hotspot in $cursor-hotspots {
+        --cursor-#{$name}: #{'url("#{$directory}/#{$name}.png") #{$hotspot}, #{$name}'};
+      }
+      /* Keep CSS dimensions and hotspots unchanged on Retina displays. */
+      @supports (cursor: image-set(url("../cursors/default.png") 1x) 10 5, default) {
+        @each $name, $hotspot in $cursor-hotspots {
+          --cursor-#{$name}: #{'image-set(url("#{$directory}/#{$name}.png") 1x, url("#{$directory}/#{$name}@2x.png") 2x) #{$hotspot}, #{$name}'};
+        }
+      }
+    }
   }
 
   html { cursor: var(--cursor-default); }
 
-  :where(p, h1, h2, h3, h4, h5, h6, blockquote, pre, code, dt, dd, td, th,
-    li, figcaption, input:not([type]), input[type="text"], input[type="search"],
+  /* Body copy keeps the default arrow. The text cursor is enabled below only
+     during a mouse gesture with an actual text selection. Editable controls keep
+     their native text affordance while the user is entering content. */
+  :where(input:not([type]), input[type="text"], input[type="search"],
     input[type="email"], input[type="url"], input[type="tel"], input[type="password"],
     input[type="number"], textarea, [contenteditable="true"], [contenteditable=""]) {
     cursor: var(--cursor-text);
   }
+
+  /* Inherit the selection cursor without overriding links or widget states. */
+  html:where(.is-selecting-text) { cursor: var(--cursor-text); }
 
   :is(a[href], button, summary, select, label[for], [role="button"], [role="link"],
     input[type="button"], input[type="submit"], input[type="reset"],

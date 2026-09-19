@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Preserve the source artwork, geometry and alpha. Compress bright RGB values
 # more than dark outlines, with a stronger shoulder for the dark theme.
+# Export 1x and 2x resources directly from the original, never upscale the 1x.
 # Requires ImageMagick 7 (exported with 7.1.2).
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -15,8 +16,14 @@ for name in default pointer text grab grabbing wait help not-allowed crosshair; 
       shoulder=0.16
       output="assets/cursors/dark/$name.png"
     fi
-    magick "scripts/assets/cursors/$name.png" -resize "${size}x${size}" \
-      -channel RGB -fx "u - $shoulder * u^3" +channel \
-      -strip -define png:exclude-chunks=date,time "$output"
+    for density in 1 2; do
+      target_size=$((size * density))
+      target_output="$output"
+      if [[ "$density" == 2 ]]; then target_output="${output%.png}@2x.png"; fi
+      magick "scripts/assets/cursors/$name.png" -filter Lanczos -resize "${target_size}x${target_size}" \
+        -channel RGB -fx "u - $shoulder * u^3" \
+        -unsharp 0x0.7+0.65+0.02 +channel \
+        -strip -define png:exclude-chunks=date,time "$target_output"
+    done
   done
 done

@@ -21,6 +21,7 @@
     var themeMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
     var themeMotionTimer = null;
     var receivingBlogTheme = false;
+
     var storeTheme = function (theme) {
       try { localStorage.setItem("theme", theme); } catch (error) { /* Session-only preference. */ }
     };
@@ -129,6 +130,32 @@
     });
 
     var scrollProgress = document.querySelector(".scroll-progress span");
+    // A retained selection must not leave the whole page using a text cursor.
+    var selectingWithMouse = false;
+    var cursorMedia = window.matchMedia("(hover: hover) and (pointer: fine) and (forced-colors: none)");
+    var finishTextSelection = function () {
+      selectingWithMouse = false;
+      root.classList.remove("is-selecting-text");
+    };
+    document.addEventListener("pointerdown", function (event) {
+      finishTextSelection();
+      selectingWithMouse = event.pointerType === "mouse" && event.button === 0 && cursorMedia.matches;
+    });
+    document.addEventListener("selectionchange", function () {
+      var selection = window.getSelection();
+      root.classList.toggle("is-selecting-text", Boolean(selectingWithMouse && selection &&
+        !selection.isCollapsed && selection.toString().length));
+    });
+    window.addEventListener("pointerup", finishTextSelection);
+    window.addEventListener("pointercancel", finishTextSelection);
+    window.addEventListener("blur", finishTextSelection);
+    window.addEventListener("pagehide", finishTextSelection);
+    document.addEventListener("pointermove", function (event) {
+      // Recover if the mouse was released outside the window.
+      if (selectingWithMouse && !(event.buttons & 1)) finishTextSelection();
+    }, { passive: true });
+    cursorMedia.addEventListener("change", finishTextSelection);
+
     var backToTop = document.querySelector(".back-to-top");
 
     var getScrollTop = function () {

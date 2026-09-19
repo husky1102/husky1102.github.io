@@ -192,6 +192,7 @@
 
   img {
     max-width: 175px;
+    filter: var(--character-filter);
     border-radius: 50%;
     box-shadow: 0 0 0 0 color-mix(in srgb, var(--global-link-color) 0%, transparent);
     transition:
@@ -207,7 +208,7 @@
       transform-origin: 50% 100%; // anchored at the ring's base, so she stands up
                                   // without lifting off it (no gap at the bottom)
       transform: translateY(var(--avatar-art-y)); // sit lower in the ring so it covers the cropped legs
-      filter: none; // removed drop-shadow to eliminate internal shadow bleeding
+      filter: var(--character-filter); // tone only; no internal shadow bleeding
       /* Start with a flat unclipped bottom (using a matching 17-point polygon for smooth interpolation) */
       clip-path: polygon(
         -50% -50%, 150% -50%, 150% 150%, 
@@ -241,7 +242,7 @@
     border-radius: 0;
     box-shadow: none;
     transform: translateY(0) scale(1.35);
-    filter: none;
+    filter: var(--character-filter);
     clip-path: polygon(
       -50% -50%, 150% -50%, 150% 63.0%,
       87.0% 63.0%, 85.7% 72.6%, 82.0% 81.5%, 76.2% 89.2%, 68.5% 95.0%, 59.6% 98.7%, 50.0% 100.0%,
@@ -269,7 +270,7 @@
     .author__profile:focus-within > .author__avatar img {
       border-radius: 50%;
       transform: translateY(var(--avatar-art-y));
-      filter: none;
+      filter: var(--character-filter);
       clip-path: polygon(
         -50% -50%, 150% -50%, 150% 150%,
         87.0% 150%, 85.7% 150%, 82.0% 150%, 76.2% 150%, 68.5% 150%, 59.6% 150%, 50.0% 150%,

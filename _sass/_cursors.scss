@@ -13,6 +13,18 @@
     --cursor-crosshair: #{'url("../cursors/crosshair.png") 24 24, crosshair'};
   }
 
+  html[data-theme="dark"] {
+    --cursor-default: #{'url("../cursors/dark/default.png") 10 5, default'};
+    --cursor-pointer: #{'url("../cursors/dark/pointer.png") 15 5, pointer'};
+    --cursor-text: #{'url("../cursors/dark/text.png") 15 16, text'};
+    --cursor-grab: #{'url("../cursors/dark/grab.png") 24 18, grab'};
+    --cursor-grabbing: #{'url("../cursors/dark/grabbing.png") 23 18, grabbing'};
+    --cursor-wait: #{'url("../cursors/dark/wait.png") 24 24, wait'};
+    --cursor-help: #{'url("../cursors/dark/help.png") 11 9, help'};
+    --cursor-not-allowed: #{'url("../cursors/dark/not-allowed.png") 24 24, not-allowed'};
+    --cursor-crosshair: #{'url("../cursors/dark/crosshair.png") 24 24, crosshair'};
+  }
+
   html { cursor: var(--cursor-default); }
 
   :where(p, h1, h2, h3, h4, h5, h6, blockquote, pre, code, dt, dd, td, th,

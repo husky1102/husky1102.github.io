@@ -28,6 +28,7 @@ $sidebar-screen-min-width   : 1024px;
 /* Default light theme for the site */
 :root {
     color-scheme: light;
+    --character-filter: brightness(0.96) saturate(0.94);
     --global-base-color                 : #{$gray};
     --global-bg-color                   : #fbfaf7;
     --global-footer-bg-color            : #f2efe9;

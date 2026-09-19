@@ -32,9 +32,11 @@ npm test
 
 字体许可证随公开字体保留；`scripts/` 下的源资产不随站点发布。资源大小检查见 `tests/asset-budget.test.js`。
 
+首页、关于页、404 页和侧栏头像使用主题中的 `--character-filter` 做可逆的显示调色：浅色模式轻微降低亮度和饱和度，深色模式进一步收敛亮度。调色不改变原始图片、透明度、尺寸或动画；需要微调时修改 `_sass/theme/_default.scss` 和 `_sass/theme/_dark.scss`。
+
 ## 鼠标指针
 
-九种透明原图保存在 `scripts/assets/cursors/`，运行 `bash scripts/export_cursors.sh`（需要 ImageMagick 7）生成 `assets/cursors/` 下的 PNG。常规指针最大 48px，文本指针最大 32px；保持原图比例和透明背景。样式和点击热点在 `_sass/_cursors.scss`，仅对支持悬停的精细指针设备启用，强制颜色模式使用系统指针。
+九种透明原图保存在 `scripts/assets/cursors/`，运行 `bash scripts/export_cursors.sh`（需要 ImageMagick 7）生成 `assets/cursors/` 下的浅色版 PNG 和 `assets/cursors/dark/` 下的深色版。导出时仅对 RGB 使用高光压缩曲线 `u - shoulder × u³`（浅色 0.06，深色 0.16），减少白边与闪光的亮度，同时保留较深的轮廓和原有透明度。常规指针最大 48px，文本指针最大 32px；保持原图比例和透明背景。样式和点击热点在 `_sass/_cursors.scss`，随主题自动切换，仅对支持悬停的精细指针设备启用，强制颜色模式使用系统指针。
 
 链接与按钮、正文与输入框、带说明的缩写、可拖动元素、禁用控件及 `aria-busy="true"` 区域会自动匹配相应指针。自定义交互可用 `data-cursor="default|pointer|text|grab|grabbing|wait|help|not-allowed|crosshair"` 指定其中一种状态；`grab` 在按下时切换为 `grabbing`。这些属性只影响指针外观，不会实现拖拽、禁用或加载逻辑。跨域博客 iframe 内的指针由博客原站控制。
 

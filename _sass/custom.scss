@@ -269,6 +269,13 @@ html[data-theme="dark"] blockquote {
   border-bottom: 1px solid var(--global-border-color);
 }
 .home-hero__copy { grid-area: copy; min-width: 0; }
+/* Keep the original artwork intact; soften its light separately for each theme. */
+.home-hero__character,
+.about-profile__art img,
+.error-404__art img {
+  filter: var(--character-filter);
+}
+
 .home-hero__stage {
   position: relative;
   grid-area: stage;

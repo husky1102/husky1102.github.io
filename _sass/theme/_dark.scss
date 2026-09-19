@@ -36,6 +36,7 @@ $sidebar-screen-min-width : 1024px;
 
 html[data-theme="dark"] {
     color-scheme: dark;
+    --character-filter: brightness(0.86) saturate(0.92);
     --global-base-color : #{$background};
     --global-bg-color : #{$background};
     --global-footer-bg-color : #22252a;

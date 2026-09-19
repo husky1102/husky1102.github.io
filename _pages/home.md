@@ -24,7 +24,6 @@ home_motion: true
     <div class="home-hero__actions">
       <a class="btn home-hero__action--primary" href="{{ base_path }}/cv/">查看英文 CV</a>
       <a class="btn btn--inverse" href="{{ base_path }}/blog_embed/">阅读个人博客</a>
-      <a class="home-hero__language" href="{{ base_path }}/cv_zh/">中文简历 <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 </section>

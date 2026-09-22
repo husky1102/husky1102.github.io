@@ -1,10 +1,13 @@
 name: Site Check
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
+  workflow_call:
+    inputs:
+      upload_pages:
+        description: Upload the verified site for Pages deployment
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -60,7 +63,7 @@ jobs:
       - name: Build Jekyll site
         run: bundle exec jekyll build --safe --trace
 
-      - name: Run Node tests
+      - name: Run Node and Python tests
         run: npm test
 
       - name: Install test browser
@@ -75,3 +78,9 @@ jobs:
         with:
           name: browser-results
           path: local/browser-check
+
+      - name: Upload verified Pages artifact
+        if: inputs.upload_pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site

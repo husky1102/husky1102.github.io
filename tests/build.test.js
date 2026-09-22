@@ -35,6 +35,26 @@ test("GitHub workflows grant deployment credentials only to the deploy job", () 
   assert.match(siteCheck, /^permissions:\n  contents: read\n/m);
 });
 
+test("Pages publishes the artifact only after the shared browser checks pass", () => {
+  const pages = read(".github/workflows/pages.yml");
+  const checks = read(".github/workflows/site-check.yml");
+  const build = jobSection(pages, "build", "deploy");
+  const deploy = jobSection(pages, "deploy");
+  assert.match(build, /uses: \.\/\.github\/workflows\/site-check\.yml/);
+  assert.match(build, /upload_pages: true/);
+  assert.match(deploy, /needs: build/);
+  assert.doesNotMatch(deploy, /if:.*always\(/);
+  assert.match(checks, /workflow_call:/);
+  assert.match(checks, /pull_request:/);
+  assert.doesNotMatch(checks, /^  push:/m, "Master pushes use the deployment caller, avoiding a duplicate build.");
+  assert.doesNotMatch(checks, /continue-on-error:/);
+  const browser = checks.indexOf("run: npm run test:browser");
+  const artifact = checks.indexOf("uses: actions/upload-pages-artifact@v3");
+  assert.ok(browser > checks.indexOf("run: npm test"));
+  assert.ok(artifact > browser);
+  assert.match(checks, /if: inputs\.upload_pages\n        uses: actions\/upload-pages-artifact@v3/);
+});
+
 test("Node builds use the committed lockfile and the supported runtime", () => {
   const pages = read(".github/workflows/pages.yml");
   const siteCheck = read(".github/workflows/site-check.yml");
@@ -42,7 +62,7 @@ test("Node builds use the committed lockfile and the supported runtime", () => {
   const packageLock = JSON.parse(read("package-lock.json"));
   const gitignore = read(".gitignore");
 
-  for (const workflow of [pages, siteCheck]) {
+  for (const workflow of [siteCheck]) {
     assert.match(workflow, /node-version: "22"/);
     assert.match(workflow, /run: npm ci/);
     assert.doesNotMatch(workflow, /run: npm install/);
@@ -65,7 +85,7 @@ test("npm test runs the Node and Python suites through one canonical entrypoint"
   );
   assert.equal(packageJson.scripts.test, "npm run test:node && npm run test:python");
 
-  for (const workflow of [pages, siteCheck]) {
+  for (const workflow of [siteCheck]) {
     assert.match(workflow, /run: npm test/);
   }
 });
@@ -149,7 +169,7 @@ test("builds regenerate font subsets before verification and publication", () =>
   assert.equal(packageJson.scripts["check:font"], "python3 scripts/subset_site_font.py --check-generated");
   assert.equal(packageJson.scripts.pretest, "npm run build:font && npm run check:font");
 
-  for (const workflow of [pages, siteCheck]) {
+  for (const workflow of [siteCheck]) {
     assert.match(workflow, /uses: actions\/setup-python@v5/);
     assert.match(workflow, /python-version: "3\.12"/);
     assert.match(workflow, /run: python3 -m pip install -r requirements-assets\.txt/);

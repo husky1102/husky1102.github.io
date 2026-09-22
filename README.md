@@ -79,6 +79,6 @@ npm run test:browser
 
 ## 部署
 
-推送到 `master` 后，`Site Check` 会执行构建与测试，`Deploy Pages` 会在相同验证通过后发布 `_site`。本地提交不会自动推送或部署。
+PR 由 `Site Check` 执行完整构建与测试；推送到 `master` 后，`Deploy Pages` 调用同一套检查，包括浏览器回归，全部通过后才上传并发布该次验证的 `_site`，不重复构建。本地提交不会自动推送或部署。
 
 参与修改前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。布局、组件、样式与共享交互由本站维护，直接依赖 Jekyll 和独立第三方库。架构、内容编辑入口和依赖边界见 [站点维护说明](docs/site-maintenance.md)。

@@ -15,59 +15,9 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-
-      - name: Install Node dependencies
-        run: npm ci
-
-      - name: Build JavaScript
-        run: npm run build:js
-
-      - name: Verify generated JavaScript
-        run: git diff --exit-code -- assets/js/site.min.js assets/js/home-motion.min.js
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
-          cache-dependency-path: requirements-assets.txt
-
-      - name: Install asset verification dependencies
-        run: python3 -m pip install -r requirements-assets.txt
-
-      - name: Generate font subset from current site content
-        run: npm run build:font
-
-      - name: Verify generated font subset
-        run: npm run check:font
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.3"
-          bundler-cache: true
-
-      - name: Build Jekyll site
-        run: bundle exec jekyll build --safe --trace
-
-      - name: Run Node tests
-        run: npm test
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./_site
+    uses: ./.github/workflows/site-check.yml
+    with:
+      upload_pages: true
 
   deploy:
     needs: build

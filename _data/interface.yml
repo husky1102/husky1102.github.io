@@ -1,4 +1,5 @@
 zh:
+  more_links: 更多链接
   navigation: 主导航
   open_menu: 打开导航菜单
   close_menu: 关闭导航菜单
@@ -11,6 +12,7 @@ zh:
   language: 简历语言
   updated: 内容更新
 en:
+  more_links: More links
   navigation: Main navigation
   open_menu: Open navigation menu
   close_menu: Close navigation menu

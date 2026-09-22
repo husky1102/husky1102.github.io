@@ -1,0 +1,57 @@
+{% assign language = page.lang | default: 'zh' %}
+{% assign labels = site.data.interface[language] %}
+{% assign summary = page.description | default: site.description %}
+{% assign canonical = page.url | absolute_url %}
+<!doctype html>
+<html lang="{{ language }}" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title | escape }} - {{ site.title | escape }}</title>
+  <meta property="og:description" name="description" content="{{ summary | escape }}">
+  <meta property="og:title" content="{{ page.title | escape }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ canonical }}">
+  <meta property="og:locale" content="{% if language == 'en' %}en-US{% else %}zh-CN{% endif %}">
+  <meta property="og:image" content="{{ '/images/character-welcome-1024.webp' | absolute_url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#fbfaf7">
+  <link rel="canonical" href="{{ canonical }}">
+  <link rel="icon" href="{{ '/images/favicon.svg' | relative_url }}" type="image/svg+xml">
+  <link rel="icon" href="{{ '/images/favicon-32x32.png' | relative_url }}" sizes="32x32">
+  <link rel="apple-touch-icon" href="{{ '/images/apple-touch-icon-180x180.png' | relative_url }}">
+  <link rel="manifest" href="{{ '/images/manifest.json' | relative_url }}">
+  <script>
+    document.documentElement.className = 'js';
+    try {
+      var initialTheme = localStorage.getItem('theme');
+      if (initialTheme !== 'light' && initialTheme !== 'dark') initialTheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = initialTheme;
+    } catch (_) { if (matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.dataset.theme = 'dark'; }
+  </script>
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+</head>
+<body class="{% if page.blog_embed %}blog-layout{% else %}site-page{% endif %}">
+  <a class="skip-link" href="#main">{{ labels.skip_content }}</a>
+  {% include site-navigation.html %}
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+  {% if page.blog_embed %}
+    {{ content }}
+  {% else %}
+    <main id="main" tabindex="-1" class="site-content{% if page.home_motion %} site-content--home{% elsif page.cv %} site-content--cv{% else %} site-content--article{% endif %}">
+      {% unless page.hide_title or page.cv or page.home_motion %}<h1 class="document-title">{{ page.title }}</h1>{% endunless %}
+      {{ content }}
+    </main>
+  {% endif %}
+  {% unless page.blog_embed %}
+    <footer class="site-footer">
+      <nav aria-label="{{ labels.more_links }}"><a href="https://github.com/husky1102">GitHub</a><a href="{{ '/terms/' | relative_url }}">{{ labels.privacy }}</a></nav>
+      <p>© {{ site.time | date: '%Y' }} {{ site.name }}</p>
+    </footer>
+    <button class="back-to-top" type="button" aria-label="{{ labels.back_to_top }}" hidden>↑</button>
+  {% endunless %}
+  {% if page.blog_embed %}<script src="{{ '/assets/js/blog-embed.js' | relative_url }}"></script>{% endif %}
+  <script src="{{ '/assets/js/site.min.js' | relative_url }}"></script>
+  {% if page.home_motion %}<script src="{{ '/assets/js/home-motion.min.js' | relative_url }}"></script>{% endif %}
+</body>
+</html>

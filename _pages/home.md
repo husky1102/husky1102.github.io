@@ -1,5 +1,5 @@
 ---
-layout: splash
+layout: site
 title: "Husky1102"
 permalink: /
 author_profile: false
@@ -7,7 +7,7 @@ hide_title: true
 home_motion: true
 ---
 
-{% include base_path %}
+{% assign base_path = site.baseurl %}
 
 <section class="home-hero">
   <div class="home-hero__stage">

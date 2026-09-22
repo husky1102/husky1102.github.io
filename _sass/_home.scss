@@ -1,0 +1,357 @@
+/* Personal homepage design; independent of the document shell. */
+.home-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "stage" "copy";
+  gap: clamp(1.25rem, 4vw, 3rem);
+  align-items: center;
+  min-width: 0;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  padding: 1rem 0 clamp(2.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--line);
+}
+.home-hero__copy { grid-area: copy; min-width: 0; }
+/* Keep the original artwork intact; soften its light separately for each theme. */
+.home-hero__character,
+.about-profile__art img,
+.error-404__art img {
+  filter: var(--character-filter);
+}
+
+.home-hero__stage {
+  position: relative;
+  grid-area: stage;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
+}
+.home-hero__portrait {
+  position: relative;
+  right: 0;
+  left: 0;
+  width: min(65vw, 17rem);
+  margin-inline: auto;
+  aspect-ratio: 4 / 5;
+}
+.home-hero__character {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 75%;
+  /* Soften only the source image's cropped lower edge. */
+  mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
+}
+.home-hero__stage-note {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+.home-hero__stage-note::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.home-hero__stage-note strong { font-size: 0.72rem; font-weight: 400; }
+
+.home-hero__eyebrow {
+  margin: 0 0 0.85rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.home-hero h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.55rem, calc(1.6rem + 4.8vw), 4.65rem);
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.home-hero h1 > span {
+  display: block;
+}
+
+.home-hero__name-cn {
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.home-hero__name-latin {
+  margin-top: 0.08em;
+  color: var(--accent);
+  font-size: 0.72em;
+  letter-spacing: -0.02em;
+}
+
+.home-hero__lead {
+  max-width: 36rem;
+  margin: 1.5rem 0 0.65rem;
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(1rem, calc(0.96rem + 0.2vw), 1.12rem);
+  line-height: 1.72;
+  text-wrap: pretty;
+}
+
+.home-hero__lead-en {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.home-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+}
+.home-hero__actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.62rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--accent) !important;
+  background: transparent;
+  box-shadow: none;
+  font-family: "Maple Mono NF CN", "LXGW WenKai Screen", sans-serif;
+  font-size: 0.78rem;
+  text-decoration: none;
+  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease;
+}
+.home-hero__actions .home-hero__action--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--surface) !important;
+}
+.home-hero__actions .btn:hover,
+.home-hero__actions .btn:focus-visible {
+  background: var(--accent);
+  color: var(--surface) !important;
+  transform: translateY(-1px);
+}
+
+.home-section {
+  min-width: 0;
+  margin: 0 0 clamp(2.5rem, 5vw, 4rem);
+}
+
+.home-section__header {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+.home-section__header h2,
+.home-now h2,
+.home-destinations h2 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: clamp(1.45rem, calc(1.2rem + 1vw), 1.9rem);
+}
+
+.home-section__header p {
+  max-width: 48rem;
+  margin: 0;
+  color: var(--muted);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.65;
+}
+
+.home-research-list {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 1.5rem;
+}
+
+.home-research-track {
+  position: relative;
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 1.05rem 0 1.35rem 1.15rem;
+  border-top: 1px solid var(--line);
+
+}
+
+.home-research-track__signal {
+  position: absolute;
+  top: 1.35rem;
+  left: 0;
+  width: 0.3rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.home-research-track:nth-child(2) .home-research-track__signal {
+  background: color-mix(in srgb, var(--accent) 68%, var(--muted));
+}
+
+.home-research-track h3 {
+  margin: 0;
+  font-size: clamp(1.05rem, calc(0.98rem + 0.4vw), 1.25rem);
+}
+
+.home-research-track p {
+  max-width: 42ch;
+  margin: 0;
+  color: var(--muted);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.68;
+  text-wrap: pretty;
+}
+
+.home-section--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 7vw, 5rem);
+  align-items: start;
+}
+
+.home-now,
+.home-destinations {
+  min-width: 0;
+}
+
+.home-now__list {
+  margin: 1.25rem 0 0;
+}
+
+.home-now__list > div {
+  display: grid;
+  grid-template-columns: minmax(4rem, 0.28fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.95rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.home-now__list dt,
+.home-now__list dd {
+  margin: 0;
+}
+
+.home-now__list dt {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.home-now__list dd {
+  color: var(--muted);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.6;
+}
+
+.home-destination-list {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-destination-list li {
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.home-destination-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.25rem;
+  padding: 0.55rem 0;
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    color 0.24s ease,
+    padding-left 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-destination-list a:hover,
+.home-destination-list a:focus-visible {
+  padding-left: 0.35rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.home-destination-list a span:last-child {
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.home-curiosity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin: 0.5rem 0 0;
+  padding: 0.9rem 0 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-family: "LXGW WenKai Screen", sans-serif;
+  font-size: 0.9rem;
+}
+.home-curiosity > span:first-child { color: #a56a27; }
+.home-curiosity [lang="en"] {
+  margin-left: auto;
+  font-family: "Maple Mono NF CN", monospace;
+  font-size: 0.7rem;
+}
+.home-section:last-child { margin-bottom: 0; }
+.home-now__list dd { font-size: 0.95rem; }
+
+@media (max-width: 30em) {
+  .home-hero { gap: 0.65rem; padding-top: 0; }
+  .home-hero__stage { min-height: 0; }
+  .home-hero__portrait { width: min(60vw, 12rem); }
+  .home-hero__stage-note { display: none; }
+  .home-hero__copy { display: flex; flex-direction: column; }
+  .home-hero__eyebrow { font-size: 0.76rem; margin: 0.2rem 0 0.7rem; }
+  .home-hero h1 { margin-bottom: 0.6rem; font-size: clamp(2.3rem, 11.7vw, 2.9rem); }
+  .home-hero__lead { margin: 0.5rem 0 0; font-size: 1rem; line-height: 1.65; }
+  .home-hero__line-break { display: none; }
+  .home-hero__actions { order: 1; gap: 0.5rem; margin-top: 1.1rem; }
+  .home-hero__actions .btn { flex: 1 1 auto; padding-inline: 0.75rem; }
+  .home-hero__lead-en { order: 2; margin: 0.45rem 0 0; font-size: 0.82rem; line-height: 1.55; }
+  .home-curiosity [lang="en"] { margin-left: 1.3rem; width: 100%; }
+}
+@media (min-width: 48em) {
+  .home-hero { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); grid-template-areas: "copy stage"; }
+  .home-hero__stage { min-height: 0; padding-top: 1.5rem; }
+  .home-hero__portrait { width: min(100%, 22rem); }
+  .home-research-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+  .home-section--split { grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); }
+}
+@media (min-width: 48em) and (max-width: 64em) {
+  .home-hero { gap: 1.5rem; }
+  .home-hero h1 { font-size: clamp(2.75rem, 5.8vw, 3.65rem); }
+  .home-hero__line-break { display: none; }
+  .home-hero__stage-note { flex-direction: column; gap: 0.1rem; }
+  .home-hero__stage-note::before { display: none; }
+}
+@media (min-width: 80em) {
+  .home-hero { min-height: min(38rem, calc(100svh - 13rem)); }
+}
+

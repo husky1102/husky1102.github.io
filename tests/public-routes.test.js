@@ -45,7 +45,7 @@ test("homepage motion assets load only on the homepage", () => {
 
   const home = readGenerated("index.html");
   const about = readGenerated("about/index.html");
-  assert.match(home, /assets\/js\/main\.min\.js[\s\S]*assets\/js\/home-motion\.min\.js/);
+  assert.match(home, /assets\/js\/(?:site|main)\.min\.js[\s\S]*assets\/js\/home-motion\.min\.js/);
   assert.doesNotMatch(about, /assets\/js\/home-motion\.min\.js/);
   assert.ok(existsInSite("assets/js/home-motion.min.js"));
   assert.ok(!existsInSite("assets/js/_home-motion.js"));

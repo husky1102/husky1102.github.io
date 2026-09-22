@@ -181,6 +181,8 @@ exclude:
   - "**/__pycache__/**"
   - assets/js/_home-motion.js
   - assets/js/_main.js
+  - assets/js/_site.js
+  - assets/js/_theme.js
   - assets/js/plugins
   - assets/js/vendor
   - CHANGELOG

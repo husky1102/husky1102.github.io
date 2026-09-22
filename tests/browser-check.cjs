@@ -123,8 +123,50 @@ async function check(name,fn) { await fn(); results.push({name,status:'pass'}); 
     await motion.locator('.back-to-top').click();await motion.waitForFunction(()=>scrollY===0);
     await motion.goto(origin+'/about/');
     await motion.locator('.site-footer').scrollIntoViewIfNeeded();
-    await motion.waitForFunction(()=>document.querySelector('.scroll-progress span').style.width==='100%');
+    await motion.waitForFunction(()=>document.querySelector('.scroll-progress span').style.transform==='scaleX(1)');
     await motion.locator('.back-to-top').click();await motion.waitForFunction(()=>scrollY===0);
+  });
+  await check('portrait pointer motion resumes inside the stage after scrolling',async()=>{
+    await motion.emulateMedia({reducedMotion:'no-preference'});
+    await motion.goto(origin+'/');
+    const stage=motion.locator('.home-hero__stage');
+    await motion.waitForFunction(()=>document.querySelector('.home-hero__stage').style.opacity==='');
+    await stage.hover();
+    await motion.waitForFunction(()=>document.querySelector('.home-hero__stage').classList.contains('is-popped'));
+    await motion.mouse.wheel(0,60);
+    await motion.waitForFunction(()=>scrollY>=60 && !document.querySelector('.home-hero__stage').classList.contains('is-popped'));
+    const bounds=await stage.boundingBox();
+    await motion.mouse.move(bounds.x+bounds.width*.65,bounds.y+bounds.height*.5);
+    await motion.waitForFunction(()=>{
+      const art=document.querySelector('.home-hero__character');
+      return art.closest('.home-hero__stage').classList.contains('is-popped') && new DOMMatrixReadOnly(getComputedStyle(art).transform).a>1.04;
+    });
+  });
+  await check('early mobile scroll completes the entrance instead of fading the visible copy',async()=>{
+    const mobileContext=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
+    await mobileContext.addInitScript(()=>document.addEventListener('DOMContentLoaded',()=>scrollTo(0,350),{once:true}));
+    const mobile=await mobileContext.newPage();await mobile.goto(origin+'/');
+    await mobile.waitForFunction(()=>document.documentElement.dataset.homeMotion==='active');
+    assert.ok(await mobile.locator('.home-hero__stage').evaluate(el=>el.getBoundingClientRect().bottom<0));
+    await mobile.waitForFunction(()=>[...document.querySelectorAll('.home-hero__copy > *')].every(el=>getComputedStyle(el).opacity==='1' && getComputedStyle(el).transform==='none'));
+    await mobile.screenshot({path:path.join(evidence,'home-early-scroll-390.png')});
+    await mobileContext.close();
+  });
+  for(const reducedMotion of ['no-preference','reduce']) await check(`shared scroll progress follows the document with ${reducedMotion}`,async()=>{
+    await motion.emulateMedia({reducedMotion});
+    for(const route of ['/','/about/']) {
+      await motion.goto(origin+route);
+      await motion.evaluate(()=>scrollTo(0,Math.round((document.documentElement.scrollHeight-innerHeight)/2)));
+      await motion.waitForFunction(()=>{
+        const distance=document.documentElement.scrollHeight-innerHeight;
+        const bar=document.querySelector('.scroll-progress span');
+        return Math.abs(new DOMMatrixReadOnly(getComputedStyle(bar).transform).a-scrollY/distance)<0.001;
+      });
+      await motion.locator('.site-footer').scrollIntoViewIfNeeded();
+      await motion.waitForFunction(()=>document.querySelector('.scroll-progress span').style.transform==='scaleX(1)');
+      await motion.evaluate(()=>scrollTo(0,0));
+      await motion.waitForFunction(()=>document.querySelector('.scroll-progress span').style.transform==='scaleX(0)');
+    }
   });
   await check('keyboard skip link reaches main content',async()=>{
     await motion.goto(origin+'/cv/');await motion.keyboard.press('Tab');

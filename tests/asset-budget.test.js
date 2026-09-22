@@ -38,10 +38,10 @@ test("shared and homepage JavaScript stay within separate delivery budgets", () 
 
   const mainBytes = fs.readFileSync(mainScript);
   const homeMotionBytes = fs.readFileSync(homeMotionScript);
-  assert.ok(mainBytes.length <= 128 * 1024, "The shared JavaScript bundle must stay at or below 128 KiB.");
-  assert.ok(homeMotionBytes.length <= 128 * 1024, "The homepage motion bundle must stay at or below 128 KiB.");
-  assert.ok(zlib.gzipSync(mainBytes).length <= 48 * 1024, "The shared bundle must stay at or below 48 KiB gzip.");
-  assert.ok(zlib.gzipSync(homeMotionBytes).length <= 52 * 1024, "The homepage motion bundle must stay at or below 52 KiB gzip.");
+  assert.ok(mainBytes.length <= 12 * 1024, "The shared JavaScript bundle must stay at or below 12 KiB.");
+  assert.ok(homeMotionBytes.length <= 80 * 1024, "The homepage motion bundle must stay at or below 80 KiB.");
+  assert.ok(zlib.gzipSync(mainBytes).length <= 5 * 1024, "The shared bundle must stay at or below 5 KiB gzip.");
+  assert.ok(zlib.gzipSync(homeMotionBytes).length <= 32 * 1024, "The homepage motion bundle must stay at or below 32 KiB gzip.");
 });
 
 test("the configured sidebar avatar is a compact WebP asset", () => {

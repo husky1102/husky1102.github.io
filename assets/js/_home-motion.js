@@ -6,14 +6,10 @@
   var root = document.documentElement;
   var homeHero = document.querySelector(".home-hero");
   var gsapApi = window.gsap;
-  var scrollTriggerApi = window.ScrollTrigger;
 
-  if (!homeHero || !gsapApi || !scrollTriggerApi) {
+  if (!homeHero || !gsapApi) {
     return;
   }
-
-  gsapApi.registerPlugin(scrollTriggerApi);
-  root.setAttribute("data-scroll-progress-engine", "gsap");
 
   var ready = function (callback) {
     if (document.readyState === "loading") {
@@ -25,34 +21,6 @@
   };
 
   ready(function () {
-    var scrollProgress = document.querySelector(".scroll-progress span");
-
-    var initGsapScrollProgress = function () {
-      if (!scrollProgress) {
-        return;
-      }
-
-      gsapApi.set(scrollProgress, {
-        width: "100%",
-        scaleX: 0,
-        transformOrigin: "left center",
-      });
-      gsapApi.to(scrollProgress, {
-        scaleX: 1,
-        ease: "none",
-        scrollTrigger: {
-          id: "site-scroll-progress",
-          trigger: document.documentElement,
-          start: "top top",
-          end: "max",
-          scrub: 0.3,
-        },
-      });
-      window.addEventListener("load", function () {
-        scrollTriggerApi.refresh();
-      }, { once: true });
-    };
-
     var initHomepageMotion = function () {
       root.setAttribute("data-home-motion", "static");
       var motionMedia = gsapApi.matchMedia();
@@ -100,7 +68,9 @@
             }
           };
           var handlePortraitPointerMove = function (event) {
-            if (!stageBounds || !stageIsVisible || document.hidden) { return; }
+            if (!stageIsVisible || document.hidden || (event.pointerType !== "mouse" && event.pointerType !== "pen")) { return; }
+            // Scroll/resize invalidates the cached bounds; moving inside the stage restores them.
+            if (!stageBounds) { handlePortraitPointerEnter(event); }
             var x = gsapApi.utils.clamp(-0.5, 0.5, (event.clientX - stageBounds.left) / stageBounds.width - 0.5);
             var y = gsapApi.utils.clamp(-0.5, 0.5, (event.clientY - stageBounds.top) / stageBounds.height - 0.5);
             xTo(x * 28); yTo(y * 16); rotationTo(x * 3);
@@ -125,8 +95,11 @@
           };
         });
         var syncHomepageMotion = function () {
-          if (stageIsVisible && !document.hidden) { homepageTimeline.resume(); }
-          else { homepageTimeline.pause(); resetPortrait(); }
+          if (!stageIsVisible || document.hidden) {
+            // A one-shot entrance must never leave visible copy partially faded.
+            homepageTimeline.progress(1);
+            resetPortrait();
+          }
         };
         if ("IntersectionObserver" in window) {
           stageObserver = new IntersectionObserver(function (entries) {
@@ -146,7 +119,6 @@
       });
     };
 
-    initGsapScrollProgress();
     initHomepageMotion();
   });
 }());

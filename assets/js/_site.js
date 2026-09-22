@@ -36,13 +36,17 @@
   function updateScroll() {
     scrollPending = false;
     const distance = Math.max(0, root.scrollHeight - innerHeight);
-    if (progress && root.dataset.scrollProgressEngine !== 'gsap') progress.style.width = (distance ? Math.min(100, scrollY / distance * 100) : 0) + '%';
+    if (progress) progress.style.transform = `scaleX(${distance ? Math.max(0, Math.min(1, scrollY / distance)) : 0})`;
     if (top) top.hidden = scrollY < 360;
   }
-  addEventListener('scroll', () => {
+  function scheduleScrollUpdate() {
     if (!scrollPending) { scrollPending = true; requestAnimationFrame(updateScroll); }
-  }, {passive: true});
-  addEventListener('resize', updateScroll);
+  }
+  addEventListener('scroll', scheduleScrollUpdate, {passive: true});
+  addEventListener('resize', scheduleScrollUpdate);
+  addEventListener('load', scheduleScrollUpdate, {once: true});
+  addEventListener('pageshow', scheduleScrollUpdate);
+  if ('ResizeObserver' in window) new ResizeObserver(scheduleScrollUpdate).observe(document.body);
   updateScroll();
   top?.addEventListener('click', () => scrollTo({top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'}));
 

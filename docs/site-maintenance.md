@@ -25,7 +25,7 @@
 - 四个 include 分别维护导航、个人资料、简历和论文资源链接。
 - `assets/css/site.scss` 汇总五个本站样式文件：基础主题、首页、关于与404、文档与博客、鼠标指针。颜色集中在 `_sass/_foundation.scss`，以 CSS 自定义属性控制明暗切换。
 - `_theme.js` 处理系统主题、本地偏好、跨标签页变化和博客同步；`_site.js` 处理手机导航、滚动进度、回到顶部、文本选区指针和代码复制。二者生成 `site.min.js`，不依赖浏览器库。
-- `_home-motion.js` 与 GSAP、ScrollTrigger 合并生成 `home-motion.min.js`，只在首页加载。减少动态效果设置会停用角色动效。
+- `_home-motion.js` 与 GSAP 合并生成 `home-motion.min.js`，只在首页加载。减少动态效果设置会停用角色动效；插画离屏时会完成入场动画，确保文字不会停在半透明状态。滚动进度由共享脚本通过 requestAnimationFrame 和 scaleX 同步，首页与其他页面使用同一逻辑，不添加追赶动画。
 - `blog-embed.js` 是独立的博客消息桥，协议与故障回退见 [博客嵌入说明](blog-embed.md)。
 
 无 JavaScript 时主要内容、导航和博客入口仍可访问。手机菜单支持 Escape 返回焦点，关闭时链接退出键盘顺序。资料链接用浏览器原生展开控件。打印简历时隐藏导航和交互入口。
@@ -36,7 +36,7 @@
 | --- | --- | --- |
 | Jekyll、Liquid、Kramdown、Sass、Rouge 及运行依赖 | 静态构建与内容转换 | `Gemfile.lock`，包内许可证 |
 | jekyll-sitemap、jekyll-redirect-from | XML 目录与历史入口 | `Gemfile.lock`，包内许可证 |
-| GSAP / ScrollTrigger | 首页动效 | `package-lock.json`、`assets/licenses/GSAP-NOTICE.txt` 和构建产物中的原许可注释 |
+| GSAP | 首页动效 | `package-lock.json`、`assets/licenses/GSAP-NOTICE.txt` 和构建产物中的原许可注释 |
 | LXGW、Maple Mono 字体 | 中文与标题字体 | `assets/fonts/*-OFL.txt` |
 | UglifyJS、onchange、Playwright | 构建、监听与浏览器测试 | `package-lock.json`，包内许可证 |
 | fonttools、Brotli | 字体子集生成 | `requirements-assets.txt`，包内许可证 |

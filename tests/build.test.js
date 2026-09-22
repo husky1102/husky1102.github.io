@@ -115,8 +115,9 @@ test("JavaScript builds keep shared and homepage motion bundles reproducible", (
   assert.doesNotMatch(mainBuild, /gsap|ScrollTrigger|_home-motion/);
   assert.match(
     homeMotionBuild,
-    /node_modules\/gsap\/dist\/gsap\.min\.js\s+node_modules\/gsap\/dist\/ScrollTrigger\.min\.js\s+assets\/js\/_home-motion\.js[\s\S]*assets\/js\/home-motion\.min\.js/
+    /node_modules\/gsap\/dist\/gsap\.min\.js\s+assets\/js\/_home-motion\.js[\s\S]*assets\/js\/home-motion\.min\.js/
   );
+  assert.doesNotMatch(homeMotionBuild, /ScrollTrigger/);
   assert.equal(packageJson.scripts.uglify, "npm run uglify:site && npm run uglify:home-motion");
   assert.equal(packageJson.scripts["build:js"], "npm run uglify");
   assert.match(packageJson.scripts["watch:js"], /-e \"assets\/js\/site\.min\.js\" -e \"assets\/js\/home-motion\.min\.js\"/);

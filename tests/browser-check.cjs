@@ -174,6 +174,88 @@ async function check(name,fn) { await fn(); results.push({name,status:'pass'}); 
     await motion.keyboard.press('Enter');assert.equal(await motion.evaluate(()=>document.activeElement.id),'main');
   });
   await motionContext.close();
+  await check('theme reveal preserves contrast in both directions and honors the last rapid toggle',async()=>{
+    const themeContext=await browser.newContext({viewport:{width:1440,height:900},colorScheme:'light',reducedMotion:'no-preference'});
+    const themePage=await themeContext.newPage();const errors=[];
+    themePage.on('pageerror',error=>errors.push(error.message));
+    await themePage.goto(origin+'/about/');await themePage.evaluate(()=>document.fonts.ready);
+    // Sample rendered colours throughout the real transition, including its middle frames.
+    for(const expected of ['dark','light']) {
+      await themePage.evaluate(()=>{
+        window.themeSamples=[];window.themeSamplesDone=false;
+        const start=performance.now();
+        function sample() {
+          const style=getComputedStyle(document.body);
+          window.themeSamples.push({fg:style.color,bg:style.backgroundColor});
+          if(performance.now()-start<900)requestAnimationFrame(sample);
+          else window.themeSamplesDone=true;
+        }
+        requestAnimationFrame(sample);
+      });
+      await themePage.locator('#theme-toggle').click();
+      await themePage.waitForFunction(()=>window.themeSamplesDone && !document.documentElement.classList.contains('is-theme-transitioning'));
+      const samples=await themePage.evaluate(()=>window.themeSamples);
+      const luminance=color=>{
+        const rgb=color.match(/[\d.]+/g).slice(0,3).map(Number).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
+        return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;
+      };
+      assert.ok(samples.length>5,'sample multiple frames');
+      for(const sample of samples) {
+        const [dark,light]=[luminance(sample.fg),luminance(sample.bg)].sort((a,b)=>a-b);
+        assert.ok((light+.05)/(dark+.05)>=7,`low text contrast: ${JSON.stringify(sample)}`);
+      }
+      assert.equal(await themePage.locator('html').getAttribute('data-theme'),expected);
+    }
+    await themePage.evaluate(()=>{
+      const button=document.querySelector('#theme-toggle');
+      button.click();button.click();button.click();
+    });
+    await themePage.waitForFunction(()=>document.documentElement.dataset.theme==='dark' && !document.documentElement.classList.contains('is-theme-transitioning'));
+    assert.equal(await themePage.locator('#theme-toggle').getAttribute('aria-pressed'),'true');
+    assert.equal(await themePage.evaluate(()=>localStorage.getItem('theme')),'dark');
+    await themePage.reload();assert.equal(await themePage.locator('html').getAttribute('data-theme'),'dark');
+    await themePage.screenshot({path:path.join(evidence,'about-theme-dark-1440.png'),fullPage:true});
+    assert.deepEqual(errors,[]);
+    await themeContext.close();
+  });
+  await check('theme reveal uses opaque palettes and stops immediately when reduced motion is enabled',async()=>{
+    const revealContext=await browser.newContext({viewport:{width:1440,height:900},colorScheme:'light',reducedMotion:'no-preference'});
+    const reveal=await revealContext.newPage();await reveal.goto(origin+'/about/');await reveal.evaluate(()=>document.fonts.ready);
+    await reveal.evaluate(()=>{
+      const start=document.startViewTransition.bind(document);
+      document.startViewTransition=callback=>{
+        const transition=start(callback);
+        transition.ready.then(()=>{
+          const animation=document.getAnimations().find(item=>item.animationName==='theme-reveal');
+          if(animation) {animation.pause();animation.currentTime=80;}
+          const old=getComputedStyle(document.documentElement,'::view-transition-old(root)');
+          const next=getComputedStyle(document.documentElement,'::view-transition-new(root)');
+          window.themeFrame={animation:animation?.animationName,oldOpacity:old.opacity,newOpacity:next.opacity,blend:next.mixBlendMode,clip:next.clipPath};
+        });
+        return transition;
+      };
+    });
+    await reveal.locator('#theme-toggle').click();await reveal.waitForFunction(()=>window.themeFrame);
+    const frame=await reveal.evaluate(()=>window.themeFrame);
+    assert.equal(frame.animation,'theme-reveal');
+    assert.equal(frame.oldOpacity,'1');assert.equal(frame.newOpacity,'1');
+    assert.equal(frame.blend,'normal');assert.ok(frame.clip.startsWith('circle('));
+    await reveal.screenshot({path:path.join(evidence,'theme-reveal-midpoint-1440.png')});
+    await reveal.emulateMedia({reducedMotion:'reduce'});
+    await reveal.waitForFunction(()=>!document.documentElement.classList.contains('is-theme-transitioning') && document.documentElement.dataset.theme==='dark');
+    assert.equal(await reveal.locator('#theme-toggle').getAttribute('aria-pressed'),'true');
+    await revealContext.close();
+  });
+  await check('theme switches without the View Transition API',async()=>{
+    const fallbackContext=await browser.newContext({viewport:{width:390,height:844},colorScheme:'light'});
+    await fallbackContext.addInitScript(()=>Object.defineProperty(document,'startViewTransition',{value:undefined}));
+    const fallback=await fallbackContext.newPage();await fallback.goto(origin+'/');
+    await fallback.locator('#theme-toggle').click();
+    assert.equal(await fallback.locator('html').getAttribute('data-theme'),'dark');
+    assert.equal(await fallback.locator('#theme-toggle').getAttribute('aria-pressed'),'true');
+    assert.equal(await fallback.locator('html').evaluate(el=>el.classList.contains('is-theme-transitioning')),false);
+    await fallbackContext.close();
+  });
   for(const fallback of [false,true]) await check(`code copy ${fallback?'fallback':'clipboard'} and wide table behavior`,async()=>{
     const fixtureContext=await browser.newContext({viewport:{width:390,height:844}});
     await fixtureContext.addInitScript(fallback=>{

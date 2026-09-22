@@ -135,7 +135,7 @@
   font-family: "Maple Mono NF CN", "LXGW WenKai Screen", sans-serif;
   font-size: 0.78rem;
   text-decoration: none;
-  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease;
+  transition: background-color var(--motion-fast) ease, color var(--motion-fast) ease, transform var(--motion-fast) var(--motion-ease);
 }
 .home-hero__actions .home-hero__action--primary {
   border-color: var(--accent);
@@ -284,17 +284,18 @@
   color: var(--ink);
   font-weight: 700;
   text-decoration: none;
-  transition:
-    color 0.24s ease,
-    padding-left 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: color var(--motion-fast) ease;
 }
 
 .home-destination-list a:hover,
 .home-destination-list a:focus-visible {
-  padding-left: 0.35rem;
   color: var(--accent);
   text-decoration: none;
 }
+
+.home-destination-list a span:first-child { transition: transform var(--motion-fast) var(--motion-ease); }
+.home-destination-list a:hover span:first-child,
+.home-destination-list a:focus-visible span:first-child { transform: translateX(0.35rem); }
 
 .home-destination-list a span:last-child {
   color: var(--accent);
@@ -323,6 +324,7 @@
 .home-now__list dd { font-size: 0.95rem; }
 
 @media (max-width: 30em) {
+  .home-section h2 > [lang="en"] { display: block; margin-top: .3rem; font-size: .7em; color: var(--muted); }
   .home-hero { gap: 0.65rem; padding-top: 0; }
   .home-hero__stage { min-height: 0; }
   .home-hero__portrait { width: min(60vw, 12rem); }

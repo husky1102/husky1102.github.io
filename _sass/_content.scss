@@ -122,17 +122,20 @@
   border-bottom: 1px solid var(--line);
   color: var(--ink);
   text-decoration: none;
-  transition: color 0.22s ease, padding-left 0.22s ease;
+  transition: color var(--motion-fast) ease;
 }
 
 .about-link-list a:hover,
 .about-link-list a:focus-visible {
-  padding-left: 0.35rem;
   color: var(--accent);
   text-decoration: none;
 }
 
+.about-link-list a:hover > span:first-child,
+.about-link-list a:focus-visible > span:first-child { transform: translateX(0.35rem); }
+
 .about-link-list a > span:first-child {
+  transition: transform var(--motion-fast) var(--motion-ease);
   display: grid;
   gap: 0.2rem;
 }

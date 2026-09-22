@@ -7,39 +7,61 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const isBlog = document.body.classList.contains('blog-layout');
   let preference = null;
-  let timer;
+  let transition = null;
+  let revision = 0;
+  let selectedTheme = root.dataset.theme === 'dark' ? 'dark' : 'light';
   try { preference = localStorage.getItem('theme'); } catch (_) {}
   if (!['light', 'dark'].includes(preference)) preference = null;
-  const current = () => root.dataset.theme === 'dark' ? 'dark' : 'light';
+  // Track the latest intent even while the browser is capturing the previous view.
+  const current = () => selectedTheme;
   function apply(theme, {remember = false, animate = false, announce = false} = {}) {
     if (!['light', 'dark'].includes(theme)) return;
-    const interrupted = root.classList.contains('is-theme-transitioning');
-    clearTimeout(timer);
+    const previous = selectedTheme;
+    const request = ++revision;
+    selectedTheme = theme;
+    if (transition) { transition.skipTransition(); transition = null; }
     root.classList.remove('is-theme-transitioning');
     if (remember) {
       preference = theme;
       try { localStorage.setItem('theme', theme); } catch (_) {}
     }
-    const duration = theme === 'dark' ? 650 : 800;
-    const motion = animate && !reduced.matches && !isBlog && window.CSS && typeof CSS.registerProperty === 'function';
-    root.classList.toggle('is-theme-syncing', !motion);
-    if (motion) {
-      root.style.setProperty('--theme-duration', duration + 'ms');
-      root.style.setProperty('--theme-ink-delay', interrupted ? '0ms' : (theme === 'dark' ? '180ms' : '240ms'));
-      root.classList.add('is-theme-transitioning');
+    function commit() {
+      if (request !== revision) return;
+      // Switch complete palettes atomically; never interpolate text through grey.
+      root.classList.add('is-theme-syncing');
+      root.dataset.theme = theme;
+      if (control) {
+        control.setAttribute('aria-pressed', String(theme === 'dark'));
+        const label = control.dataset[theme === 'dark' ? 'lightLabel' : 'darkLabel'];
+        control.setAttribute('aria-label', label);
+        control.title = label;
+      }
+      const color = document.querySelector('meta[name="theme-color"]');
+      if (color) color.content = isBlog ? (theme === 'dark' ? '#181a1d' : '#fafaf3') : (theme === 'dark' ? '#17191d' : '#fbfaf7');
+      void root.offsetWidth;
+      root.classList.remove('is-theme-syncing');
+      if (announce) window.dispatchEvent(new CustomEvent('husky:theme-change', {detail: {theme}}));
     }
-    root.dataset.theme = theme;
-    if (control) {
-      control.setAttribute('aria-pressed', String(theme === 'dark'));
-      const label = control.dataset[theme === 'dark' ? 'lightLabel' : 'darkLabel'];
-      control.setAttribute('aria-label', label);
-      control.title = label;
+    function finish() {
+      if (request !== revision) return;
+      transition = null;
+      root.classList.remove('is-theme-transitioning');
     }
-    const color = document.querySelector('meta[name="theme-color"]');
-    if (color) color.content = isBlog ? (theme === 'dark' ? '#181a1d' : '#fafaf3') : (theme === 'dark' ? '#17191d' : '#fbfaf7');
-    if (!motion) { void root.offsetWidth; root.classList.remove('is-theme-syncing'); }
-    else timer = setTimeout(() => root.classList.remove('is-theme-transitioning'), duration);
-    if (announce) window.dispatchEvent(new CustomEvent('husky:theme-change', {detail: {theme}}));
+    const motion = animate && previous !== theme && !reduced.matches && !isBlog && typeof document.startViewTransition === 'function';
+    if (!motion) { commit(); return; }
+    const bounds = control?.getBoundingClientRect();
+    const x = bounds ? bounds.left + bounds.width / 2 : innerWidth / 2;
+    const y = bounds ? bounds.top + bounds.height / 2 : 0;
+    root.style.setProperty('--theme-x', x + 'px');
+    root.style.setProperty('--theme-y', y + 'px');
+    root.style.setProperty('--theme-radius', Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) + 'px');
+    root.classList.add('is-theme-transitioning');
+    try {
+      const active = document.startViewTransition(commit);
+      transition = active;
+      active.ready.catch(() => {}); // Skipping the animation still runs its update callback.
+      active.finished.then(finish, () => { commit(); finish(); });
+    } catch (_) { commit(); finish(); }
   }
   apply(preference || (system.matches ? 'dark' : 'light'));
   control?.addEventListener('click', () => apply(current() === 'dark' ? 'light' : 'dark', {remember: true, animate: true, announce: true}));

@@ -25,6 +25,7 @@
 - 四个 include 分别维护导航、个人资料、简历和论文资源链接。
 - `assets/css/site.scss` 汇总五个本站样式文件：基础主题、首页、关于与404、文档与博客、鼠标指针。颜色集中在 `_sass/_foundation.scss`，以 CSS 自定义属性控制明暗切换。
 - `_theme.js` 处理系统主题、本地偏好、跨标签页变化和博客同步；`_site.js` 处理手机导航、滚动进度、回到顶部、文本选区指针和代码复制。二者生成 `site.min.js`，不依赖浏览器库。
+- 主题切换使用浏览器原生 View Transition，在 320ms 内展开完整的新配色，不对文字与背景颜色交叉插值。连续切换以最后一次选择为准；减少动态效果、博客页面及不支持该 API 时直接切换。按钮、链接和头像的短反馈共用 `--motion-fast` 与 `--motion-ease`；链接位移使用 transform，保持行宽稳定。
 - `_home-motion.js` 与 GSAP 合并生成 `home-motion.min.js`，只在首页加载。减少动态效果设置会停用角色动效；插画离屏时会完成入场动画，确保文字不会停在半透明状态。滚动进度由共享脚本通过 requestAnimationFrame 和 scaleX 同步，首页与其他页面使用同一逻辑，不添加追赶动画。
 - `blog-embed.js` 是独立的博客消息桥，协议与故障回退见 [博客嵌入说明](blog-embed.md)。
 

@@ -1,15 +1,10 @@
 @font-face { font-family: 'LXGW WenKai Screen'; src: url('../fonts/LXGWWenKaiGBScreen-subset.woff2') format('woff2'); font-display: swap; }
 @font-face { font-family: 'Maple Mono NF CN'; src: url('../fonts/MapleMono-NF-CN-Regular-subset.woff2') format('woff2'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'Maple Mono NF CN'; src: url('../fonts/MapleMono-NF-CN-Bold-subset.woff2') format('woff2'); font-weight: 700; font-display: swap; }
-@property --surface { syntax: '<color>'; inherits: true; initial-value: #fbfaf7; }
-@property --ink { syntax: '<color>'; inherits: true; initial-value: #27231f; }
-@property --accent { syntax: '<color>'; inherits: true; initial-value: #0f766e; }
-@property --muted { syntax: '<color>'; inherits: true; initial-value: #6f675c; }
-@property --line { syntax: '<color>'; inherits: true; initial-value: #ded8cd; }
-@property --panel { syntax: '<color>'; inherits: true; initial-value: #f2efe9; }
 :root {
   color-scheme: light; --surface: #fbfaf7; --ink: #27231f; --accent: #0f766e;
   --muted: #6f675c; --line: #ded8cd; --panel: #f2efe9; --character-filter: brightness(.96) saturate(.94);
+  --motion-fast: 200ms; --motion-ease: cubic-bezier(.22, 1, .36, 1);
   --body-font: 'LXGW WenKai Screen', system-ui, sans-serif;
   --heading-font: 'Maple Mono NF CN', 'LXGW WenKai Screen', monospace;
   font-size: 16px; scroll-padding-top: 90px;
@@ -18,9 +13,16 @@
   color-scheme: dark; --surface: #17191d; --ink: #e7edf4; --accent: #67e8f9;
   --muted: #a6b3c4; --line: rgba(255,255,255,.1); --panel: #22252a; --character-filter: brightness(.86) saturate(.92);
 }
-html.is-theme-transitioning {
-  transition: --surface var(--theme-duration) ease, --panel var(--theme-duration) ease,
-    --ink var(--theme-duration) ease var(--theme-ink-delay), --accent var(--theme-duration) ease, --muted var(--theme-duration) ease, --line var(--theme-duration) ease;
+/* Reveal a complete new palette, rather than mixing foreground/background colours. */
+html.is-theme-transitioning::view-transition { pointer-events: none; }
+html.is-theme-transitioning::view-transition-group(root),
+html.is-theme-transitioning::view-transition-old(root) { animation: none; }
+html.is-theme-transitioning::view-transition-old(root),
+html.is-theme-transitioning::view-transition-new(root) { mix-blend-mode: normal; }
+html.is-theme-transitioning::view-transition-new(root) { animation: theme-reveal 320ms var(--motion-ease) both; }
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at var(--theme-x) var(--theme-y)); }
+  to { clip-path: circle(var(--theme-radius) at var(--theme-x) var(--theme-y)); }
 }
 html.is-theme-syncing, html.is-theme-syncing * { transition: none !important; }
 *, *::before, *::after { box-sizing: border-box; }

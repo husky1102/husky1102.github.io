@@ -29,7 +29,7 @@ home_motion: true
 
 <section class="home-section">
   <header class="home-section__header">
-    <h2>研究方向 / Research Interests</h2>
+    <h2>研究方向 <span lang="en">/ Research Interests</span></h2>
     <p>关注智能体如何在世界中行动、记忆，并持续形成更好的判断。</p>
   </header>
   <div class="home-research-list">
@@ -49,7 +49,7 @@ home_motion: true
 
 <section class="home-section home-section--split">
   <div class="home-now">
-    <h2>此刻 / Now</h2>
+    <h2>此刻 <span lang="en">/ Now</span></h2>
     <dl class="home-now__list">
       <div><dt>硕士</dt><dd>西安交通大学，人工智能硕士在读</dd></div>
       <div><dt>本科</dt><dd>湖南大学，机器人工程学士，2025</dd></div>

@@ -1,0 +1,6 @@
+{% assign paper_fields = 'paperurl,slidesurl,codeurl,bibtexurl' | split: ',' %}
+{% assign paper_labels = 'Paper,Slides,Code,BibTeX' | split: ',' %}
+{% if page.lang != 'en' %}{% assign paper_labels = '论文,幻灯片,代码,BibTeX' | split: ',' %}{% endif %}
+<div class="paper-links">
+  {% for field in paper_fields %}{% if include.paper[field] %}<a href="{{ include.paper[field] | escape }}">{{ paper_labels[forloop.index0] }}</a>{% endif %}{% endfor %}
+</div>

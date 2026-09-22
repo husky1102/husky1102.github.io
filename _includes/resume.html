@@ -1,0 +1,32 @@
+{% assign resume = site.data.resume[page.lang] %}
+<article class="resume">
+  <header class="resume-heading">
+    <div class="resume-name"><h1>{{ resume.name }}</h1><nav class="cv-language-switch" aria-label="{{ site.data.interface[page.lang].language }}"><a href="{{ resume.switch_url | relative_url }}" lang="{{ resume.switch_lang }}" hreflang="{{ resume.switch_lang }}" aria-label="{{ resume.switch_label }}">{{ resume.switch_text }}</a></nav></div>
+    <p>{{ resume.summary }}</p>
+    <nav class="resume-links" aria-label="{{ resume.links_label }}"><a href="{{ '/about/' | relative_url }}">{{ resume.about }}</a><a href="https://github.com/husky1102">GitHub</a><a href="https://kaggle.com/husky1102">Kaggle</a><a href="https://www.husky1102.top/">{{ resume.blog }}</a></nav>
+  </header>
+  <section class="resume-section" aria-labelledby="education">
+    <h2 id="education">{{ resume.education_title }}</h2>
+    <ol class="education-list">
+      {% for entry in resume.education %}<li><div><h3>{{ entry.degree }}</h3><p>{{ entry.institution }}</p></div><span>{{ entry.period }}</span></li>{% endfor %}
+    </ol>
+  </section>
+  <section class="resume-section" aria-labelledby="interests">
+    <h2 id="interests">{{ resume.interests_title }}</h2>
+    <dl class="interest-list">{% for entry in resume.interests %}<div><dt>{{ entry.title }}</dt><dd>{{ entry.description }}</dd></div>{% endfor %}</dl>
+  </section>
+  {% if site.publications.size > 0 %}
+  <section class="resume-section" aria-labelledby="publications">
+    <h2 id="publications">{{ resume.publications_title }}</h2>
+    {% assign papers = site.publications | sort: 'date' | reverse %}
+    {% for paper in papers %}
+    <article class="paper-entry">
+      <h3><a href="{{ paper.url | relative_url }}">{{ paper.title | escape }}</a></h3>
+      {% if paper.venue %}<p>{{ paper.venue | escape }}</p>{% endif %}
+      {% if paper.citation %}<p>{{ paper.citation | escape }}</p>{% endif %}
+      {% include paper-links.html paper=paper %}
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+</article>

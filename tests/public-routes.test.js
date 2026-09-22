@@ -62,14 +62,14 @@ test("HTML sitemap links have titles and resolve to published pages", () => {
   assertBuiltSite();
   const sitemap = readGenerated("sitemap/index.html");
   const links = Array.from(
-    sitemap.matchAll(/<h2 class="archive__item-title"[^>]*>\s*<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g),
+    sitemap.matchAll(/<li class="sitemap-entry">\s*<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g),
     ([, href, title]) => ({ href, title: title.replace(/<[^>]+>/g, "").trim() })
   );
   assert.ok(links.length > 0, "The sitemap should list content pages.");
   assert.equal(new Set(links.map(link => link.href)).size, links.length);
   for (const { href, title } of links) {
     assert.ok(title, `Missing title for ${href}`);
-    const url = new URL(href);
+    const url = new URL(href, "https://husky1102.github.io");
     assert.equal(url.origin, "https://husky1102.github.io");
     const relativePath = decodeURIComponent(url.pathname).replace(/^\//, "");
     const target = relativePath.endsWith("/") || !relativePath ? `${relativePath}index.html` : relativePath;
@@ -78,7 +78,7 @@ test("HTML sitemap links have titles and resolve to published pages", () => {
   }
   for (const page of ["index.html", "about/index.html", "cv/index.html", "cv_zh/index.html", "blog_embed/index.html"]) {
     const canonical = readGenerated(page).match(/<link rel="canonical" href="([^"]+)"/)[1];
-    assert.ok(links.some(link => link.href === canonical), `Missing sitemap entry for ${page}`);
+    assert.ok(links.some(link => new URL(link.href, "https://husky1102.github.io").href === canonical), `Missing sitemap entry for ${page}`);
   }
 });
 

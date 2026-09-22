@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: site
 title: "个人博客"
 description: "在这里阅读 Husky 的学习记录、研究笔记与日常思考。"
 permalink: /blog_embed/
@@ -11,6 +11,6 @@ blog_embed: true
   <h1 id="blog-reader-title" class="visually-hidden">个人博客</h1>
   <div class="blog-reader__window">
     <p class="blog-reader__status" role="status" hidden>正在打开博客…</p>
-    <iframe id="blog-frame" src="https://www.husky1102.top/" title="unTitled 博客" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>
+    <iframe id="blog-frame" src="https://www.husky1102.top/" title="unTitled 博客" loading="eager" referrerpolicy="no-referrer" allow="fullscreen"></iframe>
   </div>
 </main>

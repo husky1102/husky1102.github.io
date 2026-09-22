@@ -1,0 +1,161 @@
+/* Personal about-page and character presentation. */
+.about-profile {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.about-profile__copy { min-width: 0; }
+.about-profile__art {
+  width: min(100%, 13rem);
+  justify-self: center;
+  aspect-ratio: 5 / 6;
+}
+.about-profile__art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+@media (min-width: 48em) {
+  .about-profile { grid-template-columns: minmax(0, 1fr) minmax(0, 0.65fr); gap: 2rem; }
+  .about-profile__art { width: min(100%, 20rem); }
+}
+
+.about-profile__lead {
+  max-width: 32ch;
+  margin-bottom: 1.25rem;
+  color: var(--ink);
+  font-family: "Maple Mono NF CN", "LXGW WenKai Screen", sans-serif;
+  font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+  font-weight: 400;
+  letter-spacing: -0.014em;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+.about-profile p:not(.about-profile__lead),
+.about-site p {
+  max-width: 68ch;
+  color: var(--muted);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.8;
+}
+
+.about-section {
+  margin: 0 0 clamp(2rem, 5vw, 3rem);
+}
+
+.about-section h2 {
+  margin: 0 0 1rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+}
+
+.about-focus-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+.about-focus-list article {
+  grid-column: 1 / -1;
+  padding: 1.1rem 0 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.about-focus-list h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.about-focus-list p {
+  max-width: 54ch;
+  margin: 0;
+  color: var(--muted);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.72;
+}
+
+.about-path {
+  margin: 0;
+}
+
+.about-path div {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 0.22fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.about-path dt {
+  color: var(--accent);
+  font-family: "Maple Mono NF CN", monospace;
+  font-weight: 700;
+}
+
+.about-path dd {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.about-link-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-link-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.25rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.22s ease, padding-left 0.22s ease;
+}
+
+.about-link-list a:hover,
+.about-link-list a:focus-visible {
+  padding-left: 0.35rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.about-link-list a > span:first-child {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.about-link-list strong {
+  font-family: "Maple Mono NF CN", sans-serif;
+  font-size: 1rem;
+}
+
+.about-link-list small {
+  color: var(--muted);
+  font-family: "LXGW WenKai Screen", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.84rem;
+}
+
+.about-link-list a > span:last-child {
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.about-site {
+  padding-top: 0.25rem;
+}
+
+
+@media (min-width: 48em) { .about-focus-list article { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: 1.5rem; align-items: baseline; } }

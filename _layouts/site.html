@@ -38,9 +38,12 @@
   {% if page.blog_embed %}
     {{ content }}
   {% else %}
-    <main id="main" tabindex="-1" class="site-content{% if page.home_motion %} site-content--home{% elsif page.cv %} site-content--cv{% else %} site-content--article{% endif %}">
+    <main id="main" tabindex="-1" class="site-content{% if page.profile %} site-content--profile{% endif %}{% if page.home_motion %} site-content--home{% elsif page.cv %} site-content--cv{% else %} site-content--article{% endif %}">
+      {% if page.profile %}{% include profile-card.html %}{% endif %}
+      <div class="document-body">
       {% unless page.hide_title or page.cv or page.home_motion %}<h1 class="document-title">{{ page.title }}</h1>{% endunless %}
       {{ content }}
+      </div>
     </main>
   {% endif %}
   {% unless page.blog_embed %}

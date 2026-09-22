@@ -1,4 +1,5 @@
 ---
+layout: site
 permalink: /about/
 title: "About"
 description: "关于 Husky：人工智能学习经历、研究关注与个人站点入口。"
@@ -7,7 +8,7 @@ redirect_from:
   - /about.html
 ---
 
-{% include base_path %}
+{% assign base_path = site.baseurl %}
 
 <div class="about-profile">
   <div class="about-profile__copy">
@@ -51,5 +52,5 @@ redirect_from:
 
 <section class="about-section about-site" aria-labelledby="about-site-title">
   <h2 id="about-site-title">关于本站</h2>
-  <p>本站使用 <a href="https://jekyllrb.com/">Jekyll</a> 构建，基于 <a href="https://github.com/academicpages/academicpages.github.io">AcademicPages</a> 持续调整；后者源自 <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/">Minimal Mistakes</a>。</p>
+  <p>这里汇集我的研究兴趣、教育经历和个人博客，内容会随学习进展持续更新。</p>
 </section>

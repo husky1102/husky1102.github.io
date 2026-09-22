@@ -1,12 +1,14 @@
 ---
+layout: site
+profile: true
 permalink: /terms/
 title: "隐私说明"
 description: "说明本站使用的本地设置、托管服务与外部内容边界。"
 modified: 2026-07-10
 ---
 
-{% include base_path %}
-{% include toc %}
+{% assign base_path = site.baseurl %}
+<nav class="document-toc" aria-label="本页内容"><a href="#本站如何运行">本站如何运行</a><a href="#浏览器本地设置">浏览器本地设置</a><a href="#博客与外部链接">博客与外部链接</a><a href="#说明更新">说明更新</a></nav>
 
 ## 本站如何运行
 

@@ -1,0 +1,54 @@
+en:
+  name: Husky
+  summary: "M.S. student in Artificial Intelligence at Xi'an Jiaotong University, focusing on Embodied AI, Agent Memory, and Continual Learning."
+  education_title: Education
+  interests_title: Research Interests
+  publications_title: Publications
+  links_label: CV links
+  about: About
+  blog: Blog
+  switch_label: 切换到中文简历
+  switch_text: 中文
+  switch_url: /cv_zh/
+  switch_lang: zh-CN
+  education:
+    - degree: M.S. in Artificial Intelligence
+      institution: "Xi'an Jiaotong University, China"
+      period: In progress
+    - degree: B.S. in Robotics Engineering
+      institution: Hunan University, China
+      period: '2025'
+  interests:
+    - title: Embodied AI
+      description: How agents perceive, act, and reason in environments.
+    - title: Agent Memory
+      description: How agents retain, retrieve, and use context across interactions.
+    - title: Continual Learning
+      description: How agents learn from new experience while preserving useful capabilities.
+zh:
+  name: 克苏鲁微糖
+  summary: 西安交通大学人工智能硕士在读，关注具身智能、智能体记忆与持续学习。
+  education_title: 教育背景
+  interests_title: 研究兴趣
+  publications_title: 论文发表
+  links_label: 简历链接
+  about: 关于我
+  blog: 个人博客
+  switch_label: Switch to English CV
+  switch_text: English
+  switch_url: /cv/
+  switch_lang: en
+  education:
+    - degree: 硕士，人工智能
+      institution: 西安交通大学，中国
+      period: 在读
+    - degree: 学士，机器人工程
+      institution: 湖南大学，中国
+      period: '2025'
+  interests:
+    - title: 具身智能
+      description: 关注智能体如何在环境中感知、行动与推理。
+    - title: 智能体记忆
+      description: 关注智能体如何在长期交互中保留、检索和使用上下文。
+    - title: 持续学习
+      description: 关注智能体如何从新经验中学习，同时保留已有的有效能力。

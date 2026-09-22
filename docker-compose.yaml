@@ -1,8 +1,10 @@
 services:
-  jekyll-site:
-    image: jekyll-site
+  site:
     build: .
-    volumes: [ .:/usr/src/app ]
-    ports: [ 4000:4000 ]
-    user: 1000:1000
-    command: bundle exec jekyll serve -H 0.0.0.0 -w
+    ports: ["4000:4000"]
+    volumes:
+      - .:/workspace
+      - site-node-modules:/workspace/node_modules
+    command: sh -c "npm ci && npm run build:js && npm run build:font && bundle exec jekyll serve --host 0.0.0.0"
+volumes:
+  site-node-modules:

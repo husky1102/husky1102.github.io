@@ -10,7 +10,7 @@ const publicFont = path.join(root, "assets", "fonts", "LXGWWenKaiGBScreen-subset
 const fontLicense = path.join(root, "assets", "fonts", "LXGWWenKai-OFL.txt");
 const sourceAvatar = path.join(root, "scripts", "assets", "images", "avatar-gpt063-source.png");
 const avatar = path.join(root, "images", "avatar-gpt063.webp");
-const mainScript = path.join(root, "assets", "js", "main.min.js");
+const mainScript = path.join(root, "assets", "js", "site.min.js");
 const homeMotionScript = path.join(root, "assets", "js", "home-motion.min.js");
 
 test("the full Chinese font stays source-only and the public subset stays within budget", () => {

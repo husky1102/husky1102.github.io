@@ -4,63 +4,51 @@ const vm = require("node:vm");
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const source = fs.readFileSync(path.join(__dirname, "../assets/js/_main.js"), "utf8");
+const source = fs.readFileSync(path.join(__dirname, "../assets/js/_theme.js"), "utf8");
 
 function setup({ reduced = false, supported = true, blog = false, stored = null } = {}) {
-  const attributes = new Map();
-  const classes = new Set();
-  const styles = new Map();
-  const buttonAttributes = new Map();
-  const listeners = {};
-  const timers = new Map();
-  const events = [];
-  const media = {};
-  let timerId = 0;
-  let bridge;
-  const button = {
-    getAttribute: (key) => buttonAttributes.get(key),
+  const classes = new Set(), styles = new Map(), buttonAttributes = new Map();
+  const listeners = {}, timers = new Map(), events = [], media = {};
+  let timerId = 0, bridge;
+  const root = {
+    dataset: {}, offsetWidth: 1200,
+    classList: {
+      contains: key => classes.has(key), add: key => classes.add(key), remove: key => classes.delete(key),
+      toggle: (key, enabled) => enabled ? classes.add(key) : classes.delete(key),
+    },
+    style: { setProperty: (key, value) => styles.set(key, value) },
+  };
+  const control = {
+    dataset: {lightLabel: 'Light', darkLabel: 'Dark'},
     setAttribute: (key, value) => buttonAttributes.set(key, value),
     addEventListener: (type, fn) => { listeners[type] = fn; },
   };
-  const root = {
-    getAttribute: (key) => attributes.get(key),
-    setAttribute: (key, value) => attributes.set(key, value),
-    toggleAttribute: (key, enabled) => enabled ? attributes.set(key, "") : attributes.delete(key),
-    classList: { add: (key) => classes.add(key), remove: (key) => classes.delete(key) },
-    style: { setProperty: (key, value) => styles.set(key, value) },
-    offsetWidth: 1200,
-  };
-  const document = {
-    readyState: "complete",
-    documentElement: root,
-    body: { classList: { contains: () => blog } },
-    getElementById: () => ({ querySelector: () => button }),
-    querySelector: () => null,
+  const matchMedia = query => {
+    const value = { matches: query.includes('reduced-motion') ? reduced : false };
+    value.addEventListener = (_, fn) => { value.change = event => { value.matches = event.matches; fn(event); }; };
+    media[query] = value; return value;
   };
   const window = {
-    CSS: supported ? { registerProperty() {} } : undefined,
-    matchMedia: (query) => (media[query] = {
-      matches: query.includes("reduced-motion") ? reduced : false,
-      addEventListener: (_, fn) => { media[query].change = fn; },
-    }),
-    dispatchEvent: (event) => events.push(event),
-    setTimeout: (fn) => { timers.set(++timerId, fn); return timerId; },
-    clearTimeout: (id) => timers.delete(id),
-    huskyBlogEmbed: { start: (api) => { bridge = api; } },
+    CSS: supported ? {registerProperty() {}} : undefined,
+    dispatchEvent: event => events.push(event),
+    addEventListener: (type, fn) => { listeners[type] = fn; },
+    huskyBlogEmbed: {start: api => {bridge = api;}},
   };
-  // Stop before unrelated scroll/navigation initialization, exercising the real theme code.
-  const themeSource = source.slice(0, source.indexOf('    var scrollProgress =')) + "\n  });\n})();";
-  vm.runInNewContext(themeSource, {
-    window, document,
-    localStorage: { getItem: () => stored, setItem: (_, value) => { stored = value; } },
-    CustomEvent: function (type, options) { this.type = type; this.detail = options.detail; },
+  vm.runInNewContext(source, {
+    window, CSS: window.CSS, matchMedia,
+    document: {documentElement: root, getElementById: () => control, querySelector: () => null,
+      body: {classList: {contains: () => blog}}},
+    setTimeout: fn => {timers.set(++timerId, fn); return timerId;},
+    clearTimeout: id => timers.delete(id),
+    localStorage: {getItem: () => stored, setItem: (_, value) => {stored = value;}},
+    CustomEvent: function(type, options) {this.type = type; this.detail = options.detail;},
   });
   return {
     click: () => listeners.click(), classes, styles, timers, media, events, bridge,
-    theme: () => attributes.get("data-theme") || "light",
-    stored: () => stored,
-    pressed: () => buttonAttributes.get("aria-pressed"),
-    finish: () => { for (const fn of [...timers.values()]) fn(); },
+    storage: value => listeners.storage({key: 'theme', newValue: value}),
+    theme: () => root.dataset.theme, stored: () => stored,
+    pressed: () => buttonAttributes.get('aria-pressed'),
+    finish: () => {for (const [id, fn] of [...timers]) {timers.delete(id); fn();}},
   };
 }
 
@@ -122,4 +110,16 @@ test("system theme changes stay immediate until the visitor chooses a theme", ()
   page.click();
   page.media["(prefers-color-scheme: dark)"].change({ matches: true });
   assert.equal(page.theme(), "light");
+});
+
+test('invalid saved preferences fall back to the system, storage changes update controls', () => {
+  const page = setup({stored: 'invalid'});
+  assert.equal(page.theme(), 'light');
+  page.storage('dark');
+  assert.equal(page.theme(), 'dark');
+  assert.equal(page.pressed(), 'true');
+  page.storage(null);
+  assert.equal(page.theme(), 'light');
+  page.media['(prefers-color-scheme: dark)'].change({matches: true});
+  assert.equal(page.theme(), 'dark');
 });

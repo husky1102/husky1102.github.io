@@ -1,6 +1,6 @@
 {
   "name": "husky1102.github.io",
-  "version": "0.8.1.1",
+  "version": "1.0.0",
   "private": true,
   "description": "Build scripts for husky1102's personal academic website",
   "repository": {
@@ -8,13 +8,8 @@
     "url": "https://github.com/husky1102/husky1102.github.io"
   },
   "keywords": [
-    "jekyll",
-    "theme",
-    "minimal"
-  ],
-  "contributors": [
-    "Michael Rose",
-    "Robert Zupko"
+    "personal-site",
+    "jekyll"
   ],
   "license": "MIT",
   "bugs": {
@@ -25,11 +20,7 @@
     "node": ">=22"
   },
   "dependencies": {
-    "fitvids": "^2.1.1",
-    "gsap": "^3.15.0",
-    "jquery": "^3.7.1",
-    "jquery-smooth-scroll": "^2.2.0",
-    "magnific-popup": "^1.2.0"
+    "gsap": "^3.15.0"
   },
   "devDependencies": {
     "onchange": "^7.1.0",
@@ -37,10 +28,9 @@
     "uglify-js": "^3.17.4"
   },
   "scripts": {
-    "uglify:main": "uglifyjs node_modules/jquery/dist/jquery.min.js node_modules/fitvids/dist/fitvids.min.js node_modules/magnific-popup/dist/jquery.magnific-popup.min.js node_modules/jquery-smooth-scroll/jquery.smooth-scroll.min.js assets/js/plugins/jquery.greedy-navigation.js assets/js/_main.js -c -m -o assets/js/main.min.js",
-    "uglify:home-motion": "uglifyjs node_modules/gsap/dist/gsap.min.js node_modules/gsap/dist/ScrollTrigger.min.js assets/js/_home-motion.js -c -m -o assets/js/home-motion.min.js",
-    "uglify": "npm run uglify:main && npm run uglify:home-motion && npm run uglify:site",
-    "watch:js": "onchange \"assets/js/**/*.js\" -e \"assets/js/main.min.js\" -e \"assets/js/home-motion.min.js\" -- npm run build:js",
+    "uglify:home-motion": "uglifyjs node_modules/gsap/dist/gsap.min.js node_modules/gsap/dist/ScrollTrigger.min.js assets/js/_home-motion.js --comments \"/@license/\" -c -m -o assets/js/home-motion.min.js",
+    "uglify": "npm run uglify:site && npm run uglify:home-motion",
+    "watch:js": "onchange \"assets/js/**/*.js\" -e \"assets/js/site.min.js\" -e \"assets/js/home-motion.min.js\" -- npm run build:js",
     "build:js": "npm run uglify",
     "build:font": "python3 scripts/subset_site_font.py",
     "check:font": "python3 scripts/subset_site_font.py --check-generated",
@@ -48,6 +38,8 @@
     "test": "npm run test:node && npm run test:python",
     "test:node": "node --test tests/*.test.js",
     "test:python": "python3 -m unittest discover -s tests -p 'test_*.py' -v",
-    "uglify:site": "uglifyjs assets/js/_theme.js assets/js/_site.js -c -m -o assets/js/site.min.js"
-  }
+    "uglify:site": "uglifyjs assets/js/_theme.js assets/js/_site.js -c -m -o assets/js/site.min.js",
+    "test:browser": "node tests/browser-check.cjs"
+  },
+  "author": "Husky1102"
 }

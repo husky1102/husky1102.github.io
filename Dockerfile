@@ -1,32 +1,20 @@
-# Base image: Ruby with necessary dependencies for Jekyll
-FROM ruby:3.3
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    nodejs \
+FROM node:22-bookworm-slim AS node
+FROM ruby:3.3-bookworm
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+    && apt-get update && apt-get install -y --no-install-recommends python3-venv \
     && rm -rf /var/lib/apt/lists/*
-
-
-# Create a non-root user with UID 1000
-RUN groupadd -g 1000 vscode && \
-    useradd -m -u 1000 -g vscode vscode
-
-# Set the working directory
-WORKDIR /usr/src/app
-
-# Set permissions for the working directory
-RUN chown -R vscode:vscode /usr/src/app
-
-# Switch to the non-root user
-USER vscode
-
-# Copy the locked Ruby dependency definition.
+RUN python3 -m venv /opt/assets
+ENV PATH="/opt/assets/bin:${PATH}"
+COPY requirements-assets.txt /tmp/requirements-assets.txt
+RUN pip install --no-cache-dir -r /tmp/requirements-assets.txt
+WORKDIR /workspace
 COPY Gemfile Gemfile.lock ./
-
-# Install the lockfile's Bundler version and dependencies.
-RUN gem install bundler:2.4.22
-RUN bundle _2.4.22_ install
-
-# Command to serve the Jekyll site
-CMD ["bundle", "exec", "jekyll", "serve", "-H", "0.0.0.0", "-w"]
+RUN gem install bundler:2.4.22 --no-document && bundle _2.4.22_ install
+RUN useradd --create-home --uid 1000 developer \
+    && mkdir -p /workspace/node_modules && chown -R developer:developer /workspace
+USER developer
+EXPOSE 4000
+CMD ["bundle", "exec", "jekyll", "serve", "--host", "0.0.0.0"]

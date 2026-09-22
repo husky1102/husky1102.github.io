@@ -3,7 +3,6 @@ layout: site
 permalink: /about/
 title: "About"
 description: "关于 Husky：人工智能学习经历、研究关注与个人站点入口。"
-author_profile: false
 redirect_from: 
   - /about.html
 ---

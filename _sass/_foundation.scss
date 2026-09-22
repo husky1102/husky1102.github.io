@@ -91,10 +91,9 @@ blockquote { border-left: 3px solid var(--accent); margin: 1.5rem 0; padding: 1r
 }
 @media print {
   :root, :root[data-theme='dark'] { --surface: #fff; --ink: #111; --muted: #333; --accent: #111; --line: #bbb; }
-  .site-header,.site-footer,.back-to-top,.scroll-progress,.skip-link,.cv-language-switch,.cv-header__links { display: none !important; }
+  .site-header,.site-footer,.back-to-top,.scroll-progress,.skip-link,.cv-language-switch { display: none !important; }
   .site-page { padding: 0; }
   .site-content { width: 100%; max-width: none; margin: 0; padding: 0; }
   a { color: inherit; }
   h2,h3 { break-after: avoid; }
-  .cv-item,.cv-interest-list li { break-inside: avoid; }
 }

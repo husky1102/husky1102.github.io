@@ -88,18 +88,18 @@ test("Dependabot checks every maintained dependency ecosystem each week", () => 
 
 test("JavaScript builds keep shared and homepage motion bundles reproducible", () => {
   const packageJson = JSON.parse(read("package.json"));
-  const mainBuild = packageJson.scripts["uglify:main"];
+  const mainBuild = packageJson.scripts["uglify:site"];
   const homeMotionBuild = packageJson.scripts["uglify:home-motion"];
 
-  assert.match(mainBuild, /assets\/js\/_main\.js[\s\S]*assets\/js\/main\.min\.js/);
+  assert.match(mainBuild, /assets\/js\/_theme\.js[\s\S]*assets\/js\/_site\.js[\s\S]*assets\/js\/site\.min\.js/);
   assert.doesNotMatch(mainBuild, /gsap|ScrollTrigger|_home-motion/);
   assert.match(
     homeMotionBuild,
     /node_modules\/gsap\/dist\/gsap\.min\.js\s+node_modules\/gsap\/dist\/ScrollTrigger\.min\.js\s+assets\/js\/_home-motion\.js[\s\S]*assets\/js\/home-motion\.min\.js/
   );
-  assert.equal(packageJson.scripts.uglify, "npm run uglify:main && npm run uglify:home-motion && npm run uglify:site");
+  assert.equal(packageJson.scripts.uglify, "npm run uglify:site && npm run uglify:home-motion");
   assert.equal(packageJson.scripts["build:js"], "npm run uglify");
-  assert.match(packageJson.scripts["watch:js"], /-e \"assets\/js\/main\.min\.js\" -e \"assets\/js\/home-motion\.min\.js\"/);
+  assert.match(packageJson.scripts["watch:js"], /-e \"assets\/js\/site\.min\.js\" -e \"assets\/js\/home-motion\.min\.js\"/);
 });
 
 test("npm metadata identifies this repository as a private site project", () => {
@@ -126,17 +126,16 @@ test("Ruby builds use a committed cross-platform dependency lock", () => {
   assert.match(gemfileLock, /BUNDLED WITH\n {3}2\.4\.22\n/);
 });
 
-test("Docker builds and serves with the locked Ruby bundle", () => {
+test("Container setup provides the complete asset build and preview pipeline", () => {
   const dockerfile = read("Dockerfile");
   const compose = read("docker-compose.yaml");
-
-  assert.match(dockerfile, /^FROM ruby:3\.3$/m);
-  assert.match(dockerfile, /^COPY Gemfile Gemfile\.lock \.\/$/m);
-  assert.match(dockerfile, /^RUN gem install bundler:2\.4\.22$/m);
-  assert.match(dockerfile, /^RUN bundle _2\.4\.22_ install$/m);
-  assert.doesNotMatch(dockerfile, /gem install connection_pool/);
-  assert.match(dockerfile, /^CMD \["bundle", "exec", "jekyll", "serve", "-H", "0\.0\.0\.0", "-w"\]$/m);
-  assert.match(compose, /^\s+command: bundle exec jekyll serve -H 0\.0\.0\.0 -w$/m);
+  assert.match(dockerfile, /FROM node:22-bookworm-slim AS node/);
+  assert.match(dockerfile, /FROM ruby:3.3-bookworm/);
+  assert.match(dockerfile, /python3-venv/);
+  assert.match(dockerfile, /COPY Gemfile Gemfile.lock/);
+  assert.match(dockerfile, /bundle _2.4.22_ install/);
+  assert.match(compose, /npm ci && npm run build:js && npm run build:font/);
+  assert.match(compose, /bundle exec jekyll serve/);
 });
 
 test("builds regenerate font subsets before verification and publication", () => {
@@ -165,7 +164,7 @@ test("builds regenerate font subsets before verification and publication", () =>
 
     const buildIndex = workflow.indexOf("run: npm run build:js");
     const diffIndex = workflow.indexOf(
-      "run: git diff --exit-code -- assets/js/main.min.js assets/js/home-motion.min.js"
+      "run: git diff --exit-code -- assets/js/site.min.js assets/js/home-motion.min.js"
     );
     assert.notEqual(buildIndex, -1, "Missing JavaScript build step.");
     assert.ok(diffIndex > buildIndex, "Generated JavaScript must be checked after rebuilding it.");

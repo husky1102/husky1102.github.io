@@ -3,7 +3,6 @@ layout: site
 title: "个人博客"
 description: "在这里阅读 Husky 的学习记录、研究笔记与日常思考。"
 permalink: /blog_embed/
-author_profile: false
 blog_embed: true
 ---
 

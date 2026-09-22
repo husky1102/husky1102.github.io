@@ -30,7 +30,7 @@ jobs:
         run: npm run build:js
 
       - name: Verify generated JavaScript
-        run: git diff --exit-code -- assets/js/main.min.js assets/js/home-motion.min.js
+        run: git diff --exit-code -- assets/js/site.min.js assets/js/home-motion.min.js
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -62,3 +62,16 @@ jobs:
 
       - name: Run Node tests
         run: npm test
+
+      - name: Install test browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Check browser behavior
+        run: npm run test:browser
+
+      - name: Upload browser results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-results
+          path: local/browser-check

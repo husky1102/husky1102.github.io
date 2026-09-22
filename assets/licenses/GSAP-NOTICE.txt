@@ -1,0 +1,7 @@
+GSAP 3.15.0 and ScrollTrigger 3.15.0
+Copyright 2026, GreenSock. All rights reserved.
+Subject to the terms at https://gsap.com/standard-license.
+
+Source: npm package gsap, version recorded in package-lock.json.
+The original license notices are retained in home-motion.min.js.
+This library is not covered by the site's MIT license.

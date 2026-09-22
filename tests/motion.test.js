@@ -14,17 +14,8 @@ test("Portrait motion is scoped to fine pointers and cleaned up", () => {
   assert.match(source, /pointerMedia\.revert\(\)/);
 });
 
-test("Sidebar avatar respects reduced motion", () => {
-  const sidebar = read("_sass/layout/_sidebar.scss");
-
-  assert.match(
-    sidebar,
-    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.author__profile > \.author__avatar:hover,[\s\S]*?\.author__profile:focus-within > \.author__avatar[\s\S]*?transform:\s*none[\s\S]*?overflow:\s*hidden/
-  );
-  assert.match(
-    sidebar,
-    /@media \(prefers-reduced-motion:\s*reduce\)[\s\S]*?\.author__profile > \.author__avatar:hover[\s\S]*?img\s*\{[\s\S]*?transform:\s*translateY\(var\(--avatar-art-y\)\)[\s\S]*?filter:\s*var\(--character-filter\)/
-  );
+test("Profile avatar respects reduced motion", () => {
+  assert.match(read("_sass/_documents.scss"), /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.profile-avatar:hover img \{ transform: none/);
 });
 
 test("Homepage motion supports reduced motion and releases observers", () => {

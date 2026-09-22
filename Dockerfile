@@ -10,6 +10,7 @@ RUN python3 -m venv /opt/assets
 ENV PATH="/opt/assets/bin:${PATH}"
 COPY requirements-assets.txt /tmp/requirements-assets.txt
 RUN pip install --no-cache-dir -r /tmp/requirements-assets.txt
+ENV BUNDLE_IGNORE_CONFIG=true
 WORKDIR /workspace
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler:2.4.22 --no-document && bundle _2.4.22_ install

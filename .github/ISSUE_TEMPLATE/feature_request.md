@@ -1,20 +1,10 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: 改进建议
+about: 帮助个人主页提供更清晰、方便的阅读体验
 title: ''
 labels: ''
-assignees: ''
-
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+你希望在什么页面完成什么事情？当前有什么不便？
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
-
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+请描述希望得到的结果，必要时补充参考链接或截图。

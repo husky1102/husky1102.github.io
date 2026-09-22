@@ -26,7 +26,7 @@ const walk = (dir) => {
 test("Publish output excludes development files and local tool state", () => {
   assertBuiltSite();
   const forbiddenPaths = [
-    "scripts", "tests", "docs", ".git", ".github", ".agents", ".codex", ".cowork",
+    "local", "scripts", "tests", "docs", ".git", ".github", ".agents", ".codex", ".cowork",
     ".claude", ".impeccable", ".devcontainer", ".fonttools-local", ".bundle",
     "node_modules", "vendor", "CONTRIBUTING.md", "README.md", "Gemfile", "Gemfile.lock",
     "package.json", "package-lock.json", "requirements-assets.txt", "skills-lock.json",

@@ -47,8 +47,19 @@ npm test
 
 ```bash
 npm run build:js
-git diff --exit-code -- assets/js/main.min.js assets/js/home-motion.min.js
+git diff --exit-code -- assets/js/site.min.js assets/js/home-motion.min.js
 ```
+
+浏览器回归检查：
+
+```bash
+npx playwright install chromium
+npm run test:browser
+```
+
+本机已有 Edge 时可使用 `BROWSER_CHANNEL=msedge npm run test:browser`。测试会启动独立的无头浏览器，结果和截图写入被忽略的 `local/browser-check/`。浏览器检查也在 `Site Check` 中运行，博客通信使用受控测试页面，不依赖线上博客响应。
+
+容器预览可运行 `docker compose up --build`，完整安装并生成资产后监听 4000 端口；容器使用 Debian 自带 Python。JavaScript 修改后重新运行构建，内容修改后重新生成字体。当前环境未启动 Docker 服务，容器运行需在具备 Docker 的环境验证。
 
 ## 目录说明
 
@@ -70,4 +81,4 @@ git diff --exit-code -- assets/js/main.min.js assets/js/home-motion.min.js
 
 推送到 `master` 后，`Site Check` 会执行构建与测试，`Deploy Pages` 会在相同验证通过后发布 `_site`。本地提交不会自动推送或部署。
 
-参与修改前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。本仓库源自 Academic Pages 生态，当前内容、设计与构建流程均面向 Husky 的个人站点维护。
+参与修改前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。布局、组件、样式与共享交互由本站维护，直接依赖 Jekyll 和独立第三方库。架构、内容编辑入口和依赖边界见 [站点维护说明](docs/site-maintenance.md)。

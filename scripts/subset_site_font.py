@@ -20,11 +20,7 @@ SOURCE_DIRS = (
     ROOT / "_includes",
     ROOT / "_layouts",
     ROOT / "_pages",
-    ROOT / "_posts",
-    ROOT / "_portfolio",
     ROOT / "_publications",
-    ROOT / "_talks",
-    ROOT / "_teaching",
     ROOT / "assets" / "js",
 )
 SOURCE_FILES = (ROOT / "_config.yml",)

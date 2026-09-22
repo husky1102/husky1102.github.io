@@ -16,6 +16,8 @@ npm test
 
 `npm test` 会重新生成并核对字体子集，然后运行 Node 与 Python 测试。提交包含源文件修改时，也应包含对应的 JavaScript 和字体生成产物。
 
+内容与组件的修改入口见 [站点维护说明](docs/site-maintenance.md)。修改交互或布局后还需运行 `npm run test:browser`，检查手机与桌面、主题持久化、导航、无脚本访问和博客协议。
+
 ## 字体与头像
 
 - 中文字体源文件：`scripts/assets/fonts/LXGWWenKaiGBScreen-full.woff2`。使用 `npm run build:font` 生成子集，`npm run check:font` 检查覆盖和确定性。
@@ -32,7 +34,7 @@ npm test
 
 字体许可证随公开字体保留；`scripts/` 下的源资产不随站点发布。资源大小检查见 `tests/asset-budget.test.js`。
 
-首页、关于页、404 页和侧栏头像使用主题中的 `--character-filter` 做可逆的显示调色：浅色模式轻微降低亮度和饱和度，深色模式进一步收敛亮度。调色不改变原始图片、透明度、尺寸或动画；需要微调时修改 `_sass/theme/_default.scss` 和 `_sass/theme/_dark.scss`。
+首页、关于页、404 页和侧栏头像使用主题中的 `--character-filter` 做可逆的显示调色：浅色模式轻微降低亮度和饱和度，深色模式进一步收敛亮度。调色不改变原始图片、透明度、尺寸或动画；需要微调时修改 `_sass/_foundation.scss` 中的明暗主题变量。
 
 ## 鼠标指针
 

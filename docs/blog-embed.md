@@ -1,6 +1,6 @@
 # 博客嵌入
 
-`/blog_embed/` 使用 iframe 显示 `https://www.husky1102.top/`。父页实现在 `assets/js/blog-embed.js`，主题接入在 `assets/js/_main.js`，脚本通过 `_includes/scripts.html` 加载。
+`/blog_embed/` 使用 iframe 显示 `https://www.husky1102.top/`。父页实现在 `assets/js/blog-embed.js`，主题接入在 `assets/js/_theme.js`，脚本通过 `_layouts/site.html` 加载。
 
 HTML 中保留原始博客地址和独立打开链接，无脚本时仍可访问。脚本先安装消息监听器，再向 iframe 地址添加 `embed=1`。
 
@@ -23,4 +23,4 @@ iframe 加载、导航或页面历史恢复时会重新握手。协议不可用�
 
 `tests/blog-embed.test.js` 验证消息来源、版本、能力对象、主题同步、重新加载及外部地址校验；`tests/public-routes.test.js` 检查生成页面的 iframe 和后备链接。
 
-协议修改涉及两个站点时，先部署兼容的博客实现，再部署个人主页。发布后在 `/blog_embed/` 检查首次打开、文章导航、刷新、深浅色同步、返回主页和独立打开；同时检查博客不可用时的后备入口。这些跨站浏览器检查不能由本仓库的单元测试替代。
+协议修改涉及两个站点时，先部署兼容的博客实现，再部署个人主页。发布后在 `/blog_embed/` 检查首次打开、文章导航、刷新、深浅色同步、返回主页和独立打开；同时检查博客不可用时的后备入口。`tests/browser-check.cjs` 使用受控博客页面验证真实 iframe 消息传递、主题与后备栏。这不代替发布后对线上博客兼容性、网络和安全响应头的检查。

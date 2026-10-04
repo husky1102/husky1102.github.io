@@ -13,7 +13,9 @@
       var external = document.querySelector('.blog-reader__external');
       var timer;
       var ready = false;
+      var childAvailable = false;
       function send(type) {
+        if (!childAvailable) return;
         frame.contentWindow.postMessage({ type: type, version: 1, theme: theme.current() }, origin);
       }
       function fallback(loading) {
@@ -45,11 +47,12 @@
         if (event.origin !== origin || event.source !== frame.contentWindow) return;
         var data = event.data;
         if (!data || typeof data !== 'object' || Array.isArray(data) || data.version !== 1) return;
-        if (data.type === 'husky:embed:navigating') { fallback(true); return; }
+        if (data.type === 'husky:embed:navigating') { childAvailable = false; fallback(true); return; }
         if (data.theme !== 'light' && data.theme !== 'dark') return;
         if (data.type === 'husky:embed:ready') {
           if (!data.capabilities || typeof data.capabilities !== 'object' || Array.isArray(data.capabilities) ||
               data.capabilities.returnHome !== true || data.capabilities.themeControl !== true) return;
+          childAvailable = true;
           // Initialization always gives the containing page authority on first load.
           if (data.theme !== theme.current()) { send('husky:embed:init'); return; }
           var url = articleUrl(data.url);
@@ -58,16 +61,18 @@
           ready = true;
           if (status) status.hidden = true;
           document.body.classList.add('blog-embed-ready');
-        } else if (data.type === 'husky:embed:theme') {
+        } else if (data.type === 'husky:embed:theme' && childAvailable) {
           theme.receive(data.theme); // Existing theme function; deliberately no echo.
         }
       });
       window.addEventListener('husky:theme-change', function () { send('husky:embed:theme'); });
       frame.addEventListener('load', function () {
-        fallback(false);
-        send('husky:embed:init'); // The first message may have arrived before the child listener.
+        // A load may belong to the initial inherited document or follow an early ready.
+        // Only the child's validated ready proves that the bridge is available.
+        if (!ready) fallback(true);
       });
       frame.addEventListener('error', function () {
+        childAvailable = false;
         fallback(false);
         if (status) {
           status.hidden = false;
@@ -82,7 +87,6 @@
       if (source.origin !== origin) return;
       source.searchParams.set('embed', '1');
       frame.src = source.href;
-      send('husky:embed:init');
     }
   };
 })();

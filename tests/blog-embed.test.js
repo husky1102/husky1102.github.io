@@ -16,11 +16,14 @@ function boot() {
   vm.runInNewContext(script, {window,document,URL,location:{href:'https://husky1102.github.io/blog_embed/'}});
   window.huskyBlogEmbed.start({current:()=>current,receive:t=>{current=t;applied.push(t);}});
   const message = (data, origin='https://www.husky1102.top', source=child) => events.message({data,origin,source});
-  return {events,frameEvents,sent,classes,applied,frame,external,status,message};
+  return {events,frameEvents,sent,classes,applied,frame,external,status,message,setTheme:t=>{current=t;}};
 }
 const ready = {type:'husky:embed:ready',version:1,theme:'dark',capabilities:{returnHome:true,themeControl:true},url:'https://www.husky1102.top/a/?embed=1#b'};
-test('listener precedes embed opt-in and initial messages use the exact origin',()=>{
+test('waits for validated child readiness before sending to the exact origin',()=>{
   const b=boot(); assert.equal(b.frame.src,'https://www.husky1102.top/?embed=1');
+  b.frameEvents.load(); b.events['husky:theme-change'](); b.events.pageshow({persisted:true});
+  assert.equal(b.sent.length,0);
+  b.message({...ready,theme:'light'});
   assert.equal(b.sent[0].origin,'https://www.husky1102.top'); assert.equal(b.sent[0].data.type,'husky:embed:init');
   assert.equal(b.classes.size,0);
 });
@@ -35,16 +38,32 @@ test('only validated capabilities and matching theme can hide the fallback',()=>
 });
 test('loads and child departures restore fallback; a new ready is required',()=>{
   const b=boot(); b.message(ready); b.message({type:'husky:embed:navigating',version:1}); assert.equal(b.classes.size,0);
-  b.frameEvents.load(); assert.equal(b.sent.at(-1).data.type,'husky:embed:init'); assert.equal(b.classes.size,0);
+  const count=b.sent.length; b.frameEvents.load(); b.events['husky:theme-change']();
+  assert.equal(b.sent.length,count); assert.equal(b.classes.size,0);
   b.message(ready); assert.equal(b.classes.size,1);
   b.frameEvents.error(); assert.equal(b.classes.size,0); assert.equal(b.status.hidden,false);
 });
 test('remote theme is applied without echo; local changes notify the child',()=>{
-  const b=boot(), count=b.sent.length;
+  const b=boot(); b.message(ready); const count=b.sent.length;
   b.message({type:'husky:embed:theme',version:1,theme:'light'});
   assert.deepEqual(b.applied,['light']); assert.equal(b.sent.length,count);
   b.events['husky:theme-change'](); assert.equal(b.sent.at(-1).data.theme,'light');
 });
 test('ready cannot replace the external reading link with another origin',()=>{
   const b=boot(); b.message({...ready,url:'https://evil.test/'}); assert.equal(b.external.href,undefined);
+});
+
+test('an early ready survives load; history restore rechecks an established bridge',()=>{
+  const b=boot(); b.message(ready); b.frameEvents.load();
+  assert.ok(b.classes.has('blog-embed-ready')); assert.equal(b.sent.length,0);
+  b.events.pageshow({persisted:true}); assert.equal(b.classes.size,0);
+  assert.equal(b.sent.at(-1).data.type,'husky:embed:init');
+  b.message(ready); assert.equal(b.classes.size,1);
+});
+test('the latest parent theme wins when changed while the child loads',()=>{
+  const b=boot(); b.setTheme('light'); b.events['husky:theme-change']();
+  b.message({type:'husky:embed:theme',version:1,theme:'dark'});
+  assert.equal(b.sent.length,0); assert.deepEqual(b.applied,[]);
+  b.message(ready); assert.equal(b.sent.at(-1).data.theme,'light');
+  b.message({...ready,theme:'light'}); assert.equal(b.classes.size,1);
 });
